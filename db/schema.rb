@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_12_01_140338) do
+ActiveRecord::Schema[7.1].define(version: 2025_12_01_144406) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -50,6 +50,17 @@ ActiveRecord::Schema[7.1].define(version: 2025_12_01_140338) do
     t.index ["category_id"], name: "index_lectures_on_category_id"
   end
 
+  create_table "messages", force: :cascade do |t|
+    t.string "role"
+    t.text "content"
+    t.bigint "lecture_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["lecture_id"], name: "index_messages_on_lecture_id"
+    t.index ["user_id"], name: "index_messages_on_user_id"
+  end
+
   create_table "notes", force: :cascade do |t|
     t.text "content"
     t.bigint "lecture_id", null: false
@@ -77,6 +88,8 @@ ActiveRecord::Schema[7.1].define(version: 2025_12_01_140338) do
   add_foreign_key "flashcard_completions", "users"
   add_foreign_key "flashcards", "lectures"
   add_foreign_key "lectures", "categories"
+  add_foreign_key "messages", "lectures"
+  add_foreign_key "messages", "users"
   add_foreign_key "notes", "lectures"
   add_foreign_key "notes", "users"
 end
