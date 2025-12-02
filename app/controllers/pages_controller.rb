@@ -3,4 +3,8 @@ class PagesController < ApplicationController
 
   def home
   end
+
+  def message_params
+    pararms.require(:message).permit(:content,:title)
+  end
 end
