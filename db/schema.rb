@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_12_02_112342) do
+ActiveRecord::Schema[7.1].define(version: 2025_12_01_215616) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -48,6 +48,24 @@ ActiveRecord::Schema[7.1].define(version: 2025_12_02_112342) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_categories_on_user_id"
+  end
+
+  create_table "challenges", force: :cascade do |t|
+    t.bigint "challenger_id", null: false
+    t.bigint "opponent_id", null: false
+    t.string "status", default: "pending", null: false
+    t.bigint "category_id"
+    t.bigint "winner_id"
+    t.integer "score_challenger", default: 0
+    t.integer "score_opponent", default: 0
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["category_id"], name: "index_challenges_on_category_id"
+    t.index ["challenger_id", "opponent_id"], name: "index_challenges_on_challenger_id_and_opponent_id"
+    t.index ["challenger_id"], name: "index_challenges_on_challenger_id"
+    t.index ["opponent_id"], name: "index_challenges_on_opponent_id"
+    t.index ["status"], name: "index_challenges_on_status"
+    t.index ["winner_id"], name: "index_challenges_on_winner_id"
   end
 
   create_table "flashcard_completions", force: :cascade do |t|
@@ -99,6 +117,27 @@ ActiveRecord::Schema[7.1].define(version: 2025_12_02_112342) do
     t.index ["user_id"], name: "index_notes_on_user_id"
   end
 
+  create_table "quizzes", force: :cascade do |t|
+    t.bigint "lecture_id", null: false
+    t.json "questions"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["lecture_id"], name: "index_quizzes_on_lecture_id"
+  end
+
+  create_table "user_progresses", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "league"
+    t.integer "level"
+    t.integer "xp"
+    t.integer "total_flashcards_completed"
+    t.integer "total_notes_created"
+    t.integer "streak_days"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_user_progresses_on_user_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -107,6 +146,8 @@ ActiveRecord::Schema[7.1].define(version: 2025_12_02_112342) do
     t.datetime "remember_created_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "first_name"
+    t.string "last_name"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
@@ -114,6 +155,10 @@ ActiveRecord::Schema[7.1].define(version: 2025_12_02_112342) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "categories", "users"
+  add_foreign_key "challenges", "categories"
+  add_foreign_key "challenges", "users", column: "challenger_id"
+  add_foreign_key "challenges", "users", column: "opponent_id"
+  add_foreign_key "challenges", "users", column: "winner_id"
   add_foreign_key "flashcard_completions", "flashcards"
   add_foreign_key "flashcard_completions", "users"
   add_foreign_key "flashcards", "lectures"
@@ -122,4 +167,6 @@ ActiveRecord::Schema[7.1].define(version: 2025_12_02_112342) do
   add_foreign_key "messages", "users"
   add_foreign_key "notes", "lectures"
   add_foreign_key "notes", "users"
+  add_foreign_key "quizzes", "lectures"
+  add_foreign_key "user_progresses", "users"
 end
