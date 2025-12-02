@@ -1,0 +1,17 @@
+<h1>Fichiers uploadés</h1>
+
+<% if @uploads.empty? %>
+  <p>Aucun fichier uploadé pour le moment.</p>
+<% else %>
+  <ul>
+    <% @uploads.each do |upload| %>
+      <li>
+        <a href="<%= upload[:path] %>" target="_blank"><%= upload[:name] %></a>
+        (<%= number_to_human_size(upload[:size]) %>)
+      </li>
+    <% end %>
+  </ul>
+<% end %>
+
+<br>
+<a href="<%= root_path %>">Retour à l'accueil</a>
