@@ -1,4 +1,5 @@
 class LecturesController < ApplicationController
+<<<<<<< HEAD
 
 def new
     @lecture = Lecture.new
@@ -20,4 +21,7 @@ def new
   :resume
   )
   end
+=======
+  has_one_attached :document
+>>>>>>> master
 end

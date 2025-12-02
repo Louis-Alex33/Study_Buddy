@@ -59,6 +59,8 @@ group :development, :test do
   gem "debug", platforms: %i[ mri windows ]
 end
 
+gem 'aws-sdk-s3', require: false
+
 group :development do
   # Use console on exceptions pages [https://github.com/rails/web-console]
   gem "web-console"
@@ -75,3 +77,5 @@ group :test do
   gem "capybara"
   gem "selenium-webdriver"
 end
+
+
