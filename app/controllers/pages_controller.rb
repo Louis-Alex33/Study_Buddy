@@ -6,4 +6,5 @@ class PagesController < ApplicationController
 
   def message_params
     pararms.require(:message).permit(:content,:title)
+  end
 end
