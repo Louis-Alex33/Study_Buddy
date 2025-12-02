@@ -1,5 +1,7 @@
 <h1>Study Buddy</h1>
 
-<%= simple_form_for [lecture] do |f| %>
+<%= simple_form_for @category do |f| %>
+<%= f.input :title %>
 <%= f.input :file, as: :file, label: "Upload a file (PDF, doc, image)" %>
+<%= f.submit "Create your file" %>
 <% end %>
