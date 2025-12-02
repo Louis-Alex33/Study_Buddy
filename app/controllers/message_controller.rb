@@ -1,6 +1,6 @@
 class MessageController < ApplicationController
 
-    def create
+  def create
     if @message.save
     @ruby_llm_chat = RubyLLM.chat
     build_conversation_history
