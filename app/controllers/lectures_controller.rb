@@ -1,23 +1,41 @@
 class LecturesController < ApplicationController
+  def show
+    @lecture = Lecture.find(params[:id])
+  end
 
-def new
+  def new
+    @category = Category.find(params[:category_id])
     @lecture = Lecture.new
   end
 
   def create
-    @lecture = Lecture.new(lecture_params)
-    @lecture.user = current_user
+    @category = Category.find(params[:category_id])
+    @lecture = @category.lectures.new(lecture_params)
 
     if @lecture.save
-    else render :new, status: :unprocessable_entity
+      redirect_to lecture_path(@lecture), notice: "Lecture creee avec succes"
+    else
+      render :new
+    end
+  end
+
+  def edit
+    @lecture = Lecture.find(params[:id])
+  end
+
+  def update
+    @lecture = Lecture.find(params[:id])
+
+    if @lecture.update(lecture_params)
+      redirect_to lecture_path(@lecture), notice: "Lecture mise a jour"
+    else
+      render :edit
+    end
   end
 
   private
 
   def lecture_params
-    pararms.require(:lecture).permit(
-  :title,
-  :resume
-  )
+    params.require(:lecture).permit(:title, :resume)
   end
 end
