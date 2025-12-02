@@ -6,7 +6,8 @@
 <%= f.submit "Create your file" %>
 
 <% end %>
-<div class="ul"><div class="li">
-  @category.all
-  </div>
-</div>
+<ul>
+  <% @categories.each do |category| %>
+    <li><%= category.title %></li>
+  <% end %>
+</ul>

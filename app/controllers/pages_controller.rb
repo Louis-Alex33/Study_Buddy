@@ -3,6 +3,7 @@ class PagesController < ApplicationController
 
   def home
     @category = Category.new
+    @categories = Category.all
   end
 
   def message_params
