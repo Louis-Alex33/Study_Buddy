@@ -1,7 +1,12 @@
-<h1>Pages#home</h1>
-<p>Find me in app/views/pages/home.html.erb</p>
-<%= simple_form_for [challenge, message] do |f| %>
-  <!-- [...] -->
-  <%= f.input :file, as: :file, label: "Upload a file (PDF, image, or audio)" %>
-  <!-- [...] -->
-<% end %>
+<h1>Study Buddy</h1>
+
+<form action="<%= uploads_path %>" method="post" enctype="multipart/form-data">
+  <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+
+  <label for="fileInput">Sélectionner un fichier :</label>
+  <input type="file" name="document" id="fileInput" accept=".pdf,.docx,.txt">
+
+  <br><br>
+
+  <button type="submit">Envoyer</button>
+</form>
