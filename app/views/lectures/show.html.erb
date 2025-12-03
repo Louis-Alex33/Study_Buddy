@@ -1,8 +1,35 @@
 <h1><%= @lecture.title %></h1>
-<p><strong>Categorie:</strong> <%= @lecture.category.name %></p>
+<p><strong>Categorie:</strong> <%= @lecture.category.title %></p>
 <h2>Resume</h2>
 <p><%= @lecture.resume %></p>
 <hr>
+
+<h3>Chat IA - Assistant pedagogique</h3>
+<div style="border: 1px solid #ccc; padding: 15px; margin-bottom: 20px; max-height: 400px; overflow-y: auto; background-color: #f9f9f9;">
+  <% if @lecture.messages.any? %>
+    <% @lecture.messages.order(:created_at).each do |message| %>
+      <div style="margin-bottom: 15px; padding: 10px; border-radius: 5px; <%= message.role == 'user' ? 'background-color: #e3f2fd; text-align: right;' : 'background-color: #fff3e0;' %>">
+        <strong><%= message.role == 'user' ? 'Toi' : 'Assistant IA' %>:</strong>
+        <p style="margin: 5px 0;"><%= simple_format(message.content) %></p>
+        <% if message.file.attached? %>
+          <small style="color: #666;">📎 Fichier joint: <%= message.file.filename %></small>
+        <% end %>
+      </div>
+    <% end %>
+  <% else %>
+    <p style="color: #666;">Aucun message. Commence la conversation avec l'assistant IA!</p>
+  <% end %>
+</div>
+
+<%= form_with model: [:lecture, Message.new], url: lecture_messages_path(@lecture), local: true do |f| %>
+  <div style="margin-bottom: 10px;">
+    <%= f.text_area :content, placeholder: "Pose une question sur ce cours...", rows: 3, style: "width: 100%;" %>
+  </div>
+  <%= f.submit "Envoyer", style: "padding: 10px 20px; background-color: #4CAF50; color: white; border: none; cursor: pointer;" %>
+<% end %>
+
+<hr>
+
 <h3>Flashcards</h3>
 <% if @lecture.flashcards.any? %>
   <ul>
