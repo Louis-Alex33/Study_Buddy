@@ -3,7 +3,7 @@ class Category < ApplicationRecord
 
   validates :title, presence: true
 
-  
+
   CATEGORIES = [
      "Mathématiques",
      "Physique",
