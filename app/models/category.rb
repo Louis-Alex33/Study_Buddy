@@ -13,5 +13,4 @@ class Category < ApplicationRecord
      "Biologie"
    ]
 
-
 end
