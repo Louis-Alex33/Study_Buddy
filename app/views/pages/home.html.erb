@@ -2,7 +2,31 @@
   <div class="position-relative d-inline-block">
     <%= image_tag("homepage_banner.jpg", height: 400, class: "img-fluid") %>
     <div class="position-absolute top-50 start-50 translate-middle" style="width: 45%;">
-      <%= link_to "Télécharger document", "new_lecture_path", class: "btn btn-outline-light w-100  py-4 fs-2", style: "background-color: transparent; border-width: 3px;" %>
+      <button type="button" class="btn btn-outline-light w-100 py-4 fs-2" data-bs-toggle="modal" data-bs-target="#uploadModal" style="background-color: transparent; border-width: 3px;">
+        CREER UN NOUVEAU COURS
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Bootstrap -->
+<div class="modal fade" id="uploadModal" tabindex="-1" aria-labelledby="uploadModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="uploadModalLabel">Nouveau cours</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <%= simple_form_for @lecture, url: lectures_path do |f| %>
+          <%= f.input :title, label: "Title" %>
+          <%= f.input :file, as: :file, label: "Upload a file (PDF, image, or audio)" %>
+          <%= f.association :category, collection: Category.all, label: "Category" %>
+          <div class="d-grid mt-3">
+            <%= f.button :submit, "Créer", class: "btn btn-primary" %>
+          </div>
+        <% end %>
+      </div>
     </div>
   </div>
 </div>
