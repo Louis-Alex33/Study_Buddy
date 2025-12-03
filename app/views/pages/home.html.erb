@@ -2,7 +2,9 @@
   <div class="position-relative d-inline-block">
     <%= image_tag("homepage_banner.jpg", height: 400, class: "img-fluid") %>
     <div class="position-absolute top-50 start-50 translate-middle" style="width: 45%;">
-      <%= link_to "Télécharger document", "new_lecture_path", class: "btn btn-outline-light w-100  py-4 fs-2", style: "background-color: transparent; border-width: 3px;" %>
+      <%= link_to new_lecture_path, class: "btn btn-upload-document" do %>
+        <i class="fas fa-cloud-upload-alt"></i> Télécharger document
+      <% end %>
     </div>
   </div>
 </div>

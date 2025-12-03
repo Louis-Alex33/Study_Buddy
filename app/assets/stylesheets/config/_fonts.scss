@@ -1,9 +1,9 @@
-// Import Google fonts
-@import url('https://fonts.googleapis.com/css?family=Nunito:400,700|Work+Sans:400,700&display=swap');
+// Import Aileron font from FontCDN
+@import url('https://fonts.cdnfonts.com/css/aileron');
 
 // Define fonts for body and headers
-$body-font: "Work Sans", "Helvetica", "sans-serif";
-$headers-font: "Nunito", "Helvetica", "sans-serif";
+$body-font: "Aileron", "Helvetica", sans-serif;
+$headers-font: "Aileron", "Helvetica", sans-serif;
 
 // To use a font file (.woff) uncomment following lines
 // @font-face {

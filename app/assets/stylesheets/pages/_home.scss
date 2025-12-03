@@ -1,4 +1,33 @@
 // Specific CSS for your home-page
+// Style pour le bouton de téléchargement
+.btn-upload-document {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+  color: white;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  border-radius: 50px;
+  padding: 1.2rem 2.5rem;
+  font-size: 1.4rem;
+  box-shadow: 0 8px 30px rgba(102, 126, 234, 0.4);
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 12px 40px rgba(102, 126, 234, 0.5);
+    color: white;
+    background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+  }
+
+  &:active {
+    transform: translateY(-1px);
+  }
+
+  i {
+    margin-right: 0.5rem;
+  }
+}
+
 .category-card {
   display: flex;
   align-items: center;
