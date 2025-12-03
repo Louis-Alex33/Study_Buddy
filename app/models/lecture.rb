@@ -1,7 +1,8 @@
 class Lecture < ApplicationRecord
   has_one_attached :document
-  
+
   belongs_to :category
+  belongs_to :user
   has_many :flashcards
   has_many :messages, dependent: :destroy
 
