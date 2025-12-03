@@ -12,7 +12,7 @@ Rails.application.routes.draw do
     resources :lectures, only: %i[new create]
   end
 
-  resources :lectures, only: %i[show edit update] do
+  resources :lectures, only: %i[index show edit update] do
     resources :notes, only: %i[new create]
     resources :messages, only: %i[new create]
     resources :flashcards, only: %i[new create]

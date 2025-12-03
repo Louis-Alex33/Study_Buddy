@@ -14,6 +14,9 @@
         <a href="<%= uploads_path %>" style="color: white; text-decoration: none; padding: 8px 16px; border-radius: 5px; transition: background 0.3s; display: inline-block;">
           Mes fichiers
         </a>
+        <a href="<%= lectures_path %>" style="color: white; text-decoration: none; padding: 8px 16px; border-radius: 5px; transition: background 0.3s; display: inline-block;">
+          Mes cours
+        </a>
         <span style="color: white; font-size: 14px;"><%= current_user.email %></span>
         <%= link_to "Deconnexion", destroy_user_session_path, data: {turbo_method: :delete}, style: "color: white; text-decoration: none; padding: 8px 16px; background: rgba(255,255,255,0.2); border-radius: 5px; transition: background 0.3s; display: inline-block;" %>
       <% else %>
