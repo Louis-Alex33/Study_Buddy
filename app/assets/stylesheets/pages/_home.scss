@@ -1,1 +1,40 @@
 // Specific CSS for your home-page
+
+.category-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.5rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 12px;
+  color: white;
+  min-width: 200px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+  }
+
+  .category-card-icon {
+    font-size: 1.8rem;
+    opacity: 0.9;
+  }
+
+  .category-card-content {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .category-card-title {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+  }
+
+  .category-card-count {
+    font-size: 0.85rem;
+    opacity: 0.8;
+  }
+}

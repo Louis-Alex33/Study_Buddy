@@ -4,7 +4,6 @@ class LecturesController < ApplicationController
   end
 
   def new
-    @category = Category.find(params[:category_id])
     @lecture = Lecture.new
   end
 
