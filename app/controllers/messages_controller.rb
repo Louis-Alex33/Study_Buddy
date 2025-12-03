@@ -1,13 +1,14 @@
-class MessageController < ApplicationController
+class MessagesController < ApplicationController
   before_action :set_lecture
 
   def create
     @message = @lecture.messages.new(message_params)
     @message.role = "user"
+    @message.user = current_user
 
     if @message.save
       response_content = generate_ai_response
-      @lecture.messages.create(role: "assistant", content: response_content)
+      @lecture.messages.create(role: "assistant", content: response_content, user: current_user)
       redirect_to lecture_path(@lecture), notice: "Message envoye"
     else
       redirect_to lecture_path(@lecture), alert: "Erreur lors de l'envoi du message"
