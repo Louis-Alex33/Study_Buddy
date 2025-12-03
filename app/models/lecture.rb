@@ -1,6 +1,7 @@
 class Lecture < ApplicationRecord
   belongs_to :category
   has_many :flashcards
+  has_many :messages, dependent: :destroy
 
   validates :title, presence: true
   validates :resume, presence: true
