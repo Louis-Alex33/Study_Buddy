@@ -7,22 +7,23 @@
   </div>
 </div>
 
-<%= if @categories.any? %>
-    <div class="container my-5">
-        <div class="row">
-        <% @categories.each do |category| %>
-            <div class="col-md-4 mb-4">
-            <div class="card h-100">
-                <div class="card-body d-flex flex-column">
-                <h5 class="card-title"><%= category.name %></h5>
-                <p class="card-text"><%= truncate(category.description, length: 100) %></p>
-                <div class="mt-auto">
-                    <%= link_to "Voir les documents", category_path(category), class: "btn btn-primary" %>
-                </div>
-                </div>
+<% if @categories&.any? %>
+  <div class="container my-5">
+    <h3 class="mb-4">Mes catégories</h3>
+    <div class="d-flex flex-wrap gap-3">
+      <% @categories.each do |category| %>
+        <%= link_to category_path(category), class: "text-decoration-none" do %>
+          <div class="category-card">
+            <div class="category-card-icon">
+              <i class="fas fa-folder"></i>
             </div>
+            <div class="category-card-content">
+              <h5 class="category-card-title"><%= category.title %></h5>
+              <span class="category-card-count"><%= category.lectures.count %> lecture(s)</span>
             </div>
+          </div>
         <% end %>
-        </div>
+      <% end %>
     </div>
+  </div>
 <% end %>

@@ -8,36 +8,27 @@
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
 #
-Lectrure.destroy_all
+
+puts "Cleaning database..."
+Lecture.destroy_all
 Category.destroy_all
 User.destroy_all
-Puts "Cleaning database..."
 
 test_user = User.create(
-  first_name: "test",
-  last_name: "test",
+  first_name: "JP",
+  last_name: "Ben",
   password: "azerty",
   email: "test@test.test"
 )
 
-cat = Category.create(
-  user: User.last,
-  title: "cat test"
-)
 
-lecture = Lecture.new(
-  title: "test",
-  category: Category.last,
-  resume: "test"
-)
+# lecture.document.attach(
+#   io: File.open("public/images/homepage_banner.jpg"),
+#   filename: "banner.jpg",
+#   content_type: "image/jpg"
+# )
 
-lecture.document.attach(
-  io: File.open("public/images/homepage_banner.jpg"),
-  filename: "banner.jpg",
-  content_type: "image/jpg"
-)
-
-lecture.save!
+# lecture.save!
 
 
 # blob = ActiveStorage::Blob.create_and_upload!(
@@ -47,3 +38,51 @@ lecture.save!
 # )
 
 # p blob.url
+
+puts "create a new user ...."
+henry = User.create!(
+  first_name: "Henry",
+  last_name: "Thierry",
+  email: "henry@mail.com",
+  password: "secret",
+)
+
+category_1 = Category.create!(
+  title: "Droit",
+  user: henry,
+  created_at: "2025-11-01",
+)
+category_2 = Category.create!(
+  title: "Anatomie",
+  user: henry,
+  created_at: "2025-11-01",
+)
+category_3 = Category.create!(
+  title: "Informatique",
+  user: henry,
+  created_at: "2024-03-11",
+)
+
+category_4 = Category.create!(
+  title: "Robotique",
+  user: henry,
+  created_at: "2024-03-12",
+)
+
+category_5 = Category.create!(
+  title: "Environnement",
+  user: henry,
+  created_at: "2025-06-12",
+)
+
+category_6 = Category.create!(
+  title: "Génie civil",
+  user: henry,
+  created_at: "2023-02-29",
+)
+
+lecture = Lecture.create!(
+  title: "Test",
+  category: category_1,
+  resume: "Ceci est un cours test"
+)

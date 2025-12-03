@@ -1,15 +1,7 @@
 class CategoriesController < ApplicationController
-  before_action :set_categories, only: %i[update, edit]
 
-  def edit
+  def show
+    @categories = Category.find(params[:id])
   end
 
-  def update
-  end
-
-  private
-
-  def set_categories
-    @categories = Category.all
-  end
 end
