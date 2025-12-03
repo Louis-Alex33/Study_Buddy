@@ -1,13 +1,27 @@
-<h1>Study Buddy</h1>
+<div class="text-center">
+  <div class="position-relative d-inline-block">
+    <%= image_tag(ActiveStorage::Blob.find_by(key: "4gnf2srkaiwt1a9qjb7e3rwr0gx7").url, height: 400, class: "img-fluid") %>
+    <div class="position-absolute top-50 start-50 translate-middle" style="width: 45%;">
+      <%= link_to "Télécharger document", "new_lecture_path", class: "btn btn-outline-light w-100  py-4 fs-2", style: "background-color: transparent; border-width: 3px;" %>
+    </div>
+  </div>
+</div>
 
-<%= simple_form_for @category do |f| %>
-<%= f.input :title %>
-<%= f.input :file, as: :file, label: "Upload a file (PDF, doc, image)" %>
-<%= f.submit "Create your file" %>
-
+<% if @categories&.any? %>
+  <div class="container my-5">
+    <h3 class="mb-4">Mes catégories</h3>
+    <div class="d-flex flex-wrap gap-3">
+      <% @categories.each do |category| %>
+          <div class="category-card">
+            <div class="category-card-icon">
+              <i class="fas fa-folder"></i>
+            </div>
+            <div class="category-card-content">
+              <h5 class="category-card-title"><%= category.title %></h5>
+              <span class="category-card-count"><%= category.lectures.count %> lecture(s)</span>
+            </div>
+          </div>
+      <% end %>
+    </div>
+  </div>
 <% end %>
-<ul>
-  <% @categories.each do |category| %>
-    <li><%= category.title %></li>
-  <% end %>
-</ul>
