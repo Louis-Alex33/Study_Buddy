@@ -1,11 +1,15 @@
 <h1>Study Buddy</h1>
 
 
-<div class="container">
-<%= simple_form_for @category do |f|%>
-  <%= f.input  :title  %>
-  <%= f.input :file, as: :file, label: "upload a file (PDF, doc, image)" %>
-  <%= f.submit "Upload file And create category" %>
+<%= simple_form_for @category do |f| %>
+<%= f.input :title %>
+<%= f.input :file, as: :file, label: "Upload a file (PDF, doc, image)" %>
+<%= f.submit "Create your file" %>
 
 <% end %>
-</div>
+<ul>
+  <% @categories.each do |category| %>
+    <li><%= category.title %></li>
+  <% end %>
+</ul>
+

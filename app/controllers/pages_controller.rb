@@ -3,12 +3,11 @@ class PagesController < ApplicationController
 
   def home
     @category = Category.new
-  end
+    @categories = Category.all
 
-<<<<<<< HEAD
-=======
+  end
   def message_params
     pararms.require(:message).permit(:content,:title)
   end
->>>>>>> master
+
 end

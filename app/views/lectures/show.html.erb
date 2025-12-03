@@ -1,0 +1,23 @@
+<h1><%= @lecture.title %></h1>
+<p><strong>Categorie:</strong> <%= @lecture.category.name %></p>
+<h2>Resume</h2>
+<p><%= @lecture.resume %></p>
+<hr>
+<h3>Flashcards</h3>
+<% if @lecture.flashcards.any? %>
+  <ul>
+    <% @lecture.flashcards.each do |flashcard| %>
+      <li>
+        <a href="<%= flashcard_path(flashcard) %>">Flashcard #<%= flashcard.id %></a>
+      </li>
+    <% end %>
+  </ul>
+<% else %>
+  <p>Aucune flashcard pour cette lecture.</p>
+<% end %>
+<br>
+<a href="<%= new_lecture_flashcard_path(@lecture) %>">Creer une flashcard</a>
+<br>
+<a href="<%= edit_lecture_path(@lecture) %>">Modifier cette lecture</a>
+<br>
+<a href="<%= root_path %>">Retour a l accueil</a>
