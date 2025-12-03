@@ -12,7 +12,6 @@
     <h3 class="mb-4">Mes catégories</h3>
     <div class="d-flex flex-wrap gap-3">
       <% @categories.each do |category| %>
-        <%= link_to category_path(category), class: "text-decoration-none" do %>
           <div class="category-card">
             <div class="category-card-icon">
               <i class="fas fa-folder"></i>
@@ -22,7 +21,6 @@
               <span class="category-card-count"><%= category.lectures.count %> lecture(s)</span>
             </div>
           </div>
-        <% end %>
       <% end %>
     </div>
   </div>
