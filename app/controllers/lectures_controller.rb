@@ -14,11 +14,11 @@ class LecturesController < ApplicationController
   def create
     @lecture = Lecture.new(lecture_params)
     @lecture.user = current_user
-
+    
     if @lecture.save
       redirect_to lecture_path(@lecture), notice: "Lecture créée avec succès"
     else
-      redirect_to root_path, alert: "Erreur lors de la création: #{@lecture.errors.full_messages.join(', ')}"
+      render "pages/home", status: :unprocessable_content
     end
   end
 
@@ -32,7 +32,7 @@ class LecturesController < ApplicationController
     if @lecture.update(lecture_params)
       redirect_to lecture_path(@lecture), notice: "Lecture mise a jour"
     else
-      render :edit
+      render :edit, status: :unprocessable_content
     end
   end
 
