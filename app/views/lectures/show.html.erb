@@ -1,3 +1,42 @@
+<div class="modal fade" id="exampleModalToggle" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div id="modal-content" class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalToggleLabel">Notes</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div id="modal-body" class="modal-body">
+        <%= simple_form_for [@lecture, @note] do |f| %>
+        <%= f.input :content %>
+        <% end %>
+
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary" data-bs-target="#exampleModalToggle2" data-bs-toggle="modal"> Open a new note </button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="exampleModalToggle2" aria-hidden="true" aria-labelledby="exampleModalToggleLabel2" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalToggleLabel2">Note 2</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <%= simple_form_for [@lecture, @note] do |f| %>
+        <%= f.input :content %>
+        <% end %>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary" data-bs-target="#exampleModalToggle" data-bs-toggle="modal">1er note </button>
+      </div>
+    </div>
+  </div>
+</div>
+<button id="toggle-note" class="btn btn-primary" data-bs-target="#exampleModalToggle" data-bs-toggle="modal">Ouvre une nouvelle Note </button>
+
 
 <div class="container my-5">
   <!-- Header Section -->
@@ -12,6 +51,7 @@
       <p style="color: rgba(255,255,255,0.9); font-size: 16px; margin: 0; line-height: 1.5;"><%= @lecture.resume %></p>
     </div>
   </div>
+
 
   <div class="row g-4">
     <!-- Left Column: Chat IA -->
@@ -140,7 +180,6 @@
     <%= link_to root_path, style: "display: inline-flex; align-items: center; gap: 10px; padding: 16px 36px; background: linear-gradient(135deg, #1351AA 0%, #1a66cc 100%); color: white; border-radius: 20px; text-decoration: none; font-weight: 600; font-size: 16px; box-shadow: 0 4px 15px rgba(19, 81, 170, 0.3); transition: all 0.3s;" do %>
       <span style="font-size: 20px;">←</span>
       <span>Retour a l'accueil</span>
->>>>>>> master
     <% end %>
   </div>
 </div>
