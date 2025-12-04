@@ -50,7 +50,7 @@
   }
 
   .navbar-title {
-    color: white;
+    color: #E3E2DE;
     margin: 0;
     font-size: 22px;
     font-weight: 700;
@@ -65,7 +65,7 @@
   }
 
   .navbar-link {
-    color: rgba(255, 255, 255, 0.9);
+    color: #E3E2DE;
     text-decoration: none;
     padding: 10px 18px;
     border-radius: 10px;
@@ -91,7 +91,7 @@
     }
 
     &:hover {
-      color: white;
+      color: #E3E2DE;
       text-decoration: none;
 
       &::before {
@@ -101,7 +101,7 @@
 
     &.active {
       background: rgba(255, 255, 255, 0.15);
-      color: white;
+      color: #E3E2DE;
     }
   }
 
@@ -113,7 +113,7 @@
   }
 
   .navbar-user-email {
-    color: rgba(255, 255, 255, 0.8);
+    color: #E3E2DE;
     font-size: 13px;
     padding: 6px 14px;
     background: rgba(255, 255, 255, 0.1);
@@ -126,7 +126,7 @@
   }
 
   .navbar-btn {
-    color: white;
+    color: #E3E2DE;
     text-decoration: none;
     padding: 10px 20px;
     background: rgba(255, 255, 255, 0.15);
@@ -140,7 +140,7 @@
     &:hover {
       background: rgba(255, 255, 255, 0.25);
       border-color: rgba(255, 255, 255, 0.4);
-      color: white;
+      color: #E3E2DE;
       text-decoration: none;
       transform: translateY(-2px);
       box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);

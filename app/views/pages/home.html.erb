@@ -104,10 +104,27 @@
 <div class="home-content">
   <!-- Hero Section -->
   <div class="hero-section">
-    <h1 class="hero-title">Bienvenue sur Study Buddy</h1>
+    <p class="hero-tagline">Votre compagnon d'étude intelligent</p>
+    <h1 class="hero-title">Bienvenue sur <span class="hero-highlight">Study Buddy</span></h1>
     <p class="hero-subtitle">
-      Organisez vos cours, créez des flashcards et boostez votre apprentissage avec l'aide de l'IA
+      Transformez vos cours en expériences d'apprentissage interactives.<br>
+      <strong>Organisez</strong> vos documents, <strong>créez</strong> des flashcards personnalisées<br>
+      et <strong>boostez</strong> votre réussite grâce à l'intelligence artificielle.
     </p>
+    <div class="hero-features">
+      <div class="hero-feature">
+        <i class="fas fa-folder-open"></i>
+        <span>Organisation intuitive</span>
+      </div>
+      <div class="hero-feature">
+        <i class="fas fa-brain"></i>
+        <span>IA intégrée</span>
+      </div>
+      <div class="hero-feature">
+        <i class="fas fa-layer-group"></i>
+        <span>Flashcards intelligentes</span>
+      </div>
+    </div>
     <%= link_to new_lecture_path, class: "btn btn-upload-document" do %>
       <i class="fas fa-cloud-upload-alt"></i> Télécharger un document
     <% end %>
