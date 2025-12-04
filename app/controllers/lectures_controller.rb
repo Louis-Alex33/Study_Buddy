@@ -1,4 +1,8 @@
 class LecturesController < ApplicationController
+  def index
+    @lectures = current_user.lectures
+  end
+
   def show
     @lecture = Lecture.find(params[:id])
   end
@@ -8,13 +12,12 @@ class LecturesController < ApplicationController
   end
 
   def create
-    @category = Category.find(params[:category_id])
-    @lecture = @category.lectures.new(lecture_params)
+    @lecture = Lecture.new(lecture_params)
 
     if @lecture.save
-      redirect_to lecture_path(@lecture), notice: "Lecture creee avec succes"
+      redirect_to lecture_path(@lecture), notice: "Lecture créée avec succès"
     else
-      render :new
+      redirect_to root_path, alert: "Erreur lors de la création"
     end
   end
 
@@ -35,6 +38,6 @@ class LecturesController < ApplicationController
   private
 
   def lecture_params
-    params.require(:lecture).permit(:title, :resume)
+    params.require(:lecture).permit(:title, :resume, :category_id)
   end
 end

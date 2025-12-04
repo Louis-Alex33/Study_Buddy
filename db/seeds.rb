@@ -27,11 +27,11 @@ jp = User.create!(
     Category.create!(title: cat)
   end
 
-  lecture = Lecture.create!(
-  title: "Test",
+lecture = Lecture.create!(
+  title: "test",
+  resume: "lecture content",
+  user: henry,
   category: Category.last,
-  resume: "Ceci est un cours test",
-  user: henry
 )
 
 lecture = Lecture.create!(
