@@ -11,7 +11,7 @@
 
   <div class="filter_button_card">
     <% if @lectures.any? %>
-      <%= link_to "Toutes", lectures_path, class: "filter_button #{params[:query].blank? ? 'active' : ''}" %>
+      <%= link_to "ALL", lectures_path, class: "filter_button #{params[:query].blank? ? 'active' : ''}" %>
       <% @categories.each do |category| %>
         <%= link_to category.title, lectures_path(query: category.title), class: "filter_button #{params[:query] == category.title ? 'active' : ''}" %>
       <% end %>
