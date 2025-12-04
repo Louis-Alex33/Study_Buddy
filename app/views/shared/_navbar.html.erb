@@ -7,7 +7,6 @@
     <div class="navbar-links">
       <% if user_signed_in? %>
         <%= link_to "Home", root_path, class: "navbar-link #{'active' if current_page?(root_path)}" %>
-        <%= link_to "Mes fichiers", uploads_path, class: "navbar-link #{'active' if current_page?(uploads_path)}" %>
         <%= link_to "Mes cours", lectures_path, class: "navbar-link #{'active' if current_page?(lectures_path)}" %>
         <div class="navbar-divider"></div>
         <span class="navbar-user-email"><%= current_user.email %></span>

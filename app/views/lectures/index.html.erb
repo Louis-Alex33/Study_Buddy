@@ -51,11 +51,16 @@
             </div>
           </div>
 
-          <!-- Action Button -->
-          <%= link_to lecture_path(lecture), style: "display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; padding: 14px; background: linear-gradient(135deg, #1351AA 0%, #1a66cc 100%); color: white; border-radius: 18px; text-decoration: none; font-weight: 600; font-size: 15px; box-shadow: 0 3px 12px rgba(19, 81, 170, 0.3); transition: all 0.3s;" do %>
-            <span>Voir la lecture</span>
-            <span style="font-size: 18px;">→</span>
-          <% end %>
+          <!-- Action Buttons -->
+          <div style="display: flex; gap: 10px;">
+            <%= link_to lecture_path(lecture), style: "display: flex; align-items: center; justify-content: center; gap: 10px; flex: 1; padding: 14px; background: linear-gradient(135deg, #1351AA 0%, #1a66cc 100%); color: white; border-radius: 18px; text-decoration: none; font-weight: 600; font-size: 15px; box-shadow: 0 3px 12px rgba(19, 81, 170, 0.3); transition: all 0.3s;" do %>
+              <span>Voir la lecture</span>
+              <span style="font-size: 18px;">→</span>
+            <% end %>
+            <%= button_to lecture_path(lecture), method: :delete, data: { turbo_confirm: "Êtes-vous sûr de vouloir supprimer cette lecture ?" }, style: "display: flex; align-items: center; justify-content: center; padding: 14px 18px; background: linear-gradient(135deg, #dc3545 0%, #c82333 100%); color: white; border-radius: 18px; border: none; cursor: pointer; font-weight: 600; font-size: 15px; box-shadow: 0 3px 12px rgba(220, 53, 69, 0.3); transition: all 0.3s;" do %>
+              <span style="font-size: 18px;">🗑</span>
+            <% end %>
+          </div>
         </div>
       <% end %>
     </div>

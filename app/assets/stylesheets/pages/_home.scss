@@ -337,6 +337,18 @@ body.pages-home, body.lectures-create {
   gap: 1.5rem;
 }
 
+.category-card-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+
+  &:hover,
+  &:focus {
+    text-decoration: none;
+    color: inherit;
+  }
+}
+
 .category-card {
   position: relative;
   display: flex;
