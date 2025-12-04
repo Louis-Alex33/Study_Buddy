@@ -159,9 +159,7 @@
         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
 
-      <%= turbo_frame_tag :modal_body do %>
-        <%= render "lectures/form", lecture: @lecture  %>
-      <% end %>
+      <%= render "lectures/form", lecture: @lecture %>
     </div>
   </div>
 </div>
