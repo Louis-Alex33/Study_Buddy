@@ -1,4 +1,8 @@
 class LecturesController < ApplicationController
+  def index
+    @lectures = current_user.lectures
+  end
+
   def show
     @lecture = Lecture.find(params[:id])
   end
