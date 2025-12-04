@@ -1,4 +1,6 @@
 class PagesController < ApplicationController
+  MAX_FILE_SIZE_MB = 10
+  
   skip_before_action :authenticate_user!, only: [ :home ]
 
   def home

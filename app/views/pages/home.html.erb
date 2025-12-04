@@ -113,9 +113,9 @@
         <span>Flashcards intelligentes</span>
       </div>
     </div>
-    <%= link_to new_lecture_path, class: "btn btn-upload-document" do %>
+    <button type="button" class="btn btn-upload-document" data-bs-toggle="modal" data-bs-target="#uploadModal">
       <i class="fas fa-cloud-upload-alt"></i> Télécharger un document
-    <% end %>
+    </button>
   </div>
   <!-- Categories Section -->
   <% if @categories&.any? %>
@@ -145,4 +145,21 @@
       </p>
     </div>
   <% end %>
+</div>
+
+<!-- Modal pour uploader un document -->
+<div class="modal fade" id="uploadModal" tabindex="-1" aria-labelledby="uploadModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header modal-header-gradient">
+        <div>
+          <h5 class="modal-title">Telecharger un document</h5>
+          <p class="modal-subtitle">Creez une nouvelle lecture a partir de votre fichier</p>
+        </div>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <%= render "lectures/form", lecture: @lecture %>
+    </div>
+  </div>
 </div>

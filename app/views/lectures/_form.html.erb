@@ -1,0 +1,13 @@
+<%= simple_form_for lecture, url: lectures_path, html: { data: { turbo: false, controller: "file-validation", action: "change->file-validation#validate" } } do |f| %>
+  <div class="modal-body modal-body-padded">
+    <%= f.input :title, label: "Titre de la lecture", placeholder: "Ex: Cours de mathematiques", required: true, wrapper_html: { class: "form-group-modal" } %>
+    <%= f.association :category, label: "Catégorie", prompt: "Sélectionnez une catégorie", required: true, wrapper_html: { class: "form-group-modal" } %>
+    <%= f.input :document, as: :file, label: "Document (PDF, image, audio)", input_html: { accept: "application/pdf,image/*,audio/*" }, required: true, hint: "Formats acceptés: PDF, images (JPG, PNG), audio (MP3, WAV)", wrapper_html: { class: "form-group-modal" } %>
+    <%= f.input :resume, as: :text, label: "Résumé (optionnel)", input_html: { rows: 3, placeholder: "Ajoutez un bref résumé de la lecture..." }, wrapper_html: { class: "form-group-modal" } %>
+  </div>
+
+  <div class="modal-footer modal-footer-centered">
+    <button type="button" data-bs-dismiss="modal" class="btn-cancel">Annuler</button>
+    <%= f.submit "Créer la lecture", class: "btn-submit" %>
+  </div>
+<% end %>

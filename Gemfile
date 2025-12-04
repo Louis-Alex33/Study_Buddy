@@ -61,6 +61,7 @@ group :development, :test do
 end
 
 gem 'aws-sdk-s3', require: false
+gem 'openssl', '~> 3.3.2'
 
 group :development do
   # Use console on exceptions pages [https://github.com/rails/web-console]
