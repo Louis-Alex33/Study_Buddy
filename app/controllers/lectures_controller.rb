@@ -1,10 +1,12 @@
 class LecturesController < ApplicationController
+
   def index
     @lectures = current_user.lectures
   end
 
   def show
     @lecture = Lecture.find(params[:id])
+    @note = Note.new
   end
 
   def new

@@ -39,3 +39,4 @@ lecture = Lecture.create!(
   category: category_1,
   resume: "Ceci est un cours test"
 )
+
