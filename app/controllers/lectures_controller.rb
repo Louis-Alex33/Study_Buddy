@@ -13,6 +13,7 @@ class LecturesController < ApplicationController
 
   def create
     @lecture = Lecture.new(lecture_params)
+    @lecture.user = current_user
 
     if @lecture.save
       redirect_to lecture_path(@lecture), notice: "Lecture créée avec succès"
