@@ -1,6 +1,6 @@
 class Lecture < ApplicationRecord
   MAX_FILE_SIZE_MB  = 10
-  
+
   has_one_attached :document
 
   belongs_to :user
@@ -14,10 +14,7 @@ class Lecture < ApplicationRecord
   validate :document_presence
   validate :file_size_limit
 
-  def after_create
-    # récupèrer le file.attachement
-    # créer une lecture affiliée à ce fichier (résumé)
-  end
+  after_commit :analyze_document, on: :create
 
 
   def document_presence
@@ -30,4 +27,9 @@ class Lecture < ApplicationRecord
     end
   end
 
+  private
+
+  def analyze_document
+    LectureAnalyzerService.new(self).call
+  end
 end
