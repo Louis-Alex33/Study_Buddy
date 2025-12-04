@@ -5,3 +5,5 @@ class LectureTest < ActiveSupport::TestCase
   #   assert true
   # end
 end
+
+

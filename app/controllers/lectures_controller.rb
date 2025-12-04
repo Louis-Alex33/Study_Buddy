@@ -13,7 +13,7 @@ class LecturesController < ApplicationController
     if @lecture.save
       redirect_to lecture_path(@lecture), notice: "Lecture créée avec succès"
     else
-      redirect_to root_path, alert: "Erreur lors de la création"
+      render "pages/home", status: :unprocessable_content
     end
   end
 
@@ -27,13 +27,13 @@ class LecturesController < ApplicationController
     if @lecture.update(lecture_params)
       redirect_to lecture_path(@lecture), notice: "Lecture mise a jour"
     else
-      render :edit
+      render :edit, status: :unprocessable_content
     end
   end
 
   private
 
   def lecture_params
-    params.require(:lecture).permit(:title, :resume, :category_id)
+    params.require(:lecture).permit(:title, :resume, :category_id, :document)
   end
 end

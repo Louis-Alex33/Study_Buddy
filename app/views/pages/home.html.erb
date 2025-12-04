@@ -1,6 +1,6 @@
 <div class="text-center">
   <div class="position-relative d-inline-block">
-    <%= image_tag("homepage_banner.jpg", height: 400, class: "img-fluid") %>
+    <%= image_tag("background_home.jpg", height: 400, class: "img-fluid") %>
     <div class="position-absolute top-50 start-50 translate-middle" style="width: 45%;">
       <button type="button" class="btn btn-outline-light w-100 py-4 fs-2" data-bs-toggle="modal" data-bs-target="#uploadModal" style="background-color: transparent; border-width: 3px;">
         CREER UN NOUVEAU COURS
@@ -18,13 +18,8 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <%= simple_form_for @lecture, url: lectures_path do |f| %>
-          <%= f.input :title, label: "Title" %>
-          <%= f.input :file, as: :file, label: "Upload a file (PDF, image, or audio)" %>
-          <%= f.association :category, collection: Category.all, label: "Category" %>
-          <div class="d-grid mt-3">
-            <%= f.button :submit, "Créer", class: "btn btn-primary" %>
-          </div>
+        <%= turbo_frame_tag :modal_body do %>
+          <%= render "lectures/form", lecture: @lecture  %>
         <% end %>
       </div>
     </div>
