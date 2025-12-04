@@ -1,0 +1,8 @@
+<%= simple_form_for lecture, url: lectures_path, html: { data: { controller: "file-validation", action: "change->file-validation#validate" }} do |f| %>
+  <%= f.input :title, label: "Title" %>
+  <%= f.input :document, as: :file, label: "Upload a file (PDF, image, or audio)" %>
+  <%= f.association :category, collection: Category.all, label: "Category" %>
+  <div class="d-grid mt-3">
+    <%= f.button :submit, "Créer", class: "btn btn-primary" %>
+  </div>
+<% end %>
