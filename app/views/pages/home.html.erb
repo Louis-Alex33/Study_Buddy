@@ -8,7 +8,6 @@
         <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
       </svg>
     </div>
-
     <!-- Pen icon -->
     <div class="floating-icon size-md icon-2">
       <svg viewBox="0 0 24 24">
@@ -17,7 +16,6 @@
         <path d="M2 2l7.586 7.586"></path>
       </svg>
     </div>
-
     <!-- Flashcard / Card icon -->
     <div class="floating-icon size-lg icon-3">
       <svg viewBox="0 0 24 24">
@@ -26,7 +24,6 @@
         <line x1="6" y1="12" x2="14" y2="12"></line>
       </svg>
     </div>
-
     <!-- Graduation cap -->
     <div class="floating-icon size-md icon-4 glow">
       <svg viewBox="0 0 24 24">
@@ -34,7 +31,6 @@
         <path d="M6 12v5c0 2 2 3 6 3s6-1 6-3v-5"></path>
       </svg>
     </div>
-
     <!-- Notepad icon -->
     <div class="floating-icon size-sm icon-5">
       <svg viewBox="0 0 24 24">
@@ -44,7 +40,6 @@
         <line x1="16" y1="17" x2="8" y2="17"></line>
       </svg>
     </div>
-
     <!-- Lightbulb / Idea -->
     <div class="floating-icon size-md icon-6">
       <svg viewBox="0 0 24 24">
@@ -53,14 +48,12 @@
         <path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"></path>
       </svg>
     </div>
-
     <!-- Pencil -->
     <div class="floating-icon size-lg icon-7 glow">
       <svg viewBox="0 0 24 24">
         <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
       </svg>
     </div>
-
     <!-- Open book -->
     <div class="floating-icon size-sm icon-8">
       <svg viewBox="0 0 24 24">
@@ -68,21 +61,18 @@
         <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
       </svg>
     </div>
-
     <!-- Bookmark -->
     <div class="floating-icon size-md icon-9">
       <svg viewBox="0 0 24 24">
         <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
       </svg>
     </div>
-
     <!-- Brain / Learning -->
     <div class="floating-icon size-lg icon-10">
       <svg viewBox="0 0 24 24">
         <path d="M12 2a4 4 0 0 0-4 4v1a3 3 0 0 0-3 3v1a3 3 0 0 0 0 6v1a3 3 0 0 0 3 3v1a4 4 0 0 0 8 0v-1a3 3 0 0 0 3-3v-1a3 3 0 0 0 0-6v-1a3 3 0 0 0-3-3V6a4 4 0 0 0-4-4z"></path>
       </svg>
     </div>
-
     <!-- Clock / Study time -->
     <div class="floating-icon size-sm icon-11 glow">
       <svg viewBox="0 0 24 24">
@@ -90,7 +80,6 @@
         <polyline points="12 6 12 12 16 14"></polyline>
       </svg>
     </div>
-
     <!-- Star / Achievement -->
     <div class="floating-icon size-md icon-12">
       <svg viewBox="0 0 24 24">
@@ -99,7 +88,6 @@
     </div>
   </div>
 </div>
-
 <!-- Main Content -->
 <div class="home-content">
   <!-- Hero Section -->
@@ -125,11 +113,10 @@
         <span>Flashcards intelligentes</span>
       </div>
     </div>
-    <%= link_to new_lecture_path, class: "btn btn-upload-document" do %>
+    <button type="button" class="btn btn-upload-document" data-bs-toggle="modal" data-bs-target="#uploadModal">
       <i class="fas fa-cloud-upload-alt"></i> Télécharger un document
-    <% end %>
+    </button>
   </div>
-
   <!-- Categories Section -->
   <% if @categories&.any? %>
     <div class="categories-section">
@@ -158,4 +145,53 @@
       </p>
     </div>
   <% end %>
+</div>
+
+<!-- Modal pour uploader un document -->
+<div class="modal fade" id="uploadModal" tabindex="-1" aria-labelledby="uploadModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header modal-header-gradient">
+        <div>
+          <h5 class="modal-title">Telecharger un document</h5>
+          <p class="modal-subtitle">Creez une nouvelle lecture a partir de votre fichier</p>
+        </div>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <%= form_with model: Lecture.new, url: lectures_path, local: true, multipart: true do |f| %>
+        <div class="modal-body modal-body-padded">
+          <!-- Titre -->
+          <div class="form-group-modal">
+            <%= f.label :title, "Titre de la lecture" %>
+            <%= f.text_field :title, placeholder: "Ex: Cours de mathematiques", required: true %>
+          </div>
+
+          <!-- Categorie -->
+          <div class="form-group-modal">
+            <%= f.label :category_id, "Categorie" %>
+            <%= f.collection_select :category_id, Category.all, :id, :title, { prompt: "Selectionnez une categorie" }, { required: true } %>
+          </div>
+
+          <!-- fichier -->
+          <div class="form-group-modal">
+            <%= f.label :document, "Document (PDF, image, audio)" %>
+            <%= f.file_field :document, accept: "application/pdf,image/*,audio/*", required: true %>
+            <small>Formats acceptes: PDF, images (JPG, PNG), audio (MP3, WAV)</small>
+          </div>
+
+          <!-- Resume -->
+          <div class="form-group-modal">
+            <%= f.label :resume, "Resume (optionnel)" %>
+            <%= f.text_area :resume, rows: 3, placeholder: "Ajoutez un bref resume de la lecture..." %>
+          </div>
+        </div>
+
+        <div class="modal-footer modal-footer-centered">
+          <button type="button" data-bs-dismiss="modal" class="btn-cancel">Annuler</button>
+          <%= f.submit "Creer la lecture", class: "btn-submit" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
 </div>
