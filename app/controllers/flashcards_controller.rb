@@ -2,11 +2,9 @@ class FlashcardsController < ApplicationController
   before_action :set_lecture, only: [:new, :create]
 
   def new
-    # L'IA va générer les flashcards automatiquement
   end
 
   def create
-    # Générer les flashcards avec l'IA
     generated_flashcards = generate_flashcards_with_ai
 
     if generated_flashcards.present?
@@ -63,8 +61,6 @@ class FlashcardsController < ApplicationController
 
     response = ruby_llm_chat.ask(prompt)
     flashcards_text = response.content
-
-    # Parser la réponse pour extraire les questions
     question_blocks = flashcards_text.split("---").map(&:strip).reject(&:empty?)
     questions_data = []
 
@@ -80,8 +76,6 @@ class FlashcardsController < ApplicationController
         }
       end
     end
-
-    # Créer UNE seule flashcard avec toutes les questions en JSON
     if questions_data.any?
       flashcard = @lecture.flashcards.create(
         content: questions_data.to_json,
