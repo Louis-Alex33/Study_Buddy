@@ -6,7 +6,6 @@ class PagesController < ApplicationController
     @lecture = Lecture.new
   end
 
-  end
   def message_params
     pararms.require(:message).permit(:content,:title)
   end
