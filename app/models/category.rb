@@ -5,12 +5,12 @@ class Category < ApplicationRecord
 
 
   CATEGORIES = [
-     "Mathématiques",
-     "Physique",
-     "Histoire",
-     "Langues",
-     "Informatique",
-     "Biologie"
-   ]
+    "Mathématiques",
+    "Physique",
+    "Histoire",
+    "Langues",
+    "Informatique",
+    "Biologie"
+  ]
 
 end
