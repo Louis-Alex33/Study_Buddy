@@ -2,6 +2,12 @@ class LecturesController < ApplicationController
 
   def index
     @lectures = current_user.lectures
+    @categories = Category.all
+
+    if params[:query].present?
+      @lectures = Lecture.joins(:category).where(user: current_user, category: { title: params[:query]})
+    end
+    
   end
 
   def show
