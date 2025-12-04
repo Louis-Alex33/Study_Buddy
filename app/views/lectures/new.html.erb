@@ -1,0 +1,15 @@
+<h1>creation de votre resumer </h1>
+
+
+firmulaire creation de lecture
+champ upload doc
+champs pour categories pluf f. association
+modal
+
+<%= simple_form_for @lecture do |f| %>
+<%= f.input :file, as: :file, label: "Upload a file (PDF, doc, image)" %>
+<%= f.association :categories,   %>
+<%= f.submit "generate your lecture " %>
+<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+ Generation de votre fichier
+</div>

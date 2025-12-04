@@ -43,3 +43,8 @@ category_6 = Category.create!(
   user: henry,
   created_at: "2023-02-29",
 )
+lecture = Lecture.create!(
+  title: "Test",
+  category: category_1,
+  resume: "Ceci est un cours test"
+)

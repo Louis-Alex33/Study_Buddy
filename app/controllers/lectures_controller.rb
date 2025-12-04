@@ -39,5 +39,4 @@ class LecturesController < ApplicationController
   def lecture_params
     params.require(:lecture).permit(:title, :resume)
   end
->>>>>>> master
 end
