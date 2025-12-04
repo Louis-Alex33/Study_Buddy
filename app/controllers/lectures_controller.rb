@@ -16,7 +16,7 @@ class LecturesController < ApplicationController
   def create
     @lecture = Lecture.new(lecture_params)
     @lecture.user = current_user
-    
+
     if @lecture.save
       redirect_to lecture_path(@lecture), notice: "Lecture créée avec succès"
     else
@@ -36,6 +36,12 @@ class LecturesController < ApplicationController
     else
       render :edit, status: :unprocessable_content
     end
+  end
+
+  def destroy
+    @lecture = Lecture.find(params[:id])
+    @lecture.destroy
+    redirect_to lectures_path, notice: "Lecture supprimée avec succès"
   end
 
   private

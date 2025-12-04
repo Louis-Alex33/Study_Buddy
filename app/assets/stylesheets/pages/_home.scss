@@ -315,68 +315,154 @@ body.pages-home, body.lectures-create {
     color: #E3E2DE;
     font-size: 1.75rem;
     font-weight: 600;
-    margin-bottom: 1.5rem;
+    margin-bottom: 2rem;
     text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+
+    &::before {
+      content: '';
+      width: 4px;
+      height: 28px;
+      background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
+      border-radius: 2px;
+    }
   }
 }
 
 .categories-grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.category-card-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+
+  &:hover,
+  &:focus {
+    text-decoration: none;
+    color: inherit;
+  }
 }
 
 .category-card {
+  position: relative;
   display: flex;
   align-items: center;
-  gap: 1rem;
-  padding: 1rem 1.5rem;
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 16px;
+  gap: 1.25rem;
+  padding: 1.5rem;
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.05) 100%);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
   color: #E3E2DE;
-  min-width: 220px;
-  transition: all 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   cursor: pointer;
   text-decoration: none;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.15) 0%, rgba(118, 75, 162, 0.15) 100%);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    z-index: 0;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 60%);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    pointer-events: none;
+  }
 
   &:hover {
-    transform: translateY(-4px);
-    background: rgba(255, 255, 255, 0.18);
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
-    border-color: rgba(255, 255, 255, 0.25);
+    transform: translateY(-8px) scale(1.02);
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0.08) 100%);
+    box-shadow:
+      0 20px 40px rgba(0, 0, 0, 0.25),
+      0 0 0 1px rgba(102, 126, 234, 0.3),
+      0 0 30px rgba(102, 126, 234, 0.15);
+    border-color: rgba(102, 126, 234, 0.4);
     color: #E3E2DE;
     text-decoration: none;
+
+    &::before {
+      opacity: 1;
+    }
+
+    &::after {
+      opacity: 1;
+    }
+
+    .category-card-icon {
+      transform: scale(1.1) rotate(-5deg);
+      box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
+    }
+
+    .category-card-title {
+      color: #fff;
+    }
+
+    .category-card-count {
+      color: rgba(255, 255, 255, 0.9);
+    }
   }
 
   .category-card-icon {
-    width: 50px;
-    height: 50px;
+    position: relative;
+    z-index: 1;
+    width: 56px;
+    height: 56px;
+    min-width: 56px;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    border-radius: 12px;
+    border-radius: 16px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.4rem;
-    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    font-size: 1.5rem;
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   }
 
   .category-card-content {
+    position: relative;
+    z-index: 1;
     display: flex;
     flex-direction: column;
+    flex: 1;
+    min-width: 0;
   }
 
   .category-card-title {
-    margin: 0;
-    font-size: 1.1rem;
+    margin: 0 0 0.35rem 0;
+    font-size: 1.15rem;
     font-weight: 600;
+    transition: color 0.3s ease;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .category-card-count {
     font-size: 0.85rem;
-    opacity: 0.7;
-    margin-top: 2px;
+    color: rgba(227, 226, 222, 0.6);
+    transition: color 0.3s ease;
   }
 }
 
@@ -423,8 +509,19 @@ body.pages-home, body.lectures-create {
     font-size: 1rem;
   }
 
+  .categories-grid {
+    grid-template-columns: 1fr;
+  }
+
   .category-card {
-    min-width: 100%;
+    padding: 1.25rem;
+
+    .category-card-icon {
+      width: 48px;
+      height: 48px;
+      min-width: 48px;
+      font-size: 1.25rem;
+    }
   }
 
   .floating-icon {
