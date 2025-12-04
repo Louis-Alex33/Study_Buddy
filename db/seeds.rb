@@ -33,3 +33,9 @@ lecture = Lecture.create!(
   user: henry,
   category: Category.last,
 )
+
+lecture = Lecture.create!(
+  title: "Test",
+  category: category_1,
+  resume: "Ceci est un cours test"
+)
