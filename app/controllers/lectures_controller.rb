@@ -13,11 +13,12 @@ class LecturesController < ApplicationController
 
   def create
     @lecture = Lecture.new(lecture_params)
+    @lecture.user = current_user
 
     if @lecture.save
       redirect_to lecture_path(@lecture), notice: "Lecture créée avec succès"
     else
-      redirect_to root_path, alert: "Erreur lors de la création"
+      redirect_to root_path, alert: "Erreur lors de la création: #{@lecture.errors.full_messages.join(', ')}"
     end
   end
 
@@ -38,6 +39,6 @@ class LecturesController < ApplicationController
   private
 
   def lecture_params
-    params.require(:lecture).permit(:title, :resume, :category_id)
+    params.require(:lecture).permit(:title, :resume, :category_id, :document)
   end
 end
