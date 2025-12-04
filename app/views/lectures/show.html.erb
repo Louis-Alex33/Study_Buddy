@@ -1,23 +1,172 @@
-<h1><%= @lecture.title %></h1>
-<p><strong>Categorie:</strong> <%= @lecture.category.title %></p>
-<h2>Resume</h2>
-<p><%= @lecture.resume %></p>
-<hr>
-<h3>Flashcards</h3>
-<% if @lecture.flashcards.any? %>
-  <ul>
-    <% @lecture.flashcards.each do |flashcard| %>
-      <li>
-        <a href="<%= flashcard_path(flashcard) %>">Flashcard #<%= flashcard.id %></a>
-      </li>
+
+<div class="container my-5">
+  <!-- Header Section -->
+  <div style="background: linear-gradient(135deg, #1351AA 0%, #1a66cc 100%); padding: 50px 40px; border-radius: 30px; margin-bottom: 40px; box-shadow: 0 8px 25px rgba(19, 81, 170, 0.25); position: relative; overflow: hidden;">
+    <div style="position: absolute; top: -50px; right: -50px; width: 200px; height: 200px; background: rgba(255,255,255,0.1); border-radius: 50%;"></div>
+    <div style="position: absolute; bottom: -30px; left: -30px; width: 150px; height: 150px; background: rgba(255,255,255,0.08); border-radius: 50%;"></div>
+    <div style="position: relative; z-index: 1;">
+      <div style="display: inline-block; padding: 8px 20px; background: rgba(255,255,255,0.2); border-radius: 20px; margin-bottom: 15px; font-size: 13px; font-weight: 600; letter-spacing: 0.5px;">
+        <%= @lecture.category.title.upcase %>
+      </div>
+      <h1 style="color: white; margin: 0 0 15px 0; font-size: 38px; font-weight: 800; line-height: 1.2;"><%= @lecture.title %></h1>
+      <p style="color: rgba(255,255,255,0.9); font-size: 16px; margin: 0; line-height: 1.5;"><%= @lecture.resume %></p>
+    </div>
+  </div>
+
+  <div class="row g-4">
+    <!-- Left Column: Chat IA -->
+    <div class="col-lg-5">
+      <div style="background: white; padding: 30px; border-radius: 25px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); height: 100%; display: flex; flex-direction: column;">
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 25px; padding-bottom: 20px; border-bottom: 2px solid #E3E2DE;">
+          <div style="width: 45px; height: 45px; background: linear-gradient(135deg, #1351AA 0%, #1a66cc 100%); border-radius: 15px; display: flex; align-items: center; justify-content: center; font-size: 22px;">
+            💬
+          </div>
+          <div>
+            <h3 style="color: #1351AA; margin: 0; font-size: 20px; font-weight: 700;">Assistant IA</h3>
+            <p style="margin: 0; font-size: 13px; color: #666;">Pose tes questions sur le cours</p>
+          </div>
+        </div>
+
+        <div style="flex: 1; background: #fafafa; border-radius: 20px; padding: 20px; margin-bottom: 20px; max-height: 400px; overflow-y: auto; border: 2px solid #E3E2DE;">
+          <% if @lecture.messages.any? %>
+            <% @lecture.messages.order(:created_at).each do |message| %>
+              <div style="margin-bottom: 16px; <%= message.role == 'user' ? 'text-align: right;' : '' %>">
+                <div style="display: inline-block; max-width: 75%; padding: 14px 18px; border-radius: 20px; <%= message.role == 'user' ? 'background: linear-gradient(135deg, #1351AA 0%, #1a66cc 100%); color: white; border-bottom-right-radius: 5px;' : 'background: #E3E2DE; color: #333; border-bottom-left-radius: 5px;' %> box-shadow: 0 2px 8px rgba(0,0,0,0.1); text-align: left;">
+                  <div style="font-size: 10px; font-weight: 700; text-transform: uppercase; margin-bottom: 6px; opacity: 0.7; letter-spacing: 0.5px;">
+                    <%= message.role == 'user' ? 'TOI' : 'ASSISTANT IA' %>
+                  </div>
+                  <div style="font-size: 14px; line-height: 1.5;"><%= simple_format(message.content) %></div>
+                </div>
+              </div>
+            <% end %>
+          <% else %>
+            <div style="text-align: center; padding: 60px 20px;">
+              <div style="font-size: 48px; margin-bottom: 15px; opacity: 0.3;">💭</div>
+              <p style="color: #999; font-size: 14px; margin: 0;">Commence la conversation avec l'assistant IA</p>
+            </div>
+          <% end %>
+        </div>
+
+        <%= form_with model: [:lecture, Message.new], url: lecture_messages_path(@lecture), local: true, style: "margin-top: auto;" do |f| %>
+          <div style="position: relative;">
+            <%= f.text_area :content, placeholder: "Tape ta question ici...", rows: 2, style: "width: 100%; padding: 16px 20px; border: 2px solid #E3E2DE; border-radius: 18px; font-size: 14px; outline: none; resize: none; transition: all 0.3s;" %>
+            <%= f.submit "Envoyer", style: "position: absolute; bottom: 12px; right: 12px; padding: 10px 24px; background: linear-gradient(135deg, #1351AA 0%, #1a66cc 100%); color: white; border: none; border-radius: 12px; cursor: pointer; font-weight: 600; font-size: 13px; box-shadow: 0 2px 8px rgba(19, 81, 170, 0.3); transition: all 0.3s;" %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+    <!-- Right Column: Flashcards -->
+    <div class="col-lg-7">
+      <div style="background: white; padding: 30px; border-radius: 25px; box-shadow: 0 4px 20px rgba(0,0,0,0.08);">
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 25px; padding-bottom: 20px; border-bottom: 2px solid #E3E2DE;">
+          <div style="width: 45px; height: 45px; background: linear-gradient(135deg, #1351AA 0%, #1a66cc 100%); border-radius: 15px; display: flex; align-items: center; justify-content: center; font-size: 22px;">
+            📚
+          </div>
+          <div style="flex: 1;">
+            <h3 style="color: #1351AA; margin: 0; font-size: 20px; font-weight: 700;">Flashcards</h3>
+            <p style="margin: 0; font-size: 13px; color: #666;">Teste tes connaissances</p>
+          </div>
+          <button type="button" data-bs-toggle="modal" data-bs-target="#generateFlashcardsModal" style="padding: 12px 24px; background: linear-gradient(135deg, #1351AA 0%, #1a66cc 100%); color: white; border: none; border-radius: 18px; cursor: pointer; font-weight: 600; font-size: 14px; box-shadow: 0 3px 12px rgba(19, 81, 170, 0.3); transition: all 0.3s; white-space: nowrap;">
+            ✨ Generer avec IA
+          </button>
+        </div>
+
+        <% if @lecture.flashcards.any? %>
+          <div style="display: flex; flex-direction: column; gap: 15px;">
+            <% @lecture.flashcards.each do |flashcard| %>
+              <%
+                completion = current_user.flashcard_completions.find_by(flashcard: flashcard)
+                progress = completion ? completion.status.to_i : 0
+                questions = JSON.parse(flashcard.content)
+                total = questions.count
+                percentage = total > 0 ? (progress.to_f / total * 100).round : 0
+              %>
+              <div style="background: linear-gradient(to right, #fafafa 0%, #ffffff 100%); padding: 25px; border-radius: 20px; border: 2px solid #E3E2DE; transition: all 0.3s; position: relative; overflow: hidden;">
+                <div style="position: absolute; top: 0; left: 0; width: <%= percentage %>%; height: 4px; background: linear-gradient(90deg, #1351AA 0%, #1a66cc 100%); transition: width 0.5s;"></div>
+
+                <div style="display: flex; align-items: center; justify-content: space-between; gap: 15px;">
+                  <div style="flex: 1;">
+                    <a href="<%= flashcard_path(flashcard) %>" style="color: #1351AA; font-weight: 700; text-decoration: none; font-size: 18px; display: block; margin-bottom: 8px; transition: all 0.3s;">
+                      Flashcard #<%= flashcard.id %>
+                    </a>
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                      <span style="font-size: 13px; color: #666;">
+                        <%= total %> questions
+                      </span>
+                      <span style="color: #E3E2DE;">•</span>
+                      <span style="font-size: 13px; color: #666;">
+                        <%= progress %> completees
+                      </span>
+                    </div>
+                  </div>
+
+                  <div style="display: flex; align-items: center; gap: 12px;">
+                    <div style="text-align: center;">
+                      <div style="width: 70px; height: 70px; position: relative;">
+                        <svg width="70" height="70" style="transform: rotate(-90deg);">
+                          <circle cx="35" cy="35" r="30" fill="none" stroke="#E3E2DE" stroke-width="6"/>
+                          <circle cx="35" cy="35" r="30" fill="none" stroke="<%= percentage == 100 ? '#28a745' : '#1351AA' %>" stroke-width="6" stroke-dasharray="<%= 2 * Math::PI * 30 %>" stroke-dashoffset="<%= 2 * Math::PI * 30 * (1 - percentage / 100.0) %>" stroke-linecap="round"/>
+                        </svg>
+                        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-weight: 700; font-size: 16px; color: <%= percentage == 100 ? '#28a745' : '#1351AA' %>;">
+                          <%= percentage %>%
+                        </div>
+                      </div>
+                    </div>
+
+                    <%= button_to flashcard_path(flashcard), method: :delete, data: { confirm: "Supprimer cette flashcard ?" }, style: "padding: 10px 12px; background: #E3E2DE; color: #666; border: none; border-radius: 12px; cursor: pointer; font-size: 18px; transition: all 0.3s; line-height: 1;" do %>
+                      🗑️
+                    <% end %>
+                  </div>
+                </div>
+              </div>
+            <% end %>
+          </div>
+        <% else %>
+          <div style="text-align: center; padding: 80px 20px;">
+            <div style="font-size: 64px; margin-bottom: 20px; opacity: 0.2;">📚</div>
+            <p style="color: #999; font-size: 16px; margin: 0 0 25px 0;">Aucune flashcard pour cette lecture</p>
+            <button type="button" data-bs-toggle="modal" data-bs-target="#generateFlashcardsModal" style="padding: 14px 32px; background: linear-gradient(135deg, #1351AA 0%, #1a66cc 100%); color: white; border: none; border-radius: 20px; cursor: pointer; font-weight: 600; font-size: 15px; box-shadow: 0 4px 15px rgba(19, 81, 170, 0.3); transition: all 0.3s;">
+              ✨ Generer des flashcards
+            </button>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+  <!-- Actions Footer -->
+  <div style="text-align: center; margin-top: 50px;">
+    <%= link_to root_path, style: "display: inline-flex; align-items: center; gap: 10px; padding: 16px 36px; background: linear-gradient(135deg, #1351AA 0%, #1a66cc 100%); color: white; border-radius: 20px; text-decoration: none; font-weight: 600; font-size: 16px; box-shadow: 0 4px 15px rgba(19, 81, 170, 0.3); transition: all 0.3s;" do %>
+      <span style="font-size: 20px;">←</span>
+      <span>Retour a l'accueil</span>
+>>>>>>> master
     <% end %>
-  </ul>
-<% else %>
-  <p>Aucune flashcard pour cette lecture.</p>
-<% end %>
-<br>
-<a href="<%= new_lecture_flashcard_path(@lecture) %>">Creer une flashcard</a>
-<br>
-<a href="<%= edit_lecture_path(@lecture) %>">Modifier cette lecture</a>
-<br>
-<a href="<%= root_path %>">Retour a l accueil</a>
+  </div>
+</div>
+
+<!-- Modal pour générer les flashcards -->
+<div class="modal fade" id="generateFlashcardsModal" tabindex="-1" aria-labelledby="generateFlashcardsModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content" style="border: none; border-radius: 25px; overflow: hidden; box-shadow: 0 10px 40px rgba(0,0,0,0.15);">
+      <div class="modal-header" style="background: linear-gradient(135deg, #1351AA 0%, #1a66cc 100%); color: white; padding: 25px 30px; border: none;">
+        <div>
+          <h5 class="modal-title" style="font-weight: 700; font-size: 20px; margin: 0 0 5px 0;">✨ Generer des flashcards</h5>
+          <p style="margin: 0; font-size: 13px; opacity: 0.9;">Avec l'intelligence artificielle</p>
+        </div>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body text-center" style="padding: 40px 30px;">
+        <div style="font-size: 48px; margin-bottom: 20px;">🤖</div>
+        <p style="font-size: 15px; color: #333; margin-bottom: 15px;">L'IA va generer automatiquement <strong style="color: #1351AA;">10 questions</strong> basees sur le contenu de cette lecture.</p>
+        <p style="color: #999; font-size: 13px; margin: 0;">Cela peut prendre quelques secondes...</p>
+      </div>
+      <div class="modal-footer" style="border: none; padding: 20px 30px; background: #fafafa; display: flex; justify-content: center; gap: 12px;">
+        <button type="button" data-bs-dismiss="modal" style="padding: 12px 28px; background: #E3E2DE; color: #333; border: none; border-radius: 15px; cursor: pointer; font-weight: 600; font-size: 14px;">Annuler</button>
+        <%= form_with url: lecture_flashcards_path(@lecture), method: :post, local: true, style: "display: inline;" do |f| %>
+          <%= f.submit "Generer maintenant", style: "padding: 12px 28px; background: linear-gradient(135deg, #1351AA 0%, #1a66cc 100%); color: white; border: none; border-radius: 15px; cursor: pointer; font-weight: 600; font-size: 14px; box-shadow: 0 3px 12px rgba(19, 81, 170, 0.3);" %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
