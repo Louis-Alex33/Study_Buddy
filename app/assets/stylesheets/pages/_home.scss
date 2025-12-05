@@ -1,14 +1,13 @@
-// Apply these styles only on the home page
-body.pages-home, body.lectures-create {
-  .home-background {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(135deg, #1351AA 0%, #0a3d8f 40%, #1a5fc9 100%);
-    z-index: -1;
-    overflow: hidden;
+// Apply these styles on all pages
+.home-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #1351AA 0%, #0A3D8F 40%, #1A5FC9 100%);
+  z-index: -1;
+  overflow: hidden;
 
   &::before {
     content: '';
@@ -18,9 +17,9 @@ body.pages-home, body.lectures-create {
     right: 0;
     bottom: 0;
     background:
-      radial-gradient(ellipse at 20% 80%, rgba(26, 95, 201, 0.4) 0%, transparent 50%),
-      radial-gradient(ellipse at 80% 20%, rgba(19, 81, 170, 0.3) 0%, transparent 50%),
-      radial-gradient(ellipse at 50% 50%, rgba(10, 61, 143, 0.2) 0%, transparent 70%);
+      radial-gradient(ellipse at 20% 80%, rgba(255, 255, 255, 0.08) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 20%, rgba(255, 255, 255, 0.06) 0%, transparent 50%),
+      radial-gradient(ellipse at 50% 50%, rgba(255, 255, 255, 0.04) 0%, transparent 70%);
   }
 }
 
@@ -33,37 +32,37 @@ body.pages-home, body.lectures-create {
 
 .floating-icon {
   position: absolute;
-  opacity: 0.15;
-  color: white;
-  filter: blur(0.5px);
+  opacity: 0.6;
+  color: rgba(255, 255, 255, 0.8);
+  filter: blur(0px);
   animation: float 10s infinite ease-in-out;
 
   svg {
     width: 100%;
     height: 100%;
     stroke: currentColor;
-    stroke-width: 1.5;
+    stroke-width: 2;
     fill: none;
   }
 
   &.size-sm {
-    width: 30px;
-    height: 30px;
+    width: 35px;
+    height: 35px;
   }
 
   &.size-md {
-    width: 50px;
-    height: 50px;
+    width: 60px;
+    height: 60px;
   }
 
   &.size-lg {
-    width: 70px;
-    height: 70px;
+    width: 85px;
+    height: 85px;
   }
 
   &.glow {
-    filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.3));
-    opacity: 0.2;
+    filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.6));
+    opacity: 0.7;
   }
 }
 
@@ -213,41 +212,44 @@ body.pages-home, body.lectures-create {
   padding: 40px 20px 60px;
 
   .hero-tagline {
-    color: #E3E2DE;
+    color: rgba(255, 255, 255, 0.9);
     font-size: 1rem;
     font-weight: 500;
     text-transform: uppercase;
     letter-spacing: 3px;
     margin-bottom: 1rem;
-    opacity: 0.9;
+    opacity: 1;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   }
 
   .hero-title {
-    color: #E3E2DE;
+    color: #ffffff;
     font-size: 3.5rem;
     font-weight: 700;
     margin-bottom: 1.5rem;
-    text-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    text-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
     letter-spacing: -1px;
 
     .hero-highlight {
-      background: linear-gradient(135deg, #5161a9 0%, #9c72c5 100%);
+      background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
+      text-shadow: none;
     }
   }
 
   .hero-subtitle {
-    color: #E3E2DE;
+    color: rgba(255, 255, 255, 0.95);
     font-size: 1.25rem;
     max-width: 700px;
     margin: 0 auto 2rem;
     line-height: 1.8;
-    opacity: 0.9;
+    opacity: 1;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 
     strong {
-      color: #E3E2DE;
+      color: #FFD700;
       font-weight: 600;
     }
   }
@@ -263,13 +265,14 @@ body.pages-home, body.lectures-create {
       display: flex;
       align-items: center;
       gap: 0.5rem;
-      color: #E3E2DE;
+      color: rgba(255, 255, 255, 0.9);
       font-size: 0.95rem;
-      opacity: 0.85;
+      opacity: 1;
+      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 
       i {
         font-size: 1.1rem;
-        color: #667eea;
+        color: #FFD700;
       }
     }
   }
@@ -312,11 +315,11 @@ body.pages-home, body.lectures-create {
   margin: 0 auto;
 
   .section-title {
-    color: #E3E2DE;
+    color: #ffffff;
     font-size: 1.75rem;
     font-weight: 600;
     margin-bottom: 2rem;
-    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
     display: flex;
     align-items: center;
     gap: 0.75rem;
@@ -325,8 +328,9 @@ body.pages-home, body.lectures-create {
       content: '';
       width: 4px;
       height: 28px;
-      background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
+      background: linear-gradient(180deg, #FFD700 0%, #FFA500 100%);
       border-radius: 2px;
+      box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
     }
   }
 }
@@ -355,15 +359,16 @@ body.pages-home, body.lectures-create {
   align-items: center;
   gap: 1.25rem;
   padding: 1.5rem;
-  background: linear-gradient(145deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.05) 100%);
+  background: #ffffff;
   backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 2px solid #e9ecef;
   border-radius: 20px;
-  color: #E3E2DE;
+  color: #2c3e50;
   transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   cursor: pointer;
   text-decoration: none;
   overflow: hidden;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
 
   &::before {
     content: '';
@@ -372,7 +377,7 @@ body.pages-home, body.lectures-create {
     left: 0;
     right: 0;
     bottom: 0;
-    background: linear-gradient(135deg, rgba(102, 126, 234, 0.15) 0%, rgba(118, 75, 162, 0.15) 100%);
+    background: linear-gradient(135deg, rgba(19, 81, 170, 0.05) 0%, rgba(102, 126, 234, 0.05) 100%);
     opacity: 0;
     transition: opacity 0.4s ease;
     z-index: 0;
@@ -385,7 +390,7 @@ body.pages-home, body.lectures-create {
     left: -50%;
     width: 200%;
     height: 200%;
-    background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 60%);
+    background: radial-gradient(circle, rgba(19, 81, 170, 0.08) 0%, transparent 60%);
     opacity: 0;
     transition: opacity 0.4s ease;
     pointer-events: none;
@@ -393,13 +398,13 @@ body.pages-home, body.lectures-create {
 
   &:hover {
     transform: translateY(-8px) scale(1.02);
-    background: linear-gradient(145deg, rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0.08) 100%);
+    background: #ffffff;
     box-shadow:
-      0 20px 40px rgba(0, 0, 0, 0.25),
-      0 0 0 1px rgba(102, 126, 234, 0.3),
-      0 0 30px rgba(102, 126, 234, 0.15);
-    border-color: rgba(102, 126, 234, 0.4);
-    color: #E3E2DE;
+      0 20px 40px rgba(0, 0, 0, 0.12),
+      0 0 0 2px rgba(19, 81, 170, 0.3),
+      0 0 30px rgba(19, 81, 170, 0.15);
+    border-color: rgba(19, 81, 170, 0.4);
+    color: #2c3e50;
     text-decoration: none;
 
     &::before {
@@ -412,15 +417,15 @@ body.pages-home, body.lectures-create {
 
     .category-card-icon {
       transform: scale(1.1) rotate(-5deg);
-      box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
+      box-shadow: 0 8px 25px rgba(19, 81, 170, 0.5);
     }
 
     .category-card-title {
-      color: #fff;
+      color: #1351AA;
     }
 
     .category-card-count {
-      color: rgba(255, 255, 255, 0.9);
+      color: rgba(19, 81, 170, 0.7);
     }
   }
 
@@ -430,13 +435,13 @@ body.pages-home, body.lectures-create {
     width: 56px;
     height: 56px;
     min-width: 56px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #1351AA 0%, #667eea 100%);
     border-radius: 16px;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 1.5rem;
-    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+    box-shadow: 0 6px 20px rgba(19, 81, 170, 0.4);
     transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   }
 
@@ -461,36 +466,31 @@ body.pages-home, body.lectures-create {
 
   .category-card-count {
     font-size: 0.85rem;
-    color: rgba(227, 226, 222, 0.6);
+    color: rgba(44, 62, 80, 0.5);
     transition: color 0.3s ease;
   }
 }
 
-// ========================================
-// EMPTY STATE
-// ========================================
 .empty-state {
   text-align: center;
   padding: 60px 20px;
 
   .empty-state-icon {
     font-size: 4rem;
-    color: rgba(227, 226, 222, 0.3);
+    color: rgba(255, 255, 255, 0.4);
     margin-bottom: 1.5rem;
   }
 
   .empty-state-text {
-    color: #E3E2DE;
+    color: rgba(255, 255, 255, 0.9);
     font-size: 1.1rem;
     max-width: 400px;
     margin: 0 auto;
-    opacity: 0.8;
+    opacity: 1;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
   }
 }
 
-// ========================================
-// RESPONSIVE
-// ========================================
 @media (max-width: 768px) {
   .hero-section {
     padding: 30px 15px 40px;
@@ -530,8 +530,4 @@ body.pages-home, body.lectures-create {
       height: 50px;
     }
   }
-
-  
-}
-
 }
