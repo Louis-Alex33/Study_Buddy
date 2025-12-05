@@ -9,17 +9,18 @@
     </div>
   </div>
 
+  <!-- Filtres toujours visibles -->
   <div class="filter_button_card">
-    <% if @lectures.any? %>
-      <%= link_to "ALL", lectures_path, class: "filter_button #{params[:query].blank? ? 'active' : ''}" %>
-      <% @categories.each do |category| %>
-        <%= link_to category.title, lectures_path(query: category.title), class: "filter_button #{params[:query] == category.title ? 'active' : ''}" %>
-      <% end %>
+    <%= link_to "ALL", lectures_path, class: "filter_button #{params[:query].blank? ? 'active' : ''}" %>
+    <% @categories.each do |category| %>
+      <%= link_to category.title, lectures_path(query: category.title), class: "filter_button #{params[:query] == category.title ? 'active' : ''}" %>
+    <% end %>
   </div>
-<br>
-    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 25px;">
+
+  <% if @lectures.any? %>
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 25px; margin-top: 25px;">
       <% @lectures.each do |lecture| %>
-          <!-- Category Badge -->
+        <!-- Category Badge -->
         <div style="background: white; border-radius: 25px; padding: 30px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); transition: all 0.3s; position: relative; overflow: hidden; border: 2px solid transparent;">
           <div style="position: absolute; top: 20px; right: 20px;">
             <span style="display: inline-block; padding: 6px 16px; background: linear-gradient(135deg, #1351AA 0%, #1a66cc 100%); color: white; border-radius: 20px; font-size: 11px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase;">
@@ -72,10 +73,11 @@
       <% end %>
     </div>
   <% else %>
-    <div style="text-align: center; padding: 100px 20px; background: white; border-radius: 30px; box-shadow: 0 4px 20px rgba(0,0,0,0.08);">
-      <div style="font-size: 80px; margin-bottom: 25px; opacity: 0.2;">📚</div>
+    <!-- Card blanche pour l'état vide -->
+    <div style="text-align: center; padding: 25px 20px; background: white; border-radius: 30px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); margin-top: 25px;">
+      <div style="font-size: 60px; margin-bottom: 10px; opacity: 0.2;">📚</div>
       <h3 style="color: #333; font-size: 24px; font-weight: 700; margin: 0 0 15px 0;">Aucune lecture pour le moment</h3>
-      <p style="color: #666; font-size: 16px; margin: 0 0 30px 0;">Commence par ajouter ta premiere lecture</p>
+      <p style="color: #666; font-size: 16px; margin: 0 0 10px 0;">Commence par ajouter ta première lecture</p>
       <%= link_to root_path, style: "display: inline-flex; align-items: center; gap: 10px; padding: 16px 36px; background: linear-gradient(135deg, #1351AA 0%, #1a66cc 100%); color: white; border-radius: 20px; text-decoration: none; font-weight: 600; font-size: 16px; box-shadow: 0 4px 15px rgba(19, 81, 170, 0.3); transition: all 0.3s;" do %>
         <span>+</span>
         <span>Ajouter une lecture</span>
@@ -83,7 +85,7 @@
     </div>
   <% end %>
 
-  <!-- Back Button -->
+        <!-- Back Button -->
   <div style="text-align: center; margin-top: 50px;">
     <%= link_to root_path, style: "display: inline-flex; align-items: center; gap: 10px; padding: 16px 36px; background: linear-gradient(135deg, #1351AA 0%, #1a66cc 100%); color: white; border-radius: 20px; text-decoration: none; font-weight: 600; font-size: 16px; box-shadow: 0 4px 15px rgba(19, 81, 170, 0.3); transition: all 0.3s;" do %>
       <span style="font-size: 20px;">←</span>
