@@ -1,4 +1,4 @@
-<%= simple_form_for lecture, url: lectures_path, html: { data: { turbo: false, controller: "file-validation", action: "change->file-validation#validate" } } do |f| %>
+<%= simple_form_for lecture, url: lectures_path, html: { data: { turbo: false, controller: "file-validation upload-loading", action: "change->file-validation#validate submit->upload-loading#submit" } } do |f| %>
   <div class="modal-body modal-body-padded">
     <%= f.input :title, label: "Titre de la lecture", placeholder: "Ex: Cours de mathematiques", required: true, wrapper_html: { class: "form-group-modal" } %>
     <%= f.association :category, label: "Catégorie", prompt: "Sélectionnez une catégorie", required: true, wrapper_html: { class: "form-group-modal" } %>
