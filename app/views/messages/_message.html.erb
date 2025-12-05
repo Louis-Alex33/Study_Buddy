@@ -1,0 +1,8 @@
+<div id="message_<%= message.id %>" class="chat-message <%= message.role == 'user' ? 'user-message' : 'assistant-message' %>">
+  <div class="message-bubble">
+    <div class="message-role">
+      <%= message.role == 'user' ? 'TOI' : 'ASSISTANT IA' %>
+    </div>
+    <div class="message-content"><%= simple_format(message.content) %></div>
+  </div>
+</div>

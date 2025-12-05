@@ -52,10 +52,12 @@
     </div>
   </div>
 
+  <%= turbo_stream_from @lecture %>
+
   <div class="row g-4">
     <!-- Left Column: Chat IA -->
     <div class="col-lg-5">
-      <div class="assistant-ia-card">
+      <div class="assistant-ia-card" data-controller="chat">
         <div class="assistant-header">
           <div class="assistant-icon">💬</div>
           <div class="assistant-title">
@@ -64,28 +66,21 @@
           </div>
         </div>
 
-        <div class="chat-messages-container">
+        <div id="chat-messages" class="chat-messages-container" data-chat-target="messages">
           <% if @lecture.messages.any? %>
             <% @lecture.messages.order(:created_at).each do |message| %>
-              <div class="chat-message <%= message.role == 'user' ? 'user-message' : 'assistant-message' %>">
-                <div class="message-bubble">
-                  <div class="message-role">
-                    <%= message.role == 'user' ? 'TOI' : 'ASSISTANT IA' %>
-                  </div>
-                  <div class="message-content"><%= simple_format(message.content) %></div>
-                </div>
-              </div>
+              <%= render partial: "messages/message", locals: { message: message } %>
             <% end %>
           <% else %>
-            <div class="empty-chat">
+            <div id="empty-chat-placeholder" class="empty-chat">
               <div class="empty-icon">💭</div>
               <p>Commence la conversation avec l'assistant IA</p>
             </div>
           <% end %>
         </div>
 
-        <%= form_with model: [:lecture, Message.new], url: lecture_messages_path(@lecture), local: true, class: "chat-input-form" do |f| %>
-          <%= f.text_area :content, placeholder: "Tape ta question ici...", rows: 2 %>
+        <%= form_with model: [:lecture, Message.new], url: lecture_messages_path(@lecture), class: "chat-input-form", data: { turbo_stream: true, chat_target: "form", action: "turbo:submit-end->chat#resetForm" } do |f| %>
+          <%= f.text_area :content, placeholder: "Tape ta question ici...", rows: 2, required: true, data: { chat_target: "input" } %>
           <%= f.submit "Envoyer", class: "submit-button" %>
         <% end %>
       </div>
