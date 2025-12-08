@@ -1,11 +1,12 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  connect() {
+  static targets = ["button"]
 
+  connect() {
     const savedTheme = localStorage.getItem('theme') || 'light'
     document.body.setAttribute('data-theme', savedTheme)
-    console.log('Dark mode controller connected, theme:', savedTheme)
+    this.updateIcon(savedTheme)
   }
 
   toggle() {
@@ -14,6 +15,15 @@ export default class extends Controller {
 
     document.body.setAttribute('data-theme', newTheme)
     localStorage.setItem('theme', newTheme)
-    console.log('Theme toggled to:', newTheme)
+    this.updateIcon(newTheme)
+  }
+
+  updateIcon(theme) {
+    if (this.hasButtonTarget) {
+      const icon = this.buttonTarget.querySelector('i')
+      if (icon) {
+        icon.className = theme === 'dark' ? 'fas fa-moon' : 'fas fa-sun'
+      }
+    }
   }
 }
