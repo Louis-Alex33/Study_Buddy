@@ -1,0 +1,14 @@
+<%= turbo_stream.prepend "notes-list" do %>
+  <%= turbo_frame_tag dom_id(@note) do %>
+    <div class="d-flex justify-content-between">
+      <div class="content">
+        <%= @note.content %>
+      </div>
+      <div class="delete">
+        <%= button_to note_path(@note), method: :delete, data: { turbo_confirm: "Supprimer cette note ?" }, class: "btn-delete-flashcard" do %>
+          🗑️
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+<% end %>

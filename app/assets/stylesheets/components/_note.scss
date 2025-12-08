@@ -11,3 +11,36 @@
   background-color:  #E3E2DE gris ;
   border-radius: 1rem
 }
+
+#offcanvas-header{
+  background: linear-gradient(135deg, #1351AA 0%, #0A3D8F 40%, #1A5FC9 100%);
+}
+
+#offcanvas-body{
+  background: linear-gradient(135deg, #1351AA 0%, #0A3D8F 40%, #1A5FC9 100%);
+}
+
+ #btn-note{
+  background: linear-gradient(135deg, #1351AA 0%, #1a66cc 100%);
+  padding: 10px 24px;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(19, 81, 170, 0.3);
+  transition: all 0.3s;
+}
+
+#btn-dlt-note{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 14px 18px;
+    background: linear-gradient(135deg, #1351AA 0%, #1A66CC 100%);
+    color: rgb(88, 13, 13);
+    border-radius: 18px;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 15px;
+    transition: all 0.3s;
+}

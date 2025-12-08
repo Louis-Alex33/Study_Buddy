@@ -15,6 +15,8 @@ Rails.application.routes.draw do
     resources :flashcards, only: %i[new create]
   end
 
+  resources :notes, only: :destroy
+
   resources :flashcards, only: [:show, :destroy] do
     member do
       patch :update_progress
