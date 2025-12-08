@@ -1,44 +1,63 @@
-<div class="modal fade" id="exampleModalToggle" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
-  <div class="modal-dialog modal-dialog-centered">
-    <div id="modal-content" class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalToggleLabel">Notes</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div id="modal-body" class="modal-body">
-        <%= simple_form_for [@lecture, @note] do |f| %>
-        <%= f.input :content %>
+
+<button id="toggle-note"class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
+  Mes Notes </button>
+<div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+
+  <div id="offcanvas-header" class="offcanvas-header">
+    <h5 class="offcanvas-title" id="offcanvasExampleLabel">Mes Notes</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+
+  <div id="offcanvas-body"class="offcanvas-body">
+    <div id="notes-list">
+     <% @lecture.notes.each do |note| %>
+          <%= turbo_frame_tag dom_id(note) do %>
+            <div class="d-flex justify-content-between">
+              <div id="note-content" class="content">
+                <%= note.content %>
+              </div>
+              <div  class="delete">
+                <%= button_to note_path(note), method: :delete, data: { turbo_confirm: "Supprimer cette note ?" }, id:"btn-dlt-note" do %>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path stroke-dasharray="24" stroke-dashoffset="24" d="M12 20h5c0.5 0 1 -0.5 1 -1v-14M12 20h-5c-0.5 0 -1 -0.5 -1 -1v-14"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.4s" values="24;0"></animate></path><path stroke-dasharray="20" stroke-dashoffset="20" d="M4 5h16"><animate fill="freeze" attributeName="stroke-dashoffset" begin="0.4s" dur="0.2s" values="20;0"></animate></path><path stroke-dasharray="8" stroke-dashoffset="8" d="M10 4h4M10 9v7M14 9v7"><animate fill="freeze" attributeName="stroke-dashoffset" begin="0.6s" dur="0.2s" values="8;0"></animate></path></g></svg>
+
+
+                <% end %>
+              </div>
+            </div>
+          <% end %>
+     <% end %>
+    </div>
+
+    <button id="btn-note"type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+      Nouvelle note
+    </button>
+  </div>
+</div>
+
+<!-- Modal pour nouvelle note (en dehors de l'offcanvas pour éviter les conflits de z-index) -->
+<div data-controller="handle-modal">
+  <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true" data-handle-modal-target="modal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <%= simple_form_for [@lecture, @note], data: { turbo_stream: true, handle_modal_target: "form", action: "turbo:submit-end->handle-modal#closeAndReset" } do |f| %>
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="staticBackdropLabel">Nouvelle note</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" data-handle-modal-target="closeButton"></button>
+        </div>
+          <div class="modal-body">
+              <%= f.input :content %>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <%= f.button :submit, "Ajouter une note" %>
+          </div>
         <% end %>
-      </div>
-      <div class="modal-footer">
-        <button class="btn btn-primary" data-bs-target="#exampleModalToggle2" data-bs-toggle="modal"> Open a new note </button>
       </div>
     </div>
   </div>
 </div>
 
-<div class="modal fade" id="exampleModalToggle2" aria-hidden="true" aria-labelledby="exampleModalToggleLabel2" tabindex="-1">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalToggleLabel2">Note 2</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <%= simple_form_for [@lecture, @note] do |f| %>
-        <%= f.input :content %>
-        <% end %>
-      </div>
-      <div class="modal-footer">
-        <button class="btn btn-primary" data-bs-target="#exampleModalToggle" data-bs-toggle="modal">1er note </button>
-      </div>
-    </div>
-  </div>
-</div>
 
-<button id="toggle-note" class="btn-create-note" data-bs-target="#exampleModalToggle" data-bs-toggle="modal">
-   Cree une nouvelle note
-</button>
 
 <div class="container my-5">
   <!-- Header Section -->
