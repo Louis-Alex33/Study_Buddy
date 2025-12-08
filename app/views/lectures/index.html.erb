@@ -37,54 +37,127 @@
     <% end %>
   </div>
 
-  <% if @lectures.any? %>
-    <div class="lectures-grid">
-      <% @lectures.each do |lecture| %>
-        <div class="lecture-card">
-          <span class="lecture-card-badge">
-            <%= lecture.category.title %>
-          </span>
-
-          <h3 class="lecture-card-title">
-            <%= lecture.title %>
-          </h3>
-
-          <p class="lecture-card-resume">
-            <%= lecture.resume %>
-          </p>
-
-          <div class="lecture-card-stats">
-            <div class="stat-item">
-              <div class="stat-number">
-                <%= lecture.flashcards.count %>
-              </div>
-              <div class="stat-label">
-                Flashcards
-              </div>
-            </div>
-            <div class="stat-divider"></div>
-            <div class="stat-item">
-              <div class="stat-number">
-                <%= lecture.messages.count %>
-              </div>
-              <div class="stat-label">
-                Messages
-              </div>
-            </div>
-          </div>
-
-          <div class="lecture-card-actions">
-            <%= link_to lecture_path(lecture), class: "btn-view-lecture" do %>
-              <span>Voir le cours</span>
-              <span>→</span>
-            <% end %>
-            <%= button_to lecture_path(lecture), method: :delete, data: { turbo_confirm: "Êtes-vous sûr de vouloir supprimer cette lecture ?" }, class: "btn-delete-lecture" do %>
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path stroke-dasharray="24" stroke-dashoffset="24" d="M12 20h5c0.5 0 1 -0.5 1 -1v-14M12 20h-5c-0.5 0 -1 -0.5 -1 -1v-14"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.4s" values="24;0"/></path><path stroke-dasharray="20" stroke-dashoffset="20" d="M4 5h16"><animate fill="freeze" attributeName="stroke-dashoffset" begin="0.4s" dur="0.2s" values="20;0"/></path><path stroke-dasharray="8" stroke-dashoffset="8" d="M10 4h4M10 9v7M14 9v7"><animate fill="freeze" attributeName="stroke-dashoffset" begin="0.6s" dur="0.2s" values="8;0"/></path></g></svg>
-            <% end %>
-          </div>
-        </div>
+  <% if @lectures.any? || @quizzes.any? %>
+    <!-- Filter Buttons -->
+    <div class="filter_button_card">
+      <%= link_to "ALL", lectures_path, class: "filter_button #{params[:query].blank? && params[:search].blank? ? 'active' : ''}" %>
+      <% @categories.each do |category| %>
+        <%= link_to category.title, lectures_path(query: category.title), class: "filter_button #{params[:query] == category.title ? 'active' : ''}" %>
+      <% end %>
+      <%= link_to lectures_path(query: 'quizz'), class: "filter_button #{params[:query] == 'quizz' ? 'active' : ''}" do %>
+        🧠 QUIZZ
       <% end %>
     </div>
+
+    <% if params[:query] == 'quizz' %>
+      <!-- Quizz View -->
+      <% if @quizzes.any? %>
+        <% quizzes_by_category = @quizzes.group_by { |q| q.lecture.category } %>
+        <% quizzes_by_category.each do |category, category_quizzes| %>
+          <div class="quizz-category-section">
+            <h3 class="quizz-category-title">
+              <span class="category-icon">📁</span>
+              <%= category.title %>
+              <span class="category-count">(<%= category_quizzes.count %> quizz)</span>
+            </h3>
+            <div class="quizz-grid">
+              <% category_quizzes.each do |quiz| %>
+                <%
+                  questions = JSON.parse(quiz.content)
+                  total = questions.count
+                  completed = quiz.status || 0
+                  percentage = total > 0 ? (completed.to_f / total * 100).round : 0
+                %>
+                <%= link_to quiz_path(quiz), class: "quizz-card-link" do %>
+                  <div class="quizz-card">
+                    <div class="quizz-card-header">
+                      <div class="quizz-card-icon">
+                        🧠
+                      </div>
+                      <div class="quizz-card-badge" style="background: <%= percentage == 100 ? '#28a745' : '#1351AA' %>;">
+                        <%= percentage %>%
+                      </div>
+                    </div>
+                    <div class="quizz-card-body">
+                      <h4 class="quizz-card-title"><%= quiz.lecture.title %></h4>
+                      <div class="quizz-card-stats">
+                        <span>📝 <%= total %> questions</span>
+                        <span>✅ <%= completed %> / <%= total %></span>
+                      </div>
+                    </div>
+                  </div>
+                <% end %>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+      <% else %>
+        <div class="empty-lectures">
+          <div class="empty-icon">🧠</div>
+          <h3>Aucun quizz disponible</h3>
+          <p>Génère des quizz depuis tes lectures pour valider tes connaissances !</p>
+        </div>
+      <% end %>
+    <% elsif @lectures.any? %>
+      <!-- Lectures Grid -->
+      <div class="lectures-grid">
+        <% @lectures.each do |lecture| %>
+          <div class="lecture-card">
+            <span class="lecture-card-badge">
+              <%= lecture.category.title %>
+            </span>
+
+            <h3 class="lecture-card-title">
+              <%= lecture.title %>
+            </h3>
+
+            <p class="lecture-card-resume">
+              <%= lecture.resume %>
+            </p>
+
+            <div class="lecture-card-stats">
+              <div class="stat-item">
+                <div class="stat-number">
+                  <%= lecture.flashcards.count %>
+                </div>
+                <div class="stat-label">
+                  Flashcards
+                </div>
+              </div>
+              <div class="stat-divider"></div>
+              <div class="stat-item">
+                <div class="stat-number">
+                  <%= lecture.messages.count %>
+                </div>
+                <div class="stat-label">
+                  Messages
+                </div>
+              </div>
+            </div>
+
+            <div class="lecture-card-actions">
+              <%= link_to lecture_path(lecture), class: "btn-view-lecture" do %>
+                <span>Voir la lecture</span>
+                <span>→</span>
+              <% end %>
+              <%= button_to lecture_path(lecture), method: :delete, data: { turbo_confirm: "Êtes-vous sûr de vouloir supprimer cette lecture ?" }, class: "btn-delete-lecture" do %>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path stroke-dasharray="24" stroke-dashoffset="24" d="M12 20h5c0.5 0 1 -0.5 1 -1v-14M12 20h-5c-0.5 0 -1 -0.5 -1 -1v-14"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.4s" values="24;0"/></path><path stroke-dasharray="20" stroke-dashoffset="20" d="M4 5h16"><animate fill="freeze" attributeName="stroke-dashoffset" begin="0.4s" dur="0.2s" values="20;0"/></path><path stroke-dasharray="8" stroke-dashoffset="8" d="M10 4h4M10 9v7M14 9v7"><animate fill="freeze" attributeName="stroke-dashoffset" begin="0.6s" dur="0.2s" values="8;0"/></path></g></svg>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="empty-lectures">
+        <div class="empty-icon">📚</div>
+        <h3>Aucune lecture pour le moment</h3>
+        <p>Commence par ajouter ta premiere lecture</p>
+        <%= link_to root_path, class: "btn-back-home" do %>
+          <span>+</span>
+          <span>Ajouter une lecture</span>
+        <% end %>
+      </div>
+    <% end %>
   <% else %>
     <!-- Card blanche pour l'état vide -->
     <div class="filter_button_card empty-lectures-card">
