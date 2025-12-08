@@ -1,18 +1,23 @@
-<div class="container my-5">
+<% questions = JSON.parse(@flashcard.content) %>
+
+<div class="container my-5"
+     data-controller="flashcard-progress"
+     data-flashcard-progress-completed-value="<%= @progress %>"
+     data-flashcard-progress-total-value="<%= questions.count %>"
+     data-flashcard-progress-update-url-value="<%= update_progress_flashcard_path(@flashcard) %>">
+
   <div class="flashcard-show-header">
     <h2>📚 Flashcard - <%= @flashcard.lecture.title %></h2>
   </div>
-
-  <% questions = JSON.parse(@flashcard.content) %>
 
   <!-- Barre de progression -->
   <div class="flashcard-progress-card">
     <div class="progress-header">
       <span class="progress-label">Progression</span>
-      <span id="progress-text" class="progress-count">0 / <%= questions.count %> questions completees</span>
+      <span data-flashcard-progress-target="progressText" class="progress-count">0 / <%= questions.count %> questions completees</span>
     </div>
     <div class="progress">
-      <div id="progress-bar" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
+      <div data-flashcard-progress-target="progressBar" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
     </div>
   </div>
 
@@ -26,11 +31,13 @@
           <textarea id="answer-<%= index %>" rows="3" placeholder="Tape ta reponse ici..." class="answer-textarea"></textarea>
         </div>
 
-        <button onclick="showAnswer(<%= index %>)" class="btn-show-answer">
+        <button data-action="click->flashcard-progress#showAnswer"
+                data-flashcard-progress-index-param="<%= index %>"
+                class="btn-show-answer">
           👁️ Voir la reponse
         </button>
 
-        <div id="correct-answer-<%= index %>" class="correct-answer-box">
+        <div data-flashcard-progress-target="answer" class="correct-answer-box">
           <strong>✅ Reponse correcte:</strong>
           <p><%= q['answer'] %></p>
         </div>
@@ -43,57 +50,3 @@
     <%= button_to "🗑️ Supprimer cette flashcard", flashcard_path(@flashcard), method: :delete, data: { confirm: "Es-tu sur de vouloir supprimer cette flashcard ?" }, class: "btn-delete-flashcard-main" %>
   </div>
 </div>
-
-<script>
-  let completedQuestions = <%= @progress %>;
-  const totalQuestions = <%= questions.count %>;
-  const answeredQuestions = new Set();
-
-  // Charger la progression initiale
-  window.addEventListener('DOMContentLoaded', function() {
-    if (completedQuestions > 0) {
-      updateProgressDisplay();
-    }
-  });
-
-  function showAnswer(index) {
-    const answerDiv = document.getElementById('correct-answer-' + index);
-    answerDiv.style.display = 'block';
-
-    // Marquer la question comme completee seulement si pas deja comptee
-    if (!answeredQuestions.has(index)) {
-      answeredQuestions.add(index);
-      completedQuestions++;
-      updateProgressDisplay();
-      saveProgress();
-    }
-  }
-
-  function updateProgressDisplay() {
-    const percentage = Math.round((completedQuestions / totalQuestions) * 100);
-    const progressBar = document.getElementById('progress-bar');
-    const progressText = document.getElementById('progress-text');
-
-    progressBar.style.width = percentage + '%';
-    progressBar.setAttribute('aria-valuenow', percentage);
-    progressBar.textContent = percentage + '%';
-    progressText.textContent = completedQuestions + ' / ' + totalQuestions + ' questions completees';
-
-    // Changer la couleur quand c'est termine
-    if (completedQuestions === totalQuestions) {
-      progressBar.classList.remove('progress-bar-animated');
-      progressBar.classList.add('bg-success');
-    }
-  }
-
-  function saveProgress() {
-    fetch('<%= update_progress_flashcard_path(@flashcard) %>', {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
-      },
-      body: JSON.stringify({ progress: completedQuestions })
-    });
-  }
-</script>

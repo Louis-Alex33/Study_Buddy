@@ -27,6 +27,39 @@
       <div class="tab-pane active" data-tabs-target="content" data-tab="all">
         <div class="lectures-grid">
         <% current_user.lectures.each do |lecture| %>
+  <!-- Search Bar -->
+  <div class="lectures-search-container">
+    <%= form_with url: lectures_path, method: :get, local: true, class: "lectures-search-form" do %>
+      <div class="search-input-wrapper">
+        <button type="submit" class="search-icon-btn">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"></circle>
+            <path d="m21 21-4.3-4.3"></path>
+          </svg>
+        </button>
+        <%= text_field_tag :search, params[:search], placeholder: "Rechercher une lecture...", class: "search-input" %>
+        <% if params[:search].present? %>
+          <%= link_to lectures_path, class: "search-clear-btn" do %>
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M18 6 6 18"></path>
+              <path d="m6 6 12 12"></path>
+            </svg>
+          <% end %>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="filter_button_card">
+    <%= link_to "ALL", lectures_path, class: "filter_button #{params[:query].blank? ? 'active' : ''}" %>
+    <% @categories.each do |category| %>
+      <%= link_to category.title, lectures_path(query: category.title), class: "filter_button #{params[:query] == category.title ? 'active' : ''}" %>
+    <% end %>
+  </div>
+
+  <% if @lectures.any? %>
+    <div class="lectures-grid">
+      <% @lectures.each do |lecture| %>
         <div class="lecture-card">
           <span class="lecture-card-badge">
             <%= lecture.category.title %>
@@ -66,7 +99,7 @@
               <span>→</span>
             <% end %>
             <%= button_to lecture_path(lecture), method: :delete, data: { turbo_confirm: "Êtes-vous sûr de vouloir supprimer cette lecture ?" }, class: "btn-delete-lecture" do %>
-              🗑
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path stroke-dasharray="24" stroke-dashoffset="24" d="M12 20h5c0.5 0 1 -0.5 1 -1v-14M12 20h-5c-0.5 0 -1 -0.5 -1 -1v-14"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.4s" values="24;0"/></path><path stroke-dasharray="20" stroke-dashoffset="20" d="M4 5h16"><animate fill="freeze" attributeName="stroke-dashoffset" begin="0.4s" dur="0.2s" values="20;0"/></path><path stroke-dasharray="8" stroke-dashoffset="8" d="M10 4h4M10 9v7M14 9v7"><animate fill="freeze" attributeName="stroke-dashoffset" begin="0.6s" dur="0.2s" values="8;0"/></path></g></svg>
             <% end %>
           </div>
           </div>
@@ -191,6 +224,19 @@
       </div>
     <% end %>
   </div>
+    </div>
+  <% else %>
+    <!-- Card blanche pour l'état vide -->
+    <div class="filter_button_card empty-lectures-card">
+      <div class="empty-icon">📚</div>
+      <h3>Aucune lecture pour le moment</h3>
+      <p>Commence par ajouter ta premiere lecture</p>
+      <%= link_to root_path, class: "btn-back-home" do %>
+        <span>+</span>
+        <span>Ajouter une lecture</span>
+      <% end %>
+    </div>
+  <% end %>
 
   <!-- Back Button -->
   <div class="lectures-back-section">
