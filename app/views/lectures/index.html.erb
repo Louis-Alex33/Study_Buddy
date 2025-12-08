@@ -7,6 +7,13 @@
     </div>
   </div>
 
+<div class="filter_button_card">
+    <%= link_to "ALL", lectures_path, class: "filter_button #{params[:query].blank? ? 'active' : ''}" %>
+    <% @categories.each do |category| %>
+      <%= link_to category.title, lectures_path(query: category.title), class: "filter_button #{params[:query] == category.title ? 'active' : ''}" %>
+    <% end %>
+  </div>
+
   <!-- Search Bar -->
   <div class="lectures-search-container">
     <%= form_with url: lectures_path, method: :get, local: true, class: "lectures-search-form" do %>
@@ -27,13 +34,6 @@
           <% end %>
         <% end %>
       </div>
-    <% end %>
-  </div>
-
-  <div class="filter_button_card">
-    <%= link_to "ALL", lectures_path, class: "filter_button #{params[:query].blank? ? 'active' : ''}" %>
-    <% @categories.each do |category| %>
-      <%= link_to category.title, lectures_path(query: category.title), class: "filter_button #{params[:query] == category.title ? 'active' : ''}" %>
     <% end %>
   </div>
 

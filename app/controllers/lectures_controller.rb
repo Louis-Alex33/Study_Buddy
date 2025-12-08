@@ -1,8 +1,8 @@
 class LecturesController < ApplicationController
 
   def index
-    @categories = current_user.categories
     @lectures = Lecture.where(user_id: current_user.id)
+    @categories = Category.all
 
     if params[:search].present?
       @lectures = @lectures.where("title ILIKE :search OR resume ILIKE :search", search: "%#{params[:search]}%")
