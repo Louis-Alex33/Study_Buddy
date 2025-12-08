@@ -353,7 +353,22 @@ body[data-theme="dark"] {
 
 
   .lectures-header {
-    background: linear-gradient(135deg, var(--blue-dark) 0%, var(--blue-primary) 100%) !important;
+    background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%) !important;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4) !important;
+
+    .lectures-header-content {
+      h1 {
+        color: var(--blue-primary) !important;
+      }
+
+      p {
+        color: var(--text-secondary) !important;
+      }
+    }
+
+    &::before, &::after {
+      background: rgba(74, 144, 226, 0.1) !important;
+    }
   }
 
   .lecture-card {
@@ -403,11 +418,39 @@ body[data-theme="dark"] {
   }
 
   .lecture-show-header {
-    background: linear-gradient(135deg, var(--blue-dark) 0%, var(--blue-primary) 100%) !important;
+    background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%) !important;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4) !important;
+
+    .lecture-show-header-content {
+      .category-badge {
+        background: var(--blue-primary) !important;
+      }
+
+      h1 {
+        color: var(--text-primary) !important;
+      }
+    }
   }
 
   .lecture-resume-card {
-    background: linear-gradient(135deg, var(--blue-dark) 0%, var(--blue-primary) 100%) !important;
+    background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%) !important;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4) !important;
+
+    .resume-header {
+      .resume-title {
+        h3 {
+          color: var(--blue-primary) !important;
+        }
+
+        p {
+          color: var(--text-secondary) !important;
+        }
+      }
+    }
+
+    .resume-content {
+      color: var(--text-primary) !important;
+    }
   }
 
   .assistant-ia-card, .flashcards-card {
