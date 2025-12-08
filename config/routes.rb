@@ -22,6 +22,8 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :notes, only: :destroy
+
   resources :flashcards, only: [:show, :destroy] do
     member do
       patch :update_progress
