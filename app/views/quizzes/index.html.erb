@@ -1,0 +1,80 @@
+<div class="container my-5">
+  <!-- Header Section -->
+  <div class="lectures-header">
+    <div class="lectures-header-content">
+      <h1>Quizz</h1>
+      <p>Teste tes connaissances par categorie</p>
+    </div>
+  </div>
+
+  <% if @quizzes_by_category.any? %>
+    <!-- Filter by difficulty -->
+    <div class="filter_button_card">
+      <%= link_to "Tous", quizzes_path, class: "filter_button #{params[:level].blank? ? 'active' : ''}" %>
+      <% (1..5).each do |level| %>
+        <%= link_to "Niveau #{level}", quizzes_path(level: level), class: "filter_button #{params[:level].to_i == level ? 'active' : ''}" %>
+      <% end %>
+    </div>
+
+    <% @quizzes_by_category.each do |category, quizzes| %>
+      <% filtered_quizzes = params[:level].present? ? quizzes.select { |q| q.level == params[:level].to_i } : quizzes %>
+      <% next if filtered_quizzes.empty? %>
+
+      <div class="quizz-category-section">
+        <h3 class="quizz-category-title">
+          <span class="category-icon">📁</span>
+          <%= category.title %>
+          <span class="category-count">(<%= filtered_quizzes.count %> quizz)</span>
+        </h3>
+        <div class="quizz-grid">
+          <% filtered_quizzes.each do |quiz| %>
+            <%
+              total = quiz.questions.count
+              best_attempt = quiz.attempts.where(user: current_user).completed.order(score: :desc).first
+              best_score = best_attempt&.score || 0
+              percentage = total > 0 ? (best_score.to_f / total * 100).round : 0
+            %>
+            <%= link_to quiz_path(quiz), class: "quizz-card-link" do %>
+              <div class="quizz-card">
+                <div class="quizz-card-header">
+                  <div class="quizz-card-icon">
+                    🧠
+                  </div>
+                  <div class="quizz-card-badge" style="background: <%= percentage == 100 ? '#28a745' : '#1351AA' %>;">
+                    <%= percentage %>%
+                  </div>
+                </div>
+                <div class="quizz-card-body">
+                  <h4 class="quizz-card-title"><%= quiz.title %></h4>
+                  <div class="quizz-card-stats">
+                    <span>📝 <%= total %> questions</span>
+                    <span>⭐ Niveau <%= quiz.level %></span>
+                  </div>
+                  <% if best_attempt %>
+                    <div class="quizz-card-stats">
+                      <span>✅ Meilleur: <%= best_score %>/<%= total %></span>
+                    </div>
+                  <% end %>
+                </div>
+              </div>
+            <% end %>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+  <% else %>
+    <div class="empty-lectures">
+      <div class="empty-icon">🧠</div>
+      <h3>Aucun quizz disponible</h3>
+      <p>Les quizz seront bientot disponibles !</p>
+    </div>
+  <% end %>
+
+  <!-- Back Button -->
+  <div class="lectures-back-section">
+    <%= link_to root_path, class: "btn-back-home" do %>
+      <span>←</span>
+      <span>Retour a l'accueil</span>
+    <% end %>
+  </div>
+</div>
