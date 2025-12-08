@@ -1,0 +1,52 @@
+<% questions = JSON.parse(@quiz.content) %>
+
+<div class="container my-5"
+     data-controller="flashcard-progress"
+     data-flashcard-progress-completed-value="<%= @progress %>"
+     data-flashcard-progress-total-value="<%= questions.count %>"
+     data-flashcard-progress-update-url-value="<%= update_progress_quiz_path(@quiz) %>">
+
+  <div class="flashcard-show-header">
+    <h2>🧠 Quiz de validation - <%= @quiz.lecture.title %></h2>
+  </div>
+
+  <!-- Barre de progression -->
+  <div class="flashcard-progress-card">
+    <div class="progress-header">
+      <span class="progress-label">Progression</span>
+      <span data-flashcard-progress-target="progressText" class="progress-count">0 / <%= questions.count %> questions completees</span>
+    </div>
+    <div class="progress">
+      <div data-flashcard-progress-target="progressBar" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
+    </div>
+  </div>
+
+  <div id="quiz-container">
+    <% questions.each_with_index do |q, index| %>
+      <div id="question-<%= index %>" class="flashcard-question">
+        <h5 class="question-header">Question <%= index + 1 %> / <%= questions.count %></h5>
+        <p class="question-text"><%= q['question'] %></p>
+
+        <div>
+          <textarea id="answer-<%= index %>" rows="3" placeholder="Tape ta reponse ici..." class="answer-textarea"></textarea>
+        </div>
+
+        <button data-action="click->flashcard-progress#showAnswer"
+                data-flashcard-progress-index-param="<%= index %>"
+                class="btn-show-answer">
+          👁️ Voir la reponse
+        </button>
+
+        <div data-flashcard-progress-target="answer" class="correct-answer-box">
+          <strong>✅ Reponse correcte:</strong>
+          <p><%= q['answer'] %></p>
+        </div>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="flashcard-actions-footer">
+    <%= link_to "← Retour a la lecture", lecture_path(@quiz.lecture), class: "btn-back-to-lecture" %>
+    <%= button_to "🗑️ Supprimer ce quiz", quiz_path(@quiz), method: :delete, data: { confirm: "Es-tu sur de vouloir supprimer ce quiz ?" }, class: "btn-delete-flashcard-main" %>
+  </div>
+</div>

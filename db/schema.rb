@@ -106,6 +106,8 @@ ActiveRecord::Schema[7.1].define(version: 2025_12_05_143517) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["lecture_id"], name: "index_quizzes_on_lecture_id"
+  end
+
   create_table "solid_cable_messages", force: :cascade do |t|
     t.text "channel"
     t.text "payload"
