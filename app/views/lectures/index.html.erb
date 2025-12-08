@@ -7,16 +7,26 @@
     </div>
   </div>
 
-  <div class="filter_button_card">
-    <% if @lectures.any? %>
-      <%= link_to "ALL", lectures_path, class: "filter_button #{params[:query].blank? ? 'active' : ''}" %>
-      <% @categories.each do |category| %>
-        <%= link_to category.title, lectures_path(query: category.title), class: "filter_button #{params[:query] == category.title ? 'active' : ''}" %>
-      <% end %>
-  </div>
+  <div class="lectures-content" data-controller="tabs">
+    <% if @lectures.any? || @quizzes.any? %>
+      <div class="filter_button_card">
+        <button class="filter_button active" data-tabs-target="button" data-action="click->tabs#switch" data-tab="all">
+          ALL
+        </button>
+        <% @categories.each do |category| %>
+          <button class="filter_button" data-tabs-target="button" data-action="click->tabs#switch" data-tab="<%= category.title.parameterize %>">
+            <%= category.title %>
+          </button>
+        <% end %>
+        <button class="filter_button" data-tabs-target="button" data-action="click->tabs#switch" data-tab="quizz">
+          🧠 QUIZZ
+        </button>
+      </div>
 
-    <div class="lectures-grid">
-      <% @lectures.each do |lecture| %>
+      <!-- All Lectures View -->
+      <div class="tab-pane active" data-tabs-target="content" data-tab="all">
+        <div class="lectures-grid">
+        <% current_user.lectures.each do |lecture| %>
         <div class="lecture-card">
           <span class="lecture-card-badge">
             <%= lecture.category.title %>
@@ -59,20 +69,128 @@
               🗑
             <% end %>
           </div>
+          </div>
+        <% end %>
+        </div>
+      </div>
+
+      <!-- Category Tabs -->
+      <% @categories.each do |category| %>
+        <div class="tab-pane" data-tabs-target="content" data-tab="<%= category.title.parameterize %>">
+          <div class="lectures-grid">
+            <% category.lectures.each do |lecture| %>
+              <div class="lecture-card">
+                <span class="lecture-card-badge">
+                  <%= lecture.category.title %>
+                </span>
+
+                <h3 class="lecture-card-title">
+                  <%= lecture.title %>
+                </h3>
+
+                <p class="lecture-card-resume">
+                  <%= lecture.resume %>
+                </p>
+
+                <div class="lecture-card-stats">
+                  <div class="stat-item">
+                    <div class="stat-number">
+                      <%= lecture.flashcards.count %>
+                    </div>
+                    <div class="stat-label">
+                      Flashcards
+                    </div>
+                  </div>
+                  <div class="stat-divider"></div>
+                  <div class="stat-item">
+                    <div class="stat-number">
+                      <%= lecture.messages.count %>
+                    </div>
+                    <div class="stat-label">
+                      Messages
+                    </div>
+                  </div>
+                </div>
+
+                <div class="lecture-card-actions">
+                  <%= link_to lecture_path(lecture), class: "btn-view-lecture" do %>
+                    <span>Voir la lecture</span>
+                    <span>→</span>
+                  <% end %>
+                  <%= button_to lecture_path(lecture), method: :delete, data: { turbo_confirm: "Êtes-vous sûr de vouloir supprimer cette lecture ?" }, class: "btn-delete-lecture" do %>
+                    🗑
+                  <% end %>
+                </div>
+              </div>
+            <% end %>
+          </div>
         </div>
       <% end %>
-    </div>
-  <% else %>
-    <div class="empty-lectures">
-      <div class="empty-icon">📚</div>
-      <h3>Aucune lecture pour le moment</h3>
-      <p>Commence par ajouter ta premiere lecture</p>
-      <%= link_to root_path, class: "btn-back-home" do %>
-        <span>+</span>
-        <span>Ajouter une lecture</span>
-      <% end %>
-    </div>
-  <% end %>
+
+      <!-- Quizz View -->
+      <div class="tab-pane" data-tabs-target="content" data-tab="quizz">
+        <% if @quizzes.any? %>
+          <% @categories.each do |category| %>
+            <% category_quizzes = @quizzes.select { |q| q.lecture.category_id == category.id } %>
+            <% if category_quizzes.any? %>
+              <div class="quizz-category-section">
+                <h3 class="quizz-category-title">
+                  <span class="category-icon">📁</span>
+                  <%= category.title %>
+                  <span class="category-count">(<%= category_quizzes.count %> quizz)</span>
+                </h3>
+                <div class="quizz-grid">
+                  <% category_quizzes.each do |quiz| %>
+                    <%
+                      questions = JSON.parse(quiz.content)
+                      total = questions.count
+                      completed = quiz.status || 0
+                      percentage = total > 0 ? (completed.to_f / total * 100).round : 0
+                    %>
+                    <%= link_to quiz_path(quiz), class: "quizz-card-link" do %>
+                      <div class="quizz-card">
+                        <div class="quizz-card-header">
+                          <div class="quizz-card-icon">
+                            🧠
+                          </div>
+                          <div class="quizz-card-badge" style="background: <%= percentage == 100 ? '#28a745' : '#1351AA' %>;">
+                            <%= percentage %>%
+                          </div>
+                        </div>
+                        <div class="quizz-card-body">
+                          <h4 class="quizz-card-title"><%= quiz.lecture.title %></h4>
+                          <div class="quizz-card-stats">
+                            <span>📝 <%= total %> questions</span>
+                            <span>✅ <%= completed %> / <%= total %></span>
+                          </div>
+                        </div>
+                      </div>
+                    <% end %>
+                  <% end %>
+                </div>
+              </div>
+            <% end %>
+          <% end %>
+        <% else %>
+          <div class="empty-lectures">
+            <div class="empty-icon">🧠</div>
+            <h3>Aucun quizz disponible</h3>
+            <p>Génère des quizz depuis tes lectures pour valider tes connaissances !</p>
+          </div>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="empty-lectures">
+        <div class="empty-icon">📚</div>
+        <h3>Aucune lecture pour le moment</h3>
+        <p>Commence par ajouter ta premiere lecture</p>
+        <%= link_to root_path, class: "btn-back-home" do %>
+          <span>+</span>
+          <span>Ajouter une lecture</span>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
 
   <!-- Back Button -->
   <div class="lectures-back-section">
