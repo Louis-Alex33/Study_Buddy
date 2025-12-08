@@ -2,8 +2,8 @@
   <!-- Header Section -->
   <div class="lectures-header">
     <div class="lectures-header-content">
-      <h1>Mes Lectures</h1>
-      <p>Toutes tes lectures en un seul endroit</p>
+      <h1>Mes cours</h1>
+      <p>Toutes tes cours en un seul endroit</p>
     </div>
   </div>
 
@@ -24,7 +24,7 @@
             <path d="m21 21-4.3-4.3"></path>
           </svg>
         </button>
-        <%= text_field_tag :search, params[:search], placeholder: "Rechercher une lecture...", class: "search-input" %>
+        <%= text_field_tag :search, params[:search], placeholder: "Rechercher un cours...", class: "search-input" %>
         <% if params[:search].present? %>
           <%= link_to lectures_path, class: "search-clear-btn" do %>
             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -75,7 +75,7 @@
 
           <div class="lecture-card-actions">
             <%= link_to lecture_path(lecture), class: "btn-view-lecture" do %>
-              <span>Voir la lecture</span>
+              <span>Voir le cours</span>
               <span>→</span>
             <% end %>
             <%= button_to lecture_path(lecture), method: :delete, data: { turbo_confirm: "Êtes-vous sûr de vouloir supprimer cette lecture ?" }, class: "btn-delete-lecture" do %>
