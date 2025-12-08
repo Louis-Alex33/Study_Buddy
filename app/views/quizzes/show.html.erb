@@ -1,13 +1,13 @@
-<% questions = JSON.parse(@flashcard.content) %>
+<% questions = JSON.parse(@quiz.content) %>
 
 <div class="container my-5"
      data-controller="flashcard-progress"
      data-flashcard-progress-completed-value="<%= @progress %>"
      data-flashcard-progress-total-value="<%= questions.count %>"
-     data-flashcard-progress-update-url-value="<%= update_progress_flashcard_path(@flashcard) %>">
+     data-flashcard-progress-update-url-value="<%= update_progress_quiz_path(@quiz) %>">
 
   <div class="flashcard-show-header">
-    <h2>📚 Flashcard - <%= @flashcard.lecture.title %></h2>
+    <h2>🧠 Quiz de validation - <%= @quiz.lecture.title %></h2>
   </div>
 
   <!-- Barre de progression -->
@@ -46,7 +46,7 @@
   </div>
 
   <div class="flashcard-actions-footer">
-    <%= link_to "← Retour a la lecture", lecture_path(@flashcard.lecture), class: "btn-back-to-lecture" %>
-    <%= button_to "🗑️ Supprimer cette flashcard", flashcard_path(@flashcard), method: :delete, data: { confirm: "Es-tu sur de vouloir supprimer cette flashcard ?" }, class: "btn-delete-flashcard-main" %>
+    <%= link_to "← Retour a la lecture", lecture_path(@quiz.lecture), class: "btn-back-to-lecture" %>
+    <%= button_to "🗑️ Supprimer ce quiz", quiz_path(@quiz), method: :delete, data: { confirm: "Es-tu sur de vouloir supprimer ce quiz ?" }, class: "btn-delete-flashcard-main" %>
   </div>
 </div>

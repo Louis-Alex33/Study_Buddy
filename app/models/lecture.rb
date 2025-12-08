@@ -6,6 +6,7 @@ class Lecture < ApplicationRecord
   belongs_to :user
   belongs_to :category
   has_many :flashcards
+  has_many :quizzes, dependent: :destroy
   has_many :messages, dependent: :destroy
   has_many :notes
 

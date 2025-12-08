@@ -2,12 +2,14 @@ class LecturesController < ApplicationController
 
   def index
     @lectures = current_user.lectures
-    @categories = Category.all
+    @categories = current_user.categories.distinct
+    @quizzes = Quiz.joins(:lecture).where(lectures: { category_id: current_user.categories.pluck(:id) })
 
-    if params[:query].present?
-      @lectures = Lecture.joins(:category).where(user: current_user, category: { title: params[:query]})
+    if params[:search].present?
+      @lectures = @lectures.where("title ILIKE :search OR resume ILIKE :search", search: "%#{params[:search]}%")
+    elsif params[:query].present? && params[:query] != 'quizz'
+      @lectures = @lectures.joins(:category).where(categories: { title: params[:query] })
     end
-    
   end
 
   def show
