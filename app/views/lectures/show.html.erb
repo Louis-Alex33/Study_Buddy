@@ -75,7 +75,7 @@
 
   <div class="row g-4">
     <!-- Left Column: Chat IA -->
-    <div class="col-lg-5">
+    <div class="col-lg-6">
       <div class="assistant-ia-card" data-controller="chat">
         <div class="assistant-header">
           <div class="assistant-icon">💬</div>
@@ -106,11 +106,11 @@
     </div>
 
     <!-- Right Column: Flashcards & Quizz -->
-    <div class="col-lg-7">
+    <div class="col-lg-6">
       <div class="row g-3">
         <!-- Flashcards Section (Top 50%) -->
         <div class="col-12">
-          <div class="flashcards-card" style="height: calc(50vh - 2rem);">
+          <div class="flashcards-card" style="height:100vh ;">
             <div class="flashcards-header">
               <div class="flashcards-icon">📚</div>
               <div class="flashcards-title">
@@ -159,7 +159,7 @@
                         </div>
 
                         <%= button_to flashcard_path(flashcard), method: :delete, data: { confirm: "Supprimer cette flashcard ?" }, class: "btn-delete-flashcard" do %>
-                          🗑️
+                          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path stroke-dasharray="24" stroke-dashoffset="24" d="M12 20h5c0.5 0 1 -0.5 1 -1v-14M12 20h-5c-0.5 0 -1 -0.5 -1 -1v-14"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.4s" values="24;0"/></path><path stroke-dasharray="20" stroke-dashoffset="20" d="M4 5h16"><animate fill="freeze" attributeName="stroke-dashoffset" begin="0.4s" dur="0.2s" values="20;0"/></path><path stroke-dasharray="8" stroke-dashoffset="8" d="M10 4h4M10 9v7M14 9v7"><animate fill="freeze" attributeName="stroke-dashoffset" begin="0.6s" dur="0.2s" values="8;0"/></path></g></svg>
                         <% end %>
                       </div>
                     </div>
@@ -169,115 +169,11 @@
             <% else %>
               <div class="empty-flashcards">
                 <div class="empty-icon">📚</div>
-                <p>Aucune flashcard pour cette lecture</p>
+                <p>Aucune flashcard pour le Cours</p>
               </div>
             <% end %>
           </div>
         </div>
-
-        <!-- Quizz Section (Bottom 50%) -->
-        <div class="col-12">
-          <div class="flashcards-card" style="height: calc(50vh - 2rem);">
-            <div class="flashcards-header">
-              <div class="flashcards-icon">🧠</div>
-              <div class="flashcards-title">
-                <h3>Quizz</h3>
-                <p>Valide tes connaissances</p>
-              </div>
-              <button type="button" data-bs-toggle="modal" data-bs-target="#generateQuizModal" class="btn-generate-flashcards">
-                ✨ Generer avec IA
-              </button>
-            </div>
-
-            <% if @lecture.quizzes.any? %>
-              <div class="flashcards-list" style="max-height: calc(100% - 80px); overflow-y: auto;">
-                <% @lecture.quizzes.each do |quiz| %>
-                  <%
-                    questions = JSON.parse(quiz.content)
-                    total = questions.count
-                    completed = quiz.status || 0
-                    percentage = total > 0 ? (completed.to_f / total * 100).round : 0
-                  %>
-                  <div class="flashcard-item">
-                    <div class="progress-bar" style="width: <%= percentage %>%;"></div>
-
-                    <div class="flashcard-content">
-                      <div class="flashcard-info">
-                        <a href="<%= quiz_path(quiz) %>" class="flashcard-link">
-                          Quiz de validation
-                        </a>
-                        <div class="flashcard-stats">
-                          <span><%= total %> questions</span>
-                          <span class="stat-separator">•</span>
-                          <span><%= completed %> / <%= total %></span>
-                        </div>
-                      </div>
-
-                      <div class="flashcard-actions">
-                        <div class="progress-circle">
-                          <svg width="70" height="70">
-                            <circle cx="35" cy="35" r="30" fill="none" stroke="#E3E2DE" stroke-width="6"/>
-                            <circle cx="35" cy="35" r="30" fill="none" stroke="<%= percentage == 100 ? '#28a745' : '#1351AA' %>" stroke-width="6" stroke-dasharray="<%= 2 * Math::PI * 30 %>" stroke-dashoffset="<%= 2 * Math::PI * 30 * (1 - percentage / 100.0) %>" stroke-linecap="round"/>
-                          </svg>
-                          <div class="progress-text" style="color: <%= percentage == 100 ? '#28a745' : '#1351AA' %>;">
-                            <%= percentage %>%
-                          </div>
-                        </div>
-
-                        <%= button_to quiz_path(quiz), method: :delete, data: { confirm: "Supprimer ce quiz ?" }, class: "btn-delete-flashcard" do %>
-                          🗑️
-                        <% end %>
-                      </div>
-                    </div>
-                  </div>
-                <% end %>
-              </div>
-            <% else %>
-              <div class="empty-flashcards">
-                <div class="empty-icon">🧠</div>
-                <p>Aucun quiz disponible</p>
-              </div>
-            <% end %>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Actions Footer -->
-  <div class="lectures-back-section">
-    <%= link_to root_path, class: "btn-back-home" do %>
-      <span>←</span>
-      <span>Retour a l'accueil</span>
-    <% end %>
-  </div>
-</div>
-
-<!-- Modal pour générer un quiz -->
-<div class="modal fade modal-generate-flashcards" id="generateQuizModal" tabindex="-1" aria-labelledby="generateQuizModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <div>
-          <h5 class="modal-title">✨ Generer un quiz</h5>
-          <p class="modal-subtitle">Avec l'intelligence artificielle</p>
-        </div>
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body text-center">
-        <div class="modal-icon">🤖</div>
-        <p>L'IA va generer automatiquement <strong>10 questions de validation</strong> basees sur le contenu de cette lecture.</p>
-        <p class="modal-note">Ce quiz te permettra de valider tes connaissances sur cette leçon.</p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" data-bs-dismiss="modal" class="btn-modal-cancel">Annuler</button>
-        <%= form_with url: lecture_quizzes_path(@lecture), method: :post, local: true, style: "display: inline;" do |f| %>
-          <%= f.submit "Generer maintenant", class: "btn-modal-submit" %>
-        <% end %>
-      </div>
-    </div>
-  </div>
-</div>
 
 <!-- Modal pour générer les flashcards -->
 <div class="modal fade modal-generate-flashcards" id="generateFlashcardsModal" tabindex="-1" aria-labelledby="generateFlashcardsModalLabel" aria-hidden="true">
@@ -295,9 +191,9 @@
         <p>L'IA va generer automatiquement <strong>10 questions</strong> basees sur le contenu de cette lecture.</p>
         <p class="modal-note">Ces flashcards te permettront de réviser régulièrement.</p>
       </div>
-      <div class="modal-footer">
+      <div class="modal-footer" >
         <button type="button" data-bs-dismiss="modal" class="btn-modal-cancel">Annuler</button>
-        <%= form_with url: lecture_flashcards_path(@lecture), method: :post, local: true, style: "display: inline;" do |f| %>
+        <%= form_with url: lecture_flashcards_path(@lecture), data: { controller: "upload-loading", action: "submit->upload-loading#submit" },method: :post, local: true, style: "display: inline;" do |f| %>
           <%= f.submit "Generer maintenant", class: "btn-modal-submit" %>
         <% end %>
       </div>
