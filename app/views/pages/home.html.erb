@@ -130,7 +130,7 @@
               </div>
               <div class="category-card-content">
                 <h5 class="category-card-title"><%= category.title %></h5>
-                <span class="category-card-count"><%= category.lectures.count %> lecture(s)</span>
+                <span class="category-card-count"><%= category.lectures.where(user: current_user).count %> lecture(s)</span>
               </div>
             </div>
           <% end %>
