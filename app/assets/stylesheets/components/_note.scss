@@ -36,11 +36,15 @@
     justify-content: center;
     padding: 14px 18px;
     background: linear-gradient(135deg, #1351AA 0%, #1A66CC 100%);
-    color: rgb(88, 13, 13);
+    color: rgb(249, 247, 247);
     border-radius: 18px;
     border: none;
     cursor: pointer;
     font-weight: 600;
     font-size: 15px;
     transition: all 0.3s;
+}
+
+#note-content{
+  color: rgb(249, 247, 247);
 }
