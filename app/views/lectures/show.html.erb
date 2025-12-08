@@ -105,97 +105,70 @@
       </div>
     </div>
 
-    <!-- Right Column: Flashcards & Quizz -->
+    <!-- Right Column: Flashcards -->
     <div class="col-lg-7">
-      <div class="row g-3">
-        <!-- Flashcards Section (Top 50%) -->
-        <div class="col-12">
-          <div class="flashcards-card" style="height: calc(50vh - 2rem);">
-            <div class="flashcards-header">
-              <div class="flashcards-icon">📚</div>
-              <div class="flashcards-title">
-                <h3>Flashcards</h3>
-                <p>Revise tes connaissances</p>
-              </div>
-              <button type="button" data-bs-toggle="modal" data-bs-target="#generateFlashcardsModal" class="btn-generate-flashcards">
-                ✨ Generer avec IA
-              </button>
-            </div>
+      <div class="flashcards-card" style="height: calc(100vh - 14rem);">
+        <div class="flashcards-header">
+          <div class="flashcards-icon">📚</div>
+          <div class="flashcards-title">
+            <h3>Flashcards</h3>
+            <p>Revise tes connaissances</p>
+          </div>
+          <button type="button" data-bs-toggle="modal" data-bs-target="#generateFlashcardsModal" class="btn-generate-flashcards">
+            ✨ Generer avec IA
+          </button>
+        </div>
 
-            <% if @lecture.flashcards.any? %>
-              <div class="flashcards-list" style="max-height: calc(100% - 80px); overflow-y: auto;">
-                <% @lecture.flashcards.each do |flashcard| %>
-                  <%
-                    completion = current_user.flashcard_completions.find_by(flashcard: flashcard)
-                    progress = completion ? completion.status.to_i : 0
-                    questions = JSON.parse(flashcard.content)
-                    total = questions.count
-                    percentage = total > 0 ? (progress.to_f / total * 100).round : 0
-                  %>
-                  <div class="flashcard-item">
-                    <div class="progress-bar" style="width: <%= percentage %>%;"></div>
+        <% if @lecture.flashcards.any? %>
+          <div class="flashcards-list" style="max-height: calc(100% - 80px); overflow-y: auto;">
+            <% @lecture.flashcards.each do |flashcard| %>
+              <%
+                completion = current_user.flashcard_completions.find_by(flashcard: flashcard)
+                progress = completion ? completion.status.to_i : 0
+                questions = JSON.parse(flashcard.content)
+                total = questions.count
+                percentage = total > 0 ? (progress.to_f / total * 100).round : 0
+              %>
+              <div class="flashcard-item">
+                <div class="progress-bar" style="width: <%= percentage %>%;"></div>
 
-                    <div class="flashcard-content">
-                      <div class="flashcard-info">
-                        <a href="<%= flashcard_path(flashcard) %>" class="flashcard-link">
-                          Flashcard #<%= flashcard.id %>
-                        </a>
-                        <div class="flashcard-stats">
-                          <span><%= total %> questions</span>
-                          <span class="stat-separator">•</span>
-                          <span><%= progress %> completees</span>
-                        </div>
-                      </div>
-
-                      <div class="flashcard-actions">
-                        <div class="progress-circle">
-                          <svg width="70" height="70">
-                            <circle cx="35" cy="35" r="30" fill="none" stroke="#E3E2DE" stroke-width="6"/>
-                            <circle cx="35" cy="35" r="30" fill="none" stroke="<%= percentage == 100 ? '#28a745' : '#1351AA' %>" stroke-width="6" stroke-dasharray="<%= 2 * Math::PI * 30 %>" stroke-dashoffset="<%= 2 * Math::PI * 30 * (1 - percentage / 100.0) %>" stroke-linecap="round"/>
-                          </svg>
-                          <div class="progress-text" style="color: <%= percentage == 100 ? '#28a745' : '#1351AA' %>;">
-                            <%= percentage %>%
-                          </div>
-                        </div>
-
-                        <%= button_to flashcard_path(flashcard), method: :delete, data: { confirm: "Supprimer cette flashcard ?" }, class: "btn-delete-flashcard" do %>
-                          🗑️
-                        <% end %>
-                      </div>
+                <div class="flashcard-content">
+                  <div class="flashcard-info">
+                    <a href="<%= flashcard_path(flashcard) %>" class="flashcard-link">
+                      Flashcard #<%= flashcard.id %>
+                    </a>
+                    <div class="flashcard-stats">
+                      <span><%= total %> questions</span>
+                      <span class="stat-separator">•</span>
+                      <span><%= progress %> completees</span>
                     </div>
                   </div>
-                <% end %>
-              </div>
-            <% else %>
-              <div class="empty-flashcards">
-                <div class="empty-icon">📚</div>
-                <p>Aucune flashcard pour cette lecture</p>
+
+                  <div class="flashcard-actions">
+                    <div class="progress-circle">
+                      <svg width="70" height="70">
+                        <circle cx="35" cy="35" r="30" fill="none" stroke="#E3E2DE" stroke-width="6"/>
+                        <circle cx="35" cy="35" r="30" fill="none" stroke="<%= percentage == 100 ? '#28a745' : '#1351AA' %>" stroke-width="6" stroke-dasharray="<%= 2 * Math::PI * 30 %>" stroke-dashoffset="<%= 2 * Math::PI * 30 * (1 - percentage / 100.0) %>" stroke-linecap="round"/>
+                      </svg>
+                      <div class="progress-text" style="color: <%= percentage == 100 ? '#28a745' : '#1351AA' %>;">
+                        <%= percentage %>%
+                      </div>
+                    </div>
+
+                    <%= button_to flashcard_path(flashcard), method: :delete, data: { confirm: "Supprimer cette flashcard ?" }, class: "btn-delete-flashcard" do %>
+                      🗑️
+                    <% end %>
+                  </div>
+                </div>
               </div>
             <% end %>
           </div>
-        </div>
-
-        <!-- Quizz Section (Bottom 50%) -->
-        <div class="col-12">
-          <div class="flashcards-card" style="height: calc(50vh - 2rem);">
-            <div class="flashcards-header">
-              <div class="flashcards-icon">🧠</div>
-              <div class="flashcards-title">
-                <h3>Quizz</h3>
-                <p>Valide tes connaissances</p>
-              </div>
-              <%= link_to quizzes_path, class: "btn-generate-flashcards" do %>
-                Voir tous les quizz
-              <% end %>
-            </div>
-
-            <div class="empty-flashcards">
-              <div class="empty-icon">🧠</div>
-              <p>Les quizz sont maintenant accessibles depuis la page Quizz</p>
-              <%= link_to "Acceder aux quizz", quizzes_path, class: "btn btn-primary mt-3" %>
-            </div>
+        <% else %>
+          <div class="empty-flashcards">
+            <div class="empty-icon">📚</div>
+            <p>Aucune flashcard pour cette lecture</p>
           </div>
-        </div>
+        <% end %>
       </div>
     </div>
   </div>

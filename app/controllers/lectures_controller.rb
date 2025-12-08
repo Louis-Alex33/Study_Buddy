@@ -3,6 +3,7 @@ class LecturesController < ApplicationController
   def index
     @lectures = current_user.lectures
     @categories = current_user.categories.distinct
+    @quizzes = Quiz.all
 
     if params[:search].present?
       @lectures = @lectures.where("title ILIKE :search OR resume ILIKE :search", search: "%#{params[:search]}%")
