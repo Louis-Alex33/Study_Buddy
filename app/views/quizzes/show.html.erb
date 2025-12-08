@@ -1,52 +1,79 @@
-<% questions = JSON.parse(@quiz.content) %>
-
-<div class="container my-5"
-     data-controller="flashcard-progress"
-     data-flashcard-progress-completed-value="<%= @progress %>"
-     data-flashcard-progress-total-value="<%= questions.count %>"
-     data-flashcard-progress-update-url-value="<%= update_progress_quiz_path(@quiz) %>">
-
+<div class="container my-5">
   <div class="flashcard-show-header">
-    <h2>🧠 Quiz de validation - <%= @quiz.lecture.title %></h2>
+    <h2>🧠 <%= @quiz.title %></h2>
+    <p class="text-muted">
+      <%= @quiz.category.title %> | Niveau <%= @quiz.level %> | <%= @questions.count %> questions
+    </p>
   </div>
 
-  <!-- Barre de progression -->
-  <div class="flashcard-progress-card">
-    <div class="progress-header">
-      <span class="progress-label">Progression</span>
-      <span data-flashcard-progress-target="progressText" class="progress-count">0 / <%= questions.count %> questions completees</span>
-    </div>
-    <div class="progress">
-      <div data-flashcard-progress-target="progressBar" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
-    </div>
-  </div>
-
-  <div id="quiz-container">
-    <% questions.each_with_index do |q, index| %>
-      <div id="question-<%= index %>" class="flashcard-question">
-        <h5 class="question-header">Question <%= index + 1 %> / <%= questions.count %></h5>
-        <p class="question-text"><%= q['question'] %></p>
-
-        <div>
-          <textarea id="answer-<%= index %>" rows="3" placeholder="Tape ta reponse ici..." class="answer-textarea"></textarea>
-        </div>
-
-        <button data-action="click->flashcard-progress#showAnswer"
-                data-flashcard-progress-index-param="<%= index %>"
-                class="btn-show-answer">
-          👁️ Voir la reponse
-        </button>
-
-        <div data-flashcard-progress-target="answer" class="correct-answer-box">
-          <strong>✅ Reponse correcte:</strong>
-          <p><%= q['answer'] %></p>
+  <!-- Best Score Card -->
+  <% if @best_attempt %>
+    <div class="flashcard-progress-card">
+      <div class="progress-header">
+        <span class="progress-label">Meilleur Score</span>
+        <span class="progress-count"><%= @best_attempt.score %> / <%= @best_attempt.total_questions %> (<%= @best_attempt.percentage_score %>%)</span>
+      </div>
+      <div class="progress">
+        <div class="progress-bar progress-bar-striped" role="progressbar"
+             style="width: <%= @best_attempt.percentage_score %>%; background-color: <%= @best_attempt.percentage_score == 100 ? '#28a745' : '#1351AA' %>;"
+             aria-valuenow="<%= @best_attempt.percentage_score %>" aria-valuemin="0" aria-valuemax="100">
+          <%= @best_attempt.percentage_score %>%
         </div>
       </div>
-    <% end %>
+    </div>
+  <% end %>
+
+  <!-- Start Quiz Button -->
+  <div class="text-center my-4">
+    <%= button_to "Commencer le quizz", quiz_attempts_path(@quiz), method: :post, class: "btn btn-primary btn-lg" %>
   </div>
 
+  <!-- Previous Attempts -->
+  <% if @user_attempts.any? %>
+    <div class="card mt-4">
+      <div class="card-header">
+        <h5>Mes tentatives</h5>
+      </div>
+      <div class="card-body">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Score</th>
+              <th>Statut</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @user_attempts.each do |attempt| %>
+              <tr>
+                <td><%= attempt.created_at.strftime("%d/%m/%Y %H:%M") %></td>
+                <td>
+                  <% if attempt.done? %>
+                    <%= attempt.score %>/<%= attempt.total_questions %> (<%= attempt.percentage_score %>%)
+                  <% else %>
+                    -
+                  <% end %>
+                </td>
+                <td>
+                  <% if attempt.done? %>
+                    <span class="badge bg-success">Termine</span>
+                  <% else %>
+                    <span class="badge bg-warning">En cours</span>
+                  <% end %>
+                </td>
+                <td>
+                  <%= link_to "Voir", quiz_attempt_path(@quiz, attempt), class: "btn btn-sm btn-outline-primary" %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  <% end %>
+
   <div class="flashcard-actions-footer">
-    <%= link_to "← Retour a la lecture", lecture_path(@quiz.lecture), class: "btn-back-to-lecture" %>
-    <%= button_to "🗑️ Supprimer ce quiz", quiz_path(@quiz), method: :delete, data: { confirm: "Es-tu sur de vouloir supprimer ce quiz ?" }, class: "btn-delete-flashcard-main" %>
+    <%= link_to "← Retour aux quizz", quizzes_path, class: "btn-back-to-lecture" %>
   </div>
 </div>

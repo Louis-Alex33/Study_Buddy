@@ -5,6 +5,7 @@ class User < ApplicationRecord
   has_many :categories, through: :lectures
   has_many :flashcard_completions
   has_many :flashcards, through: :flashcard_completions
+  has_many :attempts
 
   devise :database_authenticatable, :registerable,
         :recoverable, :rememberable, :validatable

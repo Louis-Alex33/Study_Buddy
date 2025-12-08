@@ -2,6 +2,9 @@ Rails.application.routes.draw do
   get 'notes/create'
   devise_for :users
   root to: "pages#home"
+
+  # Multiplayer section
+  get 'multiplayer', to: 'multiplayer#index', as: :multiplayer
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
   resources :uploads, only: [:index, :create]
 
@@ -13,12 +16,14 @@ Rails.application.routes.draw do
     resources :notes, only: %i[new create]
     resources :messages, only: %i[new create]
     resources :flashcards, only: %i[new create]
-    resources :quizzes, only: %i[new create]
   end
 
-  resources :quizzes, only: [:show, :destroy] do
-    member do
-      patch :update_progress
+  # New quiz system - standalone, organized by category
+  resources :quizzes, only: [:index, :show] do
+    resources :attempts, only: [:create, :show] do
+      member do
+        patch :submit
+      end
     end
   end
 

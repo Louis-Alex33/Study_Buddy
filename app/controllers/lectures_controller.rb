@@ -8,7 +8,7 @@ class LecturesController < ApplicationController
 
     if params[:search].present?
       @lectures = @lectures.where("title ILIKE :search OR resume ILIKE :search", search: "%#{params[:search]}%")
-    elsif params[:query].present? && params[:query] != 'quizz'
+    elsif params[:query].present?
       @lectures = @lectures.joins(:category).where(categories: { title: params[:query] })
     end
   end

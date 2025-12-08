@@ -37,61 +37,12 @@
       <% @categories.each do |category| %>
         <%= link_to category.title, lectures_path(query: category.title), class: "filter_button #{params[:query] == category.title ? 'active' : ''}" %>
       <% end %>
-      <%= link_to lectures_path(query: 'quizz'), class: "filter_button #{params[:query] == 'quizz' ? 'active' : ''}" do %>
+      <%= link_to quizzes_path, class: "filter_button" do %>
         🧠 QUIZZ
       <% end %>
     </div>
 
-    <% if params[:query] == 'quizz' %>
-      <!-- Quizz View -->
-      <% if @quizzes.any? %>
-        <% quizzes_by_category = @quizzes.group_by { |q| q.lecture.category } %>
-        <% quizzes_by_category.each do |category, category_quizzes| %>
-          <div class="quizz-category-section">
-            <h3 class="quizz-category-title">
-              <span class="category-icon">📁</span>
-              <%= category.title %>
-              <span class="category-count">(<%= category_quizzes.count %> quizz)</span>
-            </h3>
-            <div class="quizz-grid">
-              <% category_quizzes.each do |quiz| %>
-                <%
-                  questions = JSON.parse(quiz.content)
-                  total = questions.count
-                  completed = quiz.status || 0
-                  percentage = total > 0 ? (completed.to_f / total * 100).round : 0
-                %>
-                <%= link_to quiz_path(quiz), class: "quizz-card-link" do %>
-                  <div class="quizz-card">
-                    <div class="quizz-card-header">
-                      <div class="quizz-card-icon">
-                        🧠
-                      </div>
-                      <div class="quizz-card-badge" style="background: <%= percentage == 100 ? '#28a745' : '#1351AA' %>;">
-                        <%= percentage %>%
-                      </div>
-                    </div>
-                    <div class="quizz-card-body">
-                      <h4 class="quizz-card-title"><%= quiz.lecture.title %></h4>
-                      <div class="quizz-card-stats">
-                        <span>📝 <%= total %> questions</span>
-                        <span>✅ <%= completed %> / <%= total %></span>
-                      </div>
-                    </div>
-                  </div>
-                <% end %>
-              <% end %>
-            </div>
-          </div>
-        <% end %>
-      <% else %>
-        <div class="empty-lectures">
-          <div class="empty-icon">🧠</div>
-          <h3>Aucun quizz disponible</h3>
-          <p>Génère des quizz depuis tes lectures pour valider tes connaissances !</p>
-        </div>
-      <% end %>
-    <% elsif @lectures.any? %>
+    <% if @lectures.any? %>
       <!-- Lectures Grid -->
       <div class="lectures-grid">
         <% @lectures.each do |lecture| %>
