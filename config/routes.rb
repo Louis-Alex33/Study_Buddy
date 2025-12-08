@@ -2,6 +2,9 @@ Rails.application.routes.draw do
   get 'notes/create'
   devise_for :users
   root to: "pages#home"
+
+  # Multiplayer section
+  get 'multiplayer', to: 'multiplayer#index', as: :multiplayer
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
   resources :uploads, only: [:index, :create]
 
