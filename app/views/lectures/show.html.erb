@@ -165,60 +165,16 @@
                 <h3>Quizz</h3>
                 <p>Valide tes connaissances</p>
               </div>
-              <button type="button" data-bs-toggle="modal" data-bs-target="#generateQuizModal" class="btn-generate-flashcards">
-                ✨ Generer avec IA
-              </button>
+              <%= link_to quizzes_path, class: "btn-generate-flashcards" do %>
+                Voir tous les quizz
+              <% end %>
             </div>
 
-            <% if @lecture.quizzes.any? %>
-              <div class="flashcards-list" style="max-height: calc(100% - 80px); overflow-y: auto;">
-                <% @lecture.quizzes.each do |quiz| %>
-                  <%
-                    questions = JSON.parse(quiz.content)
-                    total = questions.count
-                    completed = quiz.status || 0
-                    percentage = total > 0 ? (completed.to_f / total * 100).round : 0
-                  %>
-                  <div class="flashcard-item">
-                    <div class="progress-bar" style="width: <%= percentage %>%;"></div>
-
-                    <div class="flashcard-content">
-                      <div class="flashcard-info">
-                        <a href="<%= quiz_path(quiz) %>" class="flashcard-link">
-                          Quiz de validation
-                        </a>
-                        <div class="flashcard-stats">
-                          <span><%= total %> questions</span>
-                          <span class="stat-separator">•</span>
-                          <span><%= completed %> / <%= total %></span>
-                        </div>
-                      </div>
-
-                      <div class="flashcard-actions">
-                        <div class="progress-circle">
-                          <svg width="70" height="70">
-                            <circle cx="35" cy="35" r="30" fill="none" stroke="#E3E2DE" stroke-width="6"/>
-                            <circle cx="35" cy="35" r="30" fill="none" stroke="<%= percentage == 100 ? '#28a745' : '#1351AA' %>" stroke-width="6" stroke-dasharray="<%= 2 * Math::PI * 30 %>" stroke-dashoffset="<%= 2 * Math::PI * 30 * (1 - percentage / 100.0) %>" stroke-linecap="round"/>
-                          </svg>
-                          <div class="progress-text" style="color: <%= percentage == 100 ? '#28a745' : '#1351AA' %>;">
-                            <%= percentage %>%
-                          </div>
-                        </div>
-
-                        <%= button_to quiz_path(quiz), method: :delete, data: { confirm: "Supprimer ce quiz ?" }, class: "btn-delete-flashcard" do %>
-                          🗑️
-                        <% end %>
-                      </div>
-                    </div>
-                  </div>
-                <% end %>
-              </div>
-            <% else %>
-              <div class="empty-flashcards">
-                <div class="empty-icon">🧠</div>
-                <p>Aucun quiz disponible</p>
-              </div>
-            <% end %>
+            <div class="empty-flashcards">
+              <div class="empty-icon">🧠</div>
+              <p>Les quizz sont maintenant accessibles depuis la page Quizz</p>
+              <%= link_to "Acceder aux quizz", quizzes_path, class: "btn btn-primary mt-3" %>
+            </div>
           </div>
         </div>
       </div>
@@ -231,32 +187,6 @@
       <span>←</span>
       <span>Retour a l'accueil</span>
     <% end %>
-  </div>
-</div>
-
-<!-- Modal pour générer un quiz -->
-<div class="modal fade modal-generate-flashcards" id="generateQuizModal" tabindex="-1" aria-labelledby="generateQuizModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <div>
-          <h5 class="modal-title">✨ Generer un quiz</h5>
-          <p class="modal-subtitle">Avec l'intelligence artificielle</p>
-        </div>
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body text-center">
-        <div class="modal-icon">🤖</div>
-        <p>L'IA va generer automatiquement <strong>10 questions de validation</strong> basees sur le contenu de cette lecture.</p>
-        <p class="modal-note">Ce quiz te permettra de valider tes connaissances sur cette leçon.</p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" data-bs-dismiss="modal" class="btn-modal-cancel">Annuler</button>
-        <%= form_with url: lecture_quizzes_path(@lecture), method: :post, local: true, style: "display: inline;" do |f| %>
-          <%= f.submit "Generer maintenant", class: "btn-modal-submit" %>
-        <% end %>
-      </div>
-    </div>
   </div>
 </div>
 

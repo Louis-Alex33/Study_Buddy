@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_12_05_143517) do
+ActiveRecord::Schema[7.1].define(version: 2025_12_08_135008) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -40,6 +40,30 @@ ActiveRecord::Schema[7.1].define(version: 2025_12_05_143517) do
     t.bigint "blob_id", null: false
     t.string "variation_digest", null: false
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
+  end
+
+  create_table "answers", force: :cascade do |t|
+    t.bigint "attempt_id", null: false
+    t.bigint "question_id", null: false
+    t.bigint "option_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["attempt_id", "question_id"], name: "index_answers_on_attempt_id_and_question_id"
+    t.index ["attempt_id"], name: "index_answers_on_attempt_id"
+    t.index ["option_id"], name: "index_answers_on_option_id"
+    t.index ["question_id"], name: "index_answers_on_question_id"
+  end
+
+  create_table "attempts", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "quiz_id", null: false
+    t.integer "score"
+    t.boolean "done", default: false, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["quiz_id"], name: "index_attempts_on_quiz_id"
+    t.index ["user_id", "quiz_id"], name: "index_attempts_on_user_id_and_quiz_id"
+    t.index ["user_id"], name: "index_attempts_on_user_id"
   end
 
   create_table "categories", force: :cascade do |t|
@@ -99,13 +123,34 @@ ActiveRecord::Schema[7.1].define(version: 2025_12_05_143517) do
     t.index ["user_id"], name: "index_notes_on_user_id"
   end
 
-  create_table "quizzes", force: :cascade do |t|
-    t.bigint "lecture_id", null: false
-    t.text "content"
-    t.integer "status"
+  create_table "options", force: :cascade do |t|
+    t.bigint "question_id", null: false
+    t.string "content", null: false
+    t.boolean "correct", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["lecture_id"], name: "index_quizzes_on_lecture_id"
+    t.index ["question_id"], name: "index_options_on_question_id"
+  end
+
+  create_table "questions", force: :cascade do |t|
+    t.bigint "quiz_id", null: false
+    t.text "title", null: false
+    t.boolean "multiple_answers", default: false, null: false
+    t.integer "position", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["quiz_id", "position"], name: "index_questions_on_quiz_id_and_position"
+    t.index ["quiz_id"], name: "index_questions_on_quiz_id"
+  end
+
+  create_table "quizzes", force: :cascade do |t|
+    t.string "title", null: false
+    t.integer "level", default: 1, null: false
+    t.bigint "category_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["category_id"], name: "index_quizzes_on_category_id"
+    t.index ["level"], name: "index_quizzes_on_level"
   end
 
   create_table "solid_cable_messages", force: :cascade do |t|
@@ -133,6 +178,11 @@ ActiveRecord::Schema[7.1].define(version: 2025_12_05_143517) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "answers", "attempts"
+  add_foreign_key "answers", "options"
+  add_foreign_key "answers", "questions"
+  add_foreign_key "attempts", "quizzes"
+  add_foreign_key "attempts", "users"
   add_foreign_key "flashcard_completions", "flashcards"
   add_foreign_key "flashcard_completions", "users"
   add_foreign_key "flashcards", "lectures"
@@ -142,5 +192,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_12_05_143517) do
   add_foreign_key "messages", "users"
   add_foreign_key "notes", "lectures"
   add_foreign_key "notes", "users"
-  add_foreign_key "quizzes", "lectures"
+  add_foreign_key "options", "questions"
+  add_foreign_key "questions", "quizzes"
+  add_foreign_key "quizzes", "categories"
 end

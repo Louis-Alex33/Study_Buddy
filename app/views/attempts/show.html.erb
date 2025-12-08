@@ -1,0 +1,109 @@
+<div class="container my-5">
+  <div class="flashcard-show-header">
+    <h2>🧠 <%= @quiz.title %></h2>
+    <p class="text-muted">
+      <%= @quiz.category.title %> | Niveau <%= @quiz.level %>
+    </p>
+  </div>
+
+  <% if @attempt.done? %>
+    <!-- Results View -->
+    <div class="flashcard-progress-card">
+      <div class="progress-header">
+        <span class="progress-label">Resultat Final</span>
+        <span class="progress-count"><%= @attempt.score %> / <%= @attempt.total_questions %> (<%= @attempt.percentage_score %>%)</span>
+      </div>
+      <div class="progress">
+        <div class="progress-bar progress-bar-striped" role="progressbar"
+             style="width: <%= @attempt.percentage_score %>%; background-color: <%= @attempt.percentage_score >= 80 ? '#28a745' : (@attempt.percentage_score >= 50 ? '#ffc107' : '#dc3545') %>;"
+             aria-valuenow="<%= @attempt.percentage_score %>" aria-valuemin="0" aria-valuemax="100">
+          <%= @attempt.percentage_score %>%
+        </div>
+      </div>
+    </div>
+
+    <div id="quiz-container">
+      <% @questions.each_with_index do |question, index| %>
+        <%
+          user_answers = @attempt.answers.where(question: question)
+          user_option_ids = user_answers.pluck(:option_id)
+          correct_option_ids = question.correct_options.pluck(:id)
+          is_correct = question.multiple_answers ? (user_option_ids.sort == correct_option_ids.sort) : user_option_ids.any? { |id| correct_option_ids.include?(id) }
+        %>
+        <div class="flashcard-question <%= is_correct ? 'border-success' : 'border-danger' %>" style="border-left: 4px solid <%= is_correct ? '#28a745' : '#dc3545' %>;">
+          <h5 class="question-header">
+            Question <%= index + 1 %> / <%= @questions.count %>
+            <% if is_correct %>
+              <span class="badge bg-success ms-2">Correct</span>
+            <% else %>
+              <span class="badge bg-danger ms-2">Incorrect</span>
+            <% end %>
+          </h5>
+          <p class="question-text"><%= question.title %></p>
+
+          <div class="options-list">
+            <% question.options.each do |option| %>
+              <%
+                selected = user_option_ids.include?(option.id)
+                is_correct_option = option.correct?
+              %>
+              <div class="option-item <%= selected ? 'selected' : '' %> <%= is_correct_option ? 'correct-option' : '' %>"
+                   style="padding: 10px; margin: 5px 0; border-radius: 5px;
+                          background-color: <%= is_correct_option ? '#d4edda' : (selected ? '#f8d7da' : '#f8f9fa') %>;
+                          border: 2px solid <%= selected ? (is_correct_option ? '#28a745' : '#dc3545') : (is_correct_option ? '#28a745' : '#dee2e6') %>;">
+                <% if selected %>
+                  <strong><%= is_correct_option ? '✅' : '❌' %></strong>
+                <% elsif is_correct_option %>
+                  <strong>✅</strong>
+                <% end %>
+                <%= option.content %>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+
+    <div class="flashcard-actions-footer">
+      <%= link_to "← Retour au quizz", quiz_path(@quiz), class: "btn-back-to-lecture" %>
+      <%= button_to "Recommencer", quiz_attempts_path(@quiz), method: :post, class: "btn btn-primary" %>
+    </div>
+
+  <% else %>
+    <!-- Quiz Taking View -->
+    <%= form_with url: submit_quiz_attempt_path(@quiz, @attempt), method: :patch, local: true do |f| %>
+      <div id="quiz-container">
+        <% @questions.each_with_index do |question, index| %>
+          <div class="flashcard-question">
+            <h5 class="question-header">Question <%= index + 1 %> / <%= @questions.count %></h5>
+            <p class="question-text"><%= question.title %></p>
+
+            <% if question.multiple_answers %>
+              <p class="text-muted"><em>Plusieurs reponses possibles</em></p>
+            <% end %>
+
+            <div class="options-list">
+              <% question.options.each do |option| %>
+                <div class="form-check" style="padding: 10px; margin: 5px 0; border-radius: 5px; background-color: #f8f9fa;">
+                  <% if question.multiple_answers %>
+                    <%= check_box_tag "answers[#{question.id}][]", option.id, false, class: "form-check-input", id: "option_#{option.id}" %>
+                  <% else %>
+                    <%= radio_button_tag "answers[#{question.id}]", option.id, false, class: "form-check-input", id: "option_#{option.id}" %>
+                  <% end %>
+                  <label class="form-check-label" for="option_<%= option.id %>">
+                    <%= option.content %>
+                  </label>
+                </div>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+
+      <div class="flashcard-actions-footer">
+        <%= link_to "← Annuler", quiz_path(@quiz), class: "btn-back-to-lecture" %>
+        <%= f.submit "Soumettre mes reponses", class: "btn btn-primary btn-lg" %>
+      </div>
+    <% end %>
+  <% end %>
+</div>
