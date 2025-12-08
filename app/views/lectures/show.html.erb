@@ -122,18 +122,18 @@
               </button>
             </div>
 
-            <% if @lecture.flashcards.any? %>
-              <div class="flashcards-list" style="max-height: calc(100% - 80px); overflow-y: auto;">
-                <% @lecture.flashcards.each do |flashcard| %>
-                  <%
-                    completion = current_user.flashcard_completions.find_by(flashcard: flashcard)
-                    progress = completion ? completion.status.to_i : 0
-                    questions = JSON.parse(flashcard.content)
-                    total = questions.count
-                    percentage = total > 0 ? (progress.to_f / total * 100).round : 0
-                  %>
-                  <div class="flashcard-item">
-                    <div class="progress-bar" style="width: <%= percentage %>%;"></div>
+        <% if @lecture.flashcards.any? %>
+          <div class="flashcards-list" style="max-height: calc(100% - 80px); overflow-y: auto;">
+            <% @lecture.flashcards.each do |flashcard| %>
+              <%
+                completion = current_user.flashcard_completions.find_by(flashcard: flashcard)
+                progress = completion ? completion.status.to_i : 0
+                questions = JSON.parse(flashcard.content)
+                total = questions.count
+                percentage = total > 0 ? (progress.to_f / total * 100).round : 0
+              %>
+              <div class="flashcard-item">
+                <div class="progress-bar" style="width: <%= percentage %>%;"></div>
 
                     <div class="flashcard-content">
                       <div class="flashcard-info">
