@@ -16,7 +16,11 @@ Rails.application.routes.draw do
     resources :quizzes, only: %i[new create]
   end
 
-  resources :quizzes, only: [:show, :destroy]
+  resources :quizzes, only: [:show, :destroy] do
+    member do
+      patch :update_progress
+    end
+  end
 
   resources :flashcards, only: [:show, :destroy] do
     member do
