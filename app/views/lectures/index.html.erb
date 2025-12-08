@@ -31,13 +31,13 @@
   </div>
 
   <div class="filter_button_card">
-    <% if @lectures.any? %>
-      <%= link_to "ALL", lectures_path, class: "filter_button #{params[:query].blank? ? 'active' : ''}" %>
-      <% @categories.each do |category| %>
-        <%= link_to category.title, lectures_path(query: category.title), class: "filter_button #{params[:query] == category.title ? 'active' : ''}" %>
-      <% end %>
+    <%= link_to "ALL", lectures_path, class: "filter_button #{params[:query].blank? ? 'active' : ''}" %>
+    <% @categories.each do |category| %>
+      <%= link_to category.title, lectures_path(query: category.title), class: "filter_button #{params[:query] == category.title ? 'active' : ''}" %>
+    <% end %>
   </div>
 
+  <% if @lectures.any? %>
     <div class="lectures-grid">
       <% @lectures.each do |lecture| %>
         <div class="lecture-card">
@@ -86,7 +86,8 @@
       <% end %>
     </div>
   <% else %>
-    <div class="empty-lectures">
+    <!-- Card blanche pour l'état vide -->
+    <div class="filter_button_card empty-lectures-card">
       <div class="empty-icon">📚</div>
       <h3>Aucune lecture pour le moment</h3>
       <p>Commence par ajouter ta premiere lecture</p>
