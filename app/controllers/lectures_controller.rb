@@ -3,6 +3,7 @@ class LecturesController < ApplicationController
   def index
     @lectures = current_user.lectures
     @categories = current_user.categories.distinct
+    @categories = Category.all
     @quizzes = Quiz.joins(:lecture).where(lectures: { category_id: current_user.categories.pluck(:id) })
 
     if params[:search].present?
