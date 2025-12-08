@@ -13,7 +13,10 @@ Rails.application.routes.draw do
     resources :notes, only: %i[new create]
     resources :messages, only: %i[new create]
     resources :flashcards, only: %i[new create]
+    resources :quizzes, only: %i[new create]
   end
+
+  resources :quizzes, only: [:show, :destroy]
 
   resources :flashcards, only: [:show, :destroy] do
     member do
