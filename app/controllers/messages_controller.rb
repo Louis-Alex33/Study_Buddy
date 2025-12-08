@@ -242,7 +242,8 @@ class MessagesController < ApplicationController
     - Sois concis mais complet
     - Si tu ne connais pas la réponse basée sur le cours, dis-le honnêtement
     - N'invente jamais d'informations
-    - Utilise un ton amical et encourageant"
+    - Utilise un ton amical et encourageant
+    - Réponds en format markdown"
   end
 
   def process_file_with_ai_for_thread(chat, message, lecture)
