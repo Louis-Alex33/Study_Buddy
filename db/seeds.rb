@@ -31,32 +31,61 @@ jp = User.create!(
   password: "secret",
 )
 
-jp = User.create!(
+la = User.create!(
   first_name: "LA",
   last_name: "Richoux",
   email: "la@mail.com",
   password: "secret",
 )
 
-jp = User.create!(
+leo = User.create!(
   first_name: "Léo",
   last_name: "Gosse",
   email: "leo@mail.com",
   password: "secret",
 )
 
-jp = User.create!(
+kamal = User.create!(
   first_name: "Kamal",
   last_name: "Kaims",
   email: "kamal@mail.com",
   password: "secret",
 )
 
+
+
 puts "Creating categories..."
 categories = {}
 Category::CATEGORIES.each do |cat|
   categories[cat] = Category.create!(title: cat)
 end
+
+puts "Add friendships..."
+Friendship.create!(user: jp, friend: la, status: "accepted")
+Friendship.create!(user: jp, friend: kamal, status: "accepted")
+Friendship.create!(user: jp, friend: leo, status: "accepted")
+Friendship.create!(user: jp, friend: henry, status: "accepted")
+
+Friendship.create!(user: leo, friend: la, status: "accepted")
+Friendship.create!(user: leo, friend: kamal, status: "accepted")
+Friendship.create!(user: leo, friend: jp, status: "accepted")
+Friendship.create!(user: leo, friend: henry, status: "accepted")
+
+Friendship.create!(user: kamal, friend: la, status: "accepted")
+Friendship.create!(user: kamal, friend: jp, status: "accepted")
+Friendship.create!(user: kamal, friend: leo, status: "accepted")
+Friendship.create!(user: kamal, friend: henry, status: "accepted")
+
+Friendship.create!(user: la, friend: kamal, status: "accepted")
+Friendship.create!(user: la, friend: jp, status: "accepted")
+Friendship.create!(user: la, friend: leo, status: "accepted")
+Friendship.create!(user: la, friend: henry, status: "accepted")
+
+Friendship.create!(user: henry, friend: kamal, status: "accepted")
+Friendship.create!(user: henry, friend: jp, status: "accepted")
+Friendship.create!(user: henry, friend: leo, status: "accepted")
+Friendship.create!(user: henry, friend: la, status: "accepted")
+
 
 puts "Creating sample lectures..."
 # Skip validation for seed lectures (no document required)
