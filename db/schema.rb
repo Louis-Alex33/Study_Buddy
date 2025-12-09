@@ -193,6 +193,20 @@ ActiveRecord::Schema[7.1].define(version: 2025_12_08_233154) do
     t.index ["created_at"], name: "index_solid_cable_messages_on_created_at"
   end
 
+  create_table "user_leagues", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "rank", default: "iron", null: false
+    t.integer "division", default: 4, null: false
+    t.integer "points", default: 0, null: false
+    t.integer "wins", default: 0, null: false
+    t.integer "losses", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["rank", "division", "points"], name: "index_user_leagues_on_rank_and_division_and_points"
+    t.index ["rank"], name: "index_user_leagues_on_rank"
+    t.index ["user_id"], name: "index_user_leagues_on_user_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -232,4 +246,5 @@ ActiveRecord::Schema[7.1].define(version: 2025_12_08_233154) do
   add_foreign_key "options", "questions"
   add_foreign_key "questions", "quizzes"
   add_foreign_key "quizzes", "categories"
+  add_foreign_key "user_leagues", "users"
 end
