@@ -2,71 +2,187 @@
   <!-- Header Section -->
   <div class="lectures-header">
     <div class="lectures-header-content">
-      <h1>Quizz</h1>
-      <p>Teste tes connaissances par categorie</p>
+      <h1>Quiz</h1>
+      <p>Teste tes connaissances par catégorie</p>
     </div>
   </div>
 
-  <% if @quizzes_by_category.any? %>
-    <!-- Filter by difficulty -->
-    <div class="filter_button_card">
-      <%= link_to "Tous", quizzes_path, class: "filter_button #{params[:level].blank? ? 'active' : ''}" %>
-      <% (1..5).each do |level| %>
-        <%= link_to "Niveau #{level}", quizzes_path(level: level), class: "filter_button #{params[:level].to_i == level ? 'active' : ''}" %>
-      <% end %>
-    </div>
+  <!-- Filter by difficulty -->
+  <div class="filter_button_card">
+    <%= link_to "Tous", quizzes_path, class: "filter_button #{params[:level].blank? ? 'active' : ''}" %>
+    <% (1..5).each do |level| %>
+      <%= link_to "Niveau #{level}", quizzes_path(level: level), class: "filter_button #{params[:level].to_i == level ? 'active' : ''}" %>
+    <% end %>
+  </div>
 
-    <% @quizzes_by_category.each do |category, quizzes| %>
-      <% filtered_quizzes = params[:level].present? ? quizzes.select { |q| q.level == params[:level].to_i } : quizzes %>
-      <% next if filtered_quizzes.empty? %>
+  <!-- Section Quizzes Publics -->
+  <% if @public_quizzes.any? %>
+    <div class="quizzes-section-container quizzes-section-public">
+      <div class="quizzes-section-header">
+        <h2 class="quizzes-section-title">
+          <i class="fas fa-globe"></i> Quizzes Publics
+        </h2>
+        <p class="quizzes-section-subtitle">Accessibles à tous les utilisateurs</p>
+      </div>
 
-      <div class="quizz-category-section">
-        <h3 class="quizz-category-title">
-          <span class="category-icon">📁</span>
-          <%= category.title %>
-          <span class="category-count">(<%= filtered_quizzes.count %> quizz)</span>
-        </h3>
-        <div class="quizz-grid">
-          <% filtered_quizzes.each do |quiz| %>
-            <%
-              total = quiz.questions.count
-              best_attempt = quiz.attempts.where(user: current_user).completed.order(score: :desc).first
-              best_score = best_attempt&.score || 0
-              percentage = total > 0 ? (best_score.to_f / total * 100).round : 0
-            %>
-            <%= link_to quiz_path(quiz), class: "quizz-card-link" do %>
-              <div class="quizz-card">
-                <div class="quizz-card-header">
-                  <div class="quizz-card-icon">
-                    🧠
+      <% @public_quizzes.each do |category, quizzes| %>
+        <% filtered_quizzes = params[:level].present? ? quizzes.select { |q| q.level == params[:level].to_i } : quizzes %>
+        <% next if filtered_quizzes.empty? %>
+
+        <div class="quizzes-category-block">
+          <h3 class="quizzes-category-title">
+            <span class="category-icon">📁</span>
+            <%= category.title %>
+            <span class="category-count">(<%= filtered_quizzes.count %> quiz)</span>
+          </h3>
+          <div class="quizzes-grid">
+            <% filtered_quizzes.each do |quiz| %>
+              <%
+                total = quiz.questions.count
+                best_attempt = quiz.attempts.select { |a| a.user_id == current_user.id && a.done }.max_by(&:score)
+                best_score = best_attempt&.score || 0
+                percentage = total > 0 ? (best_score.to_f / total * 100).round : 0
+              %>
+              <%= link_to quiz_path(quiz), class: "quiz-card-link" do %>
+                <div class="quiz-card quiz-card-public">
+                  <div class="quiz-card-header">
+                    <span class="quiz-card-category"><%= quiz.category.title %></span>
+                    <span class="quiz-card-level">
+                      <% quiz.level.times do %><i class="fas fa-star"></i><% end %>
+                      <% (5 - quiz.level).times do %><i class="far fa-star"></i><% end %>
+                    </span>
                   </div>
-                  <div class="quizz-card-badge" style="background: <%= percentage == 100 ? '#28a745' : '#1351AA' %>;">
-                    <%= percentage %>%
-                  </div>
-                </div>
-                <div class="quizz-card-body">
-                  <h4 class="quizz-card-title"><%= quiz.title %></h4>
-                  <div class="quizz-card-stats">
-                    <span>📝 <%= total %> questions</span>
-                    <span>⭐ Niveau <%= quiz.level %></span>
+                  <h4 class="quiz-card-title"><%= quiz.title %></h4>
+                  <div class="quiz-card-stats">
+                    <span><i class="fas fa-question-circle"></i> <%= total %> questions</span>
                   </div>
                   <% if best_attempt %>
-                    <div class="quizz-card-stats">
-                      <span>✅ Meilleur: <%= best_score %>/<%= total %></span>
+                    <div class="quiz-card-progress">
+                      <div class="progress-bar-container">
+                        <div class="progress-bar-fill" style="width: <%= percentage %>%; background: <%= percentage == 100 ? '#28a745' : '#ffd700' %>;"></div>
+                      </div>
+                      <span class="progress-text">Meilleur: <%= best_score %>/<%= total %></span>
                     </div>
                   <% end %>
+                  <div class="quiz-card-actions">
+                    <span class="btn-quiz-play">
+                      <i class="fas fa-play"></i> Jouer
+                    </span>
+                  </div>
+                </div>
+              <% end %>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+
+  <!-- Section Quizzes Partagés -->
+  <% if @shared_quizzes.any? %>
+    <div class="quizzes-section-container quizzes-section-shared">
+      <div class="quizzes-section-header">
+        <h2 class="quizzes-section-title">
+          <i class="fas fa-share-alt"></i> Quizzes Partagés
+        </h2>
+        <p class="quizzes-section-subtitle">Créés et partagés avec moi par la communauté</p>
+      </div>
+
+      <% @shared_quizzes.each do |category, quizzes| %>
+        <% filtered_quizzes = params[:level].present? ? quizzes.select { |q| q.level == params[:level].to_i } : quizzes %>
+        <% next if filtered_quizzes.empty? %>
+
+        <div class="quizzes-category-block">
+          <h3 class="quizzes-category-title">
+            <span class="category-icon">📁</span>
+            <%= category.title %>
+            <span class="category-count">(<%= filtered_quizzes.count %> quiz)</span>
+          </h3>
+          <div class="quizzes-grid">
+            <% filtered_quizzes.each do |quiz| %>
+              <%
+                total = quiz.questions.count
+                best_attempt = quiz.attempts.select { |a| a.user_id == current_user.id && a.done }.max_by(&:score)
+                best_score = best_attempt&.score || 0
+                percentage = total > 0 ? (best_score.to_f / total * 100).round : 0
+                challenge = quiz.challenges.first
+              %>
+              <div class="quiz-card-wrapper">
+                <div class="quiz-card quiz-card-shared">
+                  <div class="quiz-card-header">
+                    <span class="quiz-card-category"><%= quiz.category.title %></span>
+                    <span class="quiz-card-level">
+                      <% quiz.level.times do %><i class="fas fa-star"></i><% end %>
+                      <% (5 - quiz.level).times do %><i class="far fa-star"></i><% end %>
+                    </span>
+                  </div>
+                  <h4 class="quiz-card-title"><%= quiz.title %></h4>
+                  <% if challenge&.user %>
+                    <p class="quiz-card-from">
+                      <i class="fas fa-user"></i> Créé par <%= challenge.user.display_name %>
+                    </p>
+                  <% end %>
+                  <div class="quiz-card-stats">
+                    <span><i class="fas fa-question-circle"></i> <%= total %> questions</span>
+                    <% if challenge && challenge.invited_users.any? %>
+                      <span data-bs-toggle="modal" data-bs-target="#sharedQuizModal<%= quiz.id %>" class="quiz-invited-link">
+                        <i class="fas fa-users"></i> <%= challenge.invited_users.count %> invité(s)
+                      </span>
+                    <% end %>
+                  </div>
+                  <% if best_attempt %>
+                    <div class="quiz-card-progress">
+                      <div class="progress-bar-container">
+                        <div class="progress-bar-fill" style="width: <%= percentage %>%; background: <%= percentage == 100 ? '#28a745' : '#ffd700' %>;"></div>
+                      </div>
+                      <span class="progress-text">Meilleur: <%= best_score %>/<%= total %></span>
+                    </div>
+                  <% end %>
+                  <div class="quiz-card-actions">
+                    <%= link_to quiz_path(quiz), class: "btn-quiz-play" do %>
+                      <i class="fas fa-play"></i> Jouer
+                    <% end %>
+                  </div>
                 </div>
               </div>
+
+              <% if challenge %>
+                <!-- Modal invités -->
+                <div class="modal fade" id="sharedQuizModal<%= quiz.id %>" tabindex="-1" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered modal-sm">
+                    <div class="modal-content">
+                      <div class="modal-header modal-header-gradient">
+                        <h5 class="modal-title">Invités au quiz</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                      </div>
+                      <div class="modal-body">
+                        <% if challenge.invited_users.any? %>
+                          <ul class="invited-users-list">
+                            <% challenge.invited_users.each do |user| %>
+                              <li><i class="fas fa-user"></i> <%= user.display_name %></li>
+                            <% end %>
+                          </ul>
+                        <% else %>
+                          <p class="text-muted text-center">Aucun invité</p>
+                        <% end %>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              <% end %>
             <% end %>
-          <% end %>
+          </div>
         </div>
-      </div>
-    <% end %>
-  <% else %>
-    <div class="empty-lectures">
-      <div class="empty-icon">🧠</div>
-      <h3>Aucun quizz disponible</h3>
-      <p>Les quizz seront bientot disponibles !</p>
+      <% end %>
+    </div>
+  <% end %>
+
+  <!-- État vide -->
+  <% if @public_quizzes.empty? && @shared_quizzes.empty? %>
+    <div class="quizzes-empty">
+      <div class="quizzes-empty-icon">🧠</div>
+      <h3>Aucun quiz disponible</h3>
+      <p>Les quiz seront bientôt disponibles !</p>
     </div>
   <% end %>
 
@@ -74,7 +190,7 @@
   <div class="lectures-back-section">
     <%= link_to root_path, class: "btn-back-home" do %>
       <span>←</span>
-      <span>Retour a l'accueil</span>
+      <span>Retour à l'accueil</span>
     <% end %>
   </div>
 </div>
