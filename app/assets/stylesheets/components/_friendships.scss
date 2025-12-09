@@ -1,0 +1,216 @@
+// Friendships page styles
+
+.friendships-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 30px;
+  margin-top: 30px;
+}
+
+.friendship-card {
+  background: white;
+  border-radius: 25px;
+  overflow: hidden;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+}
+
+.friendship-card-header {
+  padding: 20px 25px;
+  color: white;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  &.header-pending {
+    background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+  }
+
+  &.header-sent {
+    background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+  }
+
+  &.header-friends {
+    background: linear-gradient(135deg, #1351AA 0%, #1a66cc 100%);
+  }
+
+  h5 {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 700;
+  }
+
+  .header-icon {
+    font-size: 1.3rem;
+  }
+
+  .header-count {
+    margin-left: auto;
+    background: rgba(255, 255, 255, 0.2);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+  }
+}
+
+.friendship-card-body {
+  padding: 20px;
+}
+
+.friendship-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 18px;
+  background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+  border-radius: 15px;
+  margin-bottom: 12px;
+  border: 1px solid #eee;
+  transition: all 0.3s ease;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  &:hover {
+    transform: translateX(5px);
+    box-shadow: 0 4px 15px rgba(19, 81, 170, 0.1);
+    border-color: #1351AA;
+  }
+}
+
+.friendship-item-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+
+  .friendship-name {
+    font-weight: 600;
+    color: #333;
+    text-decoration: none;
+    font-size: 1rem;
+
+    &:hover {
+      color: #1351AA;
+    }
+  }
+
+  .friendship-email {
+    font-size: 0.85rem;
+    color: #888;
+  }
+
+  .friendship-stats {
+    font-size: 0.85rem;
+    color: #1351AA;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+}
+
+.friendship-item-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-friendship {
+  padding: 8px 16px;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+
+  &.btn-accept {
+    background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+    color: white;
+    box-shadow: 0 3px 10px rgba(39, 174, 96, 0.3);
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(39, 174, 96, 0.4);
+    }
+  }
+
+  &.btn-reject {
+    background: transparent;
+    color: #e74c3c;
+    border: 2px solid #e74c3c;
+
+    &:hover {
+      background: #e74c3c;
+      color: white;
+    }
+  }
+
+  &.btn-cancel {
+    background: #E3E2DE;
+    color: #666;
+
+    &:hover {
+      background: #d5d4d0;
+    }
+  }
+
+  &.btn-profile {
+    background: linear-gradient(135deg, #1351AA 0%, #1a66cc 100%);
+    color: white;
+    box-shadow: 0 3px 10px rgba(19, 81, 170, 0.3);
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(19, 81, 170, 0.4);
+    }
+  }
+}
+
+.friendship-empty {
+  text-align: center;
+  padding: 40px 20px;
+  color: #888;
+
+  .empty-icon {
+    font-size: 3rem;
+    margin-bottom: 15px;
+    opacity: 0.5;
+  }
+
+  p {
+    margin: 0 0 15px 0;
+    font-size: 1rem;
+  }
+}
+
+.btn-find-friends {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 32px;
+  background: linear-gradient(135deg, #1351AA 0%, #1a66cc 100%);
+  color: white;
+  border-radius: 20px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1.1rem;
+  box-shadow: 0 5px 20px rgba(19, 81, 170, 0.3);
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(19, 81, 170, 0.4);
+    color: white;
+    text-decoration: none;
+  }
+}
+
+.hero-section-friends {
+  text-align: center;
+  margin-bottom: 20px;
+}

@@ -5,6 +5,17 @@ Rails.application.routes.draw do
 
   # Multiplayer section
   get 'multiplayer', to: 'multiplayer#index', as: :multiplayer
+
+  # Social / Friends system
+  resources :friendships, only: [:index, :create, :destroy] do
+    member do
+      patch :accept
+      patch :reject
+    end
+  end
+
+  # Users listing and profiles
+  resources :users, only: [:index, :show]
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
   resources :uploads, only: [:index, :create]
 
@@ -19,7 +30,7 @@ Rails.application.routes.draw do
   end
 
   # New quiz system - standalone, organized by category
-  resources :quizzes, only: [:index, :show] do
+  resources :quizzes, only: [:index, :show, :new, :create] do
     resources :attempts, only: [:create, :show] do
       member do
         patch :submit
@@ -28,6 +39,11 @@ Rails.application.routes.draw do
   end
 
   resources :notes, only: :destroy
+
+  resources :challenges, only: [:index, :new, :destroy] do
+    resources :challenge_users, only: [:create, :show]
+  end
+
 
   resources :flashcards, only: [:show, :destroy] do
     member do
