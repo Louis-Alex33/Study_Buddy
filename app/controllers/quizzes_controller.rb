@@ -3,7 +3,8 @@ class QuizzesController < ApplicationController
 
   def index
     @categories = Category.includes(:quizzes).where.not(quizzes: { id: nil })
-    @quizzes_by_category = Quiz.includes(:category, :questions).group_by(&:category)
+    @public_quizzes = Quiz.where(status: "public").includes(:category, :questions, :attempts).group_by(&:category)
+    @shared_quizzes = Quiz.where(status: "shared").includes(:category, :questions, :attempts, challenges: [:user, :invited_users]).group_by(&:category)
   end
 
   def show
@@ -19,7 +20,6 @@ class QuizzesController < ApplicationController
 
   def create
     @quiz = Quiz.new(quiz_params)
-    @quiz.status = "private"
 
     if @quiz.save
       # Générer les questions avec l'IA
@@ -28,8 +28,8 @@ class QuizzesController < ApplicationController
       # Créer le challenge avec l'utilisateur courant comme propriétaire
       challenge = current_user.challenges.create!(quiz: @quiz)
 
-      # Ajouter les amis invités au challenge
-      if params[:invited_user_ids].present?
+      # Ajouter les amis invités au challenge (seulement si quiz shared)
+      if @quiz.status == "shared" && params[:invited_user_ids].present?
         params[:invited_user_ids].each do |user_id|
           challenge.challenger_users.create!(user_id: user_id)
         end
@@ -44,6 +44,6 @@ class QuizzesController < ApplicationController
   private
 
   def quiz_params
-    params.require(:quiz).permit(:title, :category_id, :level)
+    params.require(:quiz).permit(:title, :category_id, :level, :status)
   end
 end

@@ -107,10 +107,11 @@ lecture2.save!(validate: false)
 
 puts "Creating quizzes..."
 
-# Math Quiz - Level 1
+# Math Quiz - Level 1 (PUBLIC)
 math_quiz_1 = Quiz.create!(
   title: "Bases des Mathematiques",
   level: 1,
+  status: "public",
   category: categories["Mathématiques"]
 )
 
@@ -132,10 +133,11 @@ Option.create!(question: q3, content: "3", correct: false)
 Option.create!(question: q3, content: "4", correct: true)
 Option.create!(question: q3, content: "7", correct: false)
 
-# Math Quiz - Level 2
+# Math Quiz - Level 2 (PUBLIC)
 math_quiz_2 = Quiz.create!(
   title: "Algebre Intermediaire",
   level: 2,
+  status: "public",
   category: categories["Mathématiques"]
 )
 
@@ -151,10 +153,11 @@ Option.create!(question: q5, content: "3", correct: false)
 Option.create!(question: q5, content: "6", correct: true)
 Option.create!(question: q5, content: "36", correct: false)
 
-# Physics Quiz - Level 1
+# Physics Quiz - Level 1 (PUBLIC)
 physics_quiz_1 = Quiz.create!(
   title: "Introduction a la Physique",
   level: 1,
+  status: "public",
   category: categories["Physique"]
 )
 
@@ -176,10 +179,11 @@ Option.create!(question: q8, content: "300 000 km/s", correct: true)
 Option.create!(question: q8, content: "3 000 000 km/s", correct: false)
 Option.create!(question: q8, content: "30 km/s", correct: false)
 
-# History Quiz - Level 1
+# History Quiz - Level 1 (SHARED)
 history_quiz_1 = Quiz.create!(
   title: "Histoire de France",
   level: 1,
+  status: "shared",
   category: categories["Histoire"]
 )
 
@@ -195,10 +199,11 @@ Option.create!(question: q10, content: "Un empereur francais", correct: true)
 Option.create!(question: q10, content: "Un president de la Republique", correct: false)
 Option.create!(question: q10, content: "Un general anglais", correct: false)
 
-# Informatique Quiz - Level 1
+# Informatique Quiz - Level 1 (PUBLIC)
 info_quiz_1 = Quiz.create!(
   title: "Bases de la Programmation",
   level: 1,
+  status: "public",
   category: categories["Informatique"]
 )
 
@@ -220,10 +225,11 @@ Option.create!(question: q13, content: "High Tech Modern Language", correct: fal
 Option.create!(question: q13, content: "Home Tool Markup Language", correct: false)
 Option.create!(question: q13, content: "Hyperlinks and Text Markup Language", correct: false)
 
-# Informatique Quiz - Level 3
+# Informatique Quiz - Level 3 (SHARED)
 info_quiz_2 = Quiz.create!(
   title: "Algorithmes et Structures de Donnees",
   level: 3,
+  status: "shared",
   category: categories["Informatique"]
 )
 
@@ -238,6 +244,24 @@ Option.create!(question: q15, content: "Queue (FIFO)", correct: true)
 Option.create!(question: q15, content: "Stack (LIFO)", correct: true)
 Option.create!(question: q15, content: "Array", correct: false)
 Option.create!(question: q15, content: "Hash Table", correct: false)
+
+puts "Creating challenges for all quizzes..."
+# Challenges pour quizzes PUBLIC (pas d'invités)
+Challenge.create!(user: henry, quiz: math_quiz_1)
+Challenge.create!(user: henry, quiz: math_quiz_2)
+Challenge.create!(user: jp, quiz: physics_quiz_1)
+Challenge.create!(user: la, quiz: info_quiz_1)
+
+# Challenges pour quizzes SHARED (avec invités)
+# Challenge pour Histoire de France (créé par JP, invités: LA, Leo)
+history_challenge = Challenge.create!(user: jp, quiz: history_quiz_1)
+ChallengerUser.create!(challenge: history_challenge, user: la)
+ChallengerUser.create!(challenge: history_challenge, user: leo)
+
+# Challenge pour Algorithmes (créé par Kamal, invités: JP, Henry)
+algo_challenge = Challenge.create!(user: kamal, quiz: info_quiz_2)
+ChallengerUser.create!(challenge: algo_challenge, user: jp)
+ChallengerUser.create!(challenge: algo_challenge, user: henry)
 
 puts "Seeding completed!"
 puts "Created #{User.count} users"

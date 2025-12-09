@@ -1,9 +1,11 @@
-<%= simple_form_for quiz, url: quizzes_path do |f| %>
+<%= simple_form_for quiz, url: quizzes_path, html: { data: { controller: "quiz-form" } } do |f| %>
   <div class="modal-body modal-body-padded">
     <%= f.input :title, label: "Titre de votre défi", placeholder: "Ex: Check tes maths bro...", required: true, wrapper_html: { class: "form-group-modal" } %>
     <%= f.association :category, label: "Catégorie", prompt: "Sélectionnez une catégorie", required: true, wrapper_html: { class: "form-group-modal" } %>
 
-    <div class="form-group-modal friends-checkboxes">
+    <%= f.input :status, as: :select, collection: [["Public - Visible par tous", "public"], ["Partagé - Avec des amis", "shared"]], label: "Type de quiz", required: true, wrapper_html: { class: "form-group-modal" }, input_html: { data: { quiz_form_target: "statusSelect", action: "change->quiz-form#toggleFriends" } } %>
+
+    <div class="form-group-modal friends-checkboxes" data-quiz-form-target="friendsSection" style="display: none;">
       <label>Invite tes amis</label>
       <div class="check_boxes">
         <% current_user.friends.each do |friend| %>
