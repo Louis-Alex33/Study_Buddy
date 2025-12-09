@@ -1,0 +1,130 @@
+<div class="container my-5">
+
+  <!-- Header Section -->
+  <div class="lectures-header">
+    <div class="lectures-header-content">
+      <h1>Défie tes amis</h1>
+      <p>Crée des défis sur mesure et envoie-les à tes amis pour tester leurs connaissances.</p>
+    </div>
+  </div>
+
+  <div class="hero-section">
+    <button type="button" class="btn btn-upload-document" data-bs-toggle="modal" data-bs-target="#uploadModal">
+      <i class="fas fa-cloud-upload-alt"></i> Créer un nouveau défi
+    </button>
+  </div>
+
+  <!-- Mes défis créés -->
+  <% if @my_challenges.any? %>
+    <div class="challenges-section">
+      <h2 class="challenges-section-title">Mes défis :</h2>
+      <div class="challenges-grid">
+        <% @my_challenges.each do |challenge| %>
+          <div class="challenge-card">
+            <div class="challenge-card-header">
+              <span class="challenge-card-category"><%= challenge.quiz.category.title %></span>
+              <span class="challenge-card-level">
+                <% challenge.quiz.level.times do %><i class="fas fa-star"></i><% end %>
+                <% (5 - challenge.quiz.level).times do %><i class="far fa-star"></i><% end %>
+              </span>
+            </div>
+            <h3 class="challenge-card-title"><%= challenge.quiz.title %></h3>
+            <div class="challenge-card-stats">
+              <span><i class="fas fa-question-circle"></i> <%= challenge.quiz.questions.count %> questions</span>
+              <span data-bs-toggle="modal" data-bs-target="#invitedModal<%= challenge.id %>" class="invited-link">
+                <i class="fas fa-users"></i> <%= challenge.invited_users.count %> invité(s)
+              </span>
+            </div>
+            <div class="challenge-card-actions">
+              <%= link_to quiz_path(challenge.quiz), class: "btn-challenge-play" do %>
+                <i class="fas fa-play"></i> Jouer
+              <% end %>
+            </div>
+          </div>
+
+          <!-- Modal invités -->
+          <div class="modal fade" id="invitedModal<%= challenge.id %>" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-sm">
+              <div class="modal-content">
+                <div class="modal-header modal-header-gradient">
+                  <h5 class="modal-title">Invités au défi</h5>
+                  <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                  <% if challenge.invited_users.any? %>
+                    <ul class="invited-users-list">
+                      <% challenge.invited_users.each do |user| %>
+                        <li><i class="fas fa-user"></i> <%= user.display_name %></li>
+                      <% end %>
+                    </ul>
+                  <% else %>
+                    <p class="text-muted text-center">Aucun invité</p>
+                  <% end %>
+                </div>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+
+  <!-- Défis reçus -->
+  <% if @invited_challenges.any? %>
+    <div class="challenges-section">
+      <h2 class="challenges-section-title">Défis reçus</h2>
+      <div class="challenges-grid">
+        <% @invited_challenges.each do |challenge| %>
+          <div class="challenge-card challenge-card-received">
+            <div class="challenge-card-header">
+              <span class="challenge-card-category"><%= challenge.quiz.category.title %></span>
+              <span class="challenge-card-level">
+                <% challenge.quiz.level.times do %><i class="fas fa-star"></i><% end %>
+                <% (5 - challenge.quiz.level).times do %><i class="far fa-star"></i><% end %>
+              </span>
+            </div>
+            <h3 class="challenge-card-title"><%= challenge.quiz.title %></h3>
+            <p class="challenge-card-from">
+              <i class="fas fa-user"></i> Défi de <%= challenge.user.display_name %>
+            </p>
+            <div class="challenge-card-stats">
+              <span><i class="fas fa-question-circle"></i> <%= challenge.quiz.questions.count %> questions</span>
+            </div>
+            <div class="challenge-card-actions">
+              <%= link_to quiz_path(challenge.quiz), class: "btn-challenge-play" do %>
+                <i class="fas fa-play"></i> Relever le défi
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+
+  <!-- État vide -->
+  <% if @my_challenges.empty? && @invited_challenges.empty? %>
+    <div class="challenges-empty">
+      <div class="challenges-empty-icon">🎯</div>
+      <h3>Aucun défi pour le moment</h3>
+      <p>Crée ton premier défi et invite tes amis !</p>
+    </div>
+  <% end %>
+
+</div>
+
+<!-- Modal pour uploader un document -->
+<div class="modal fade" id="uploadModal" tabindex="-1" aria-labelledby="uploadModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header modal-header-gradient">
+        <div>
+          <h5 class="modal-title">Crée un nouveau défi</h5>
+          <p class="modal-subtitle">Génère un nouveau défi à partager avec tes amis</p>
+        </div>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <%= render "quizzes/form", quiz: @quiz, challenge: @challenge %>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,133 @@
+<div class="container my-5">
+  <!-- Header Section -->
+  <div class="lectures-header">
+    <div class="lectures-header-content">
+      <h1>Communauté</h1>
+      <p>Gère tes amis et tes demandes</p>
+    </div>
+  </div>
+
+  <!-- Action Button -->
+  <div class="hero-section-friends">
+    <%= link_to users_path, class: "btn-find-friends" do %>
+      <i class="fas fa-user-plus"></i> Trouver des amis
+    <% end %>
+  </div>
+
+  <div class="friendships-container">
+    <!-- Left Column -->
+    <div>
+      <!-- Pending Requests -->
+      <div class="friendship-card">
+        <div class="friendship-card-header header-pending">
+          <span class="header-icon">📬</span>
+          <h5>Demandes reçues</h5>
+          <span class="header-count"><%= @pending_requests.count %></span>
+        </div>
+        <div class="friendship-card-body">
+          <% if @pending_requests.any? %>
+            <% @pending_requests.each do |request| %>
+              <div class="friendship-item">
+                <div class="friendship-item-info">
+                  <%= link_to request.user.display_name, user_path(request.user), class: "friendship-name" %>
+                  <span class="friendship-email"><%= request.user.email %></span>
+                </div>
+                <div class="friendship-item-actions">
+                  <%= button_to accept_friendship_path(request), method: :patch, class: "btn-friendship btn-accept" do %>
+                    <i class="fas fa-check"></i> Accepter
+                  <% end %>
+                  <%= button_to reject_friendship_path(request), method: :patch, class: "btn-friendship btn-reject" do %>
+                    <i class="fas fa-times"></i>
+                  <% end %>
+                </div>
+              </div>
+            <% end %>
+          <% else %>
+            <div class="friendship-empty">
+              <div class="empty-icon">📭</div>
+              <p>Aucune demande en attente</p>
+            </div>
+          <% end %>
+        </div>
+      </div>
+
+      <!-- Sent Requests -->
+      <div class="friendship-card" style="margin-top: 25px;">
+        <div class="friendship-card-header header-sent">
+          <span class="header-icon">📤</span>
+          <h5>Demandes envoyées</h5>
+          <span class="header-count"><%= @sent_requests.count %></span>
+        </div>
+        <div class="friendship-card-body">
+          <% if @sent_requests.any? %>
+            <% @sent_requests.each do |request| %>
+              <div class="friendship-item">
+                <div class="friendship-item-info">
+                  <%= link_to request.friend.display_name, user_path(request.friend), class: "friendship-name" %>
+                  <span class="friendship-email">En attente de réponse...</span>
+                </div>
+                <div class="friendship-item-actions">
+                  <%= button_to friendship_path(request), method: :delete, class: "btn-friendship btn-cancel", data: { turbo_confirm: "Annuler cette demande ?" } do %>
+                    Annuler
+                  <% end %>
+                </div>
+              </div>
+            <% end %>
+          <% else %>
+            <div class="friendship-empty">
+              <div class="empty-icon">✉️</div>
+              <p>Aucune demande envoyée</p>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Column - Friends List -->
+    <div>
+      <div class="friendship-card">
+        <div class="friendship-card-header header-friends">
+          <span class="header-icon">👥</span>
+          <h5>Mes amis</h5>
+          <span class="header-count"><%= @friends.count %></span>
+        </div>
+        <div class="friendship-card-body">
+          <% if @friends.any? %>
+            <% @friends.each do |friend| %>
+              <div class="friendship-item">
+                <div class="friendship-item-info">
+                  <%= link_to friend.display_name, user_path(friend), class: "friendship-name" %>
+                  <span class="friendship-email"><%= friend.email %></span>
+                  <span class="friendship-stats">
+                    <i class="fas fa-trophy"></i> <%= friend.attempts.completed.count %> quiz terminés
+                  </span>
+                </div>
+                <div class="friendship-item-actions">
+                  <%= link_to user_path(friend), class: "btn-friendship btn-profile" do %>
+                    <i class="fas fa-eye"></i> Profil
+                  <% end %>
+                </div>
+              </div>
+            <% end %>
+          <% else %>
+            <div class="friendship-empty">
+              <div class="empty-icon">👥</div>
+              <p>Tu n'as pas encore d'amis</p>
+              <%= link_to users_path, class: "btn-find-friends" do %>
+                <i class="fas fa-user-plus"></i> Trouver des amis
+              <% end %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Back Button -->
+  <div class="lectures-back-section">
+    <%= link_to multiplayer_path, class: "btn-back-home" do %>
+      <span>←</span>
+      <span>Retour au mode Multijoueur</span>
+    <% end %>
+  </div>
+</div>

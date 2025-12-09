@@ -1,0 +1,70 @@
+<div class="container my-5">
+  <!-- Header Section -->
+  <div class="lectures-header">
+    <div class="lectures-header-content">
+      <h1>Tous les utilisateurs</h1>
+      <p>Trouve de nouveaux amis</p>
+    </div>
+  </div>
+
+  <% if @users.any? %>
+    <div class="row g-3">
+      <% @users.each do |user| %>
+        <div class="col-md-6 col-lg-4">
+          <div class="card h-100" style="border-radius: 12px; overflow: hidden;">
+            <div class="card-body">
+              <div class="d-flex align-items-center mb-3">
+                <div class="user-avatar" style="width: 50px; height: 50px; background: linear-gradient(135deg, #1351AA 0%, #1a66cc 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 1.2rem;">
+                  <%= user.display_name.first.upcase %>
+                </div>
+                <div class="ms-3">
+                  <h5 class="mb-0"><%= user.display_name %></h5>
+                  <small class="text-muted"><%= user.email %></small>
+                </div>
+              </div>
+
+              <div class="user-stats mb-3">
+                <span class="badge bg-light text-dark me-2">
+                  🎯 <%= user.attempts.completed.count %> quiz
+                </span>
+                <span class="badge bg-light text-dark">
+                  📚 <%= user.lectures.count %> cours
+                </span>
+              </div>
+
+              <div class="d-flex gap-2">
+                <%= link_to user_path(user), class: "btn btn-outline-primary btn-sm flex-grow-1" do %>
+                  Voir profil
+                <% end %>
+
+                <% if current_user.friend_with?(user) %>
+                  <span class="btn btn-success btn-sm disabled">✓ Ami</span>
+                <% elsif current_user.pending_request_with?(user) %>
+                  <span class="btn btn-secondary btn-sm disabled">En attente</span>
+                <% else %>
+                  <%= button_to friendships_path(friend_id: user.id), method: :post, class: "btn btn-primary btn-sm" do %>
+                    + Ajouter
+                  <% end %>
+                <% end %>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <div class="empty-lectures">
+      <div class="empty-icon">👥</div>
+      <h3>Aucun autre utilisateur</h3>
+      <p>Tu es le seul utilisateur pour le moment !</p>
+    </div>
+  <% end %>
+
+  <!-- Back Button -->
+  <div class="lectures-back-section">
+    <%= link_to friendships_path, class: "btn-back-home" do %>
+      <span>←</span>
+      <span>Retour a la communaute</span>
+    <% end %>
+  </div>
+</div>
