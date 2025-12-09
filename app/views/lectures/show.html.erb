@@ -211,7 +211,7 @@
       </div>
       <div class="modal-footer" >
         <button type="button" data-bs-dismiss="modal" class="btn-modal-cancel">Annuler</button>
-        <%= form_with url: lecture_flashcards_path(@lecture), data: { controller: "upload-loading", action: "submit->upload-loading#submit" },method: :post, local: true, style: "display: inline;" do |f| %>
+        <%= form_with url: lecture_flashcards_path(@lecture), data: { controller: "flashcard-loading", action: "submit->flashcard-loading#submit" }, method: :post, local: true, style: "display: inline;" do |f| %>
           <%= f.submit "Generer maintenant", class: "btn-modal-submit" %>
         <% end %>
       </div>
