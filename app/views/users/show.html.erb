@@ -1,0 +1,114 @@
+<div class="container my-5">
+  <!-- Header Section -->
+  <div class="lectures-header">
+    <div class="lectures-header-content">
+      <div class="d-flex align-items-center justify-content-center mb-3">
+        <div class="user-avatar-large" style="width: 80px; height: 80px; background: linear-gradient(135deg, #1351AA 0%, #1a66cc 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 2rem;">
+          <%= @user.display_name.first.upcase %>
+        </div>
+      </div>
+      <h1><%= @user.display_name %></h1>
+      <p><%= @user.email %></p>
+    </div>
+  </div>
+
+  <!-- Action Buttons -->
+  <div class="text-center mb-4">
+    <% if @user != current_user %>
+      <% if @is_friend %>
+        <span class="btn btn-success btn-lg disabled">✓ Vous etes amis</span>
+      <% elsif @pending_request %>
+        <span class="btn btn-secondary btn-lg disabled">Demande en attente</span>
+      <% else %>
+        <%= button_to friendships_path(friend_id: @user.id), method: :post, class: "btn btn-primary btn-lg" do %>
+          + Ajouter comme ami
+        <% end %>
+      <% end %>
+    <% end %>
+  </div>
+
+  <!-- Stats -->
+  <div class="row g-3 mb-4">
+    <div class="col-md-4">
+      <div class="card text-center">
+        <div class="card-body">
+          <h2 class="text-primary"><%= @completed_attempts.count %></h2>
+          <p class="mb-0 text-muted">Quiz termines</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card text-center">
+        <div class="card-body">
+          <h2 class="text-success">
+            <% avg_score = @completed_attempts.any? ? (@completed_attempts.sum { |a| a.percentage_score } / @completed_attempts.count.to_f).round : 0 %>
+            <%= avg_score %>%
+          </h2>
+          <p class="mb-0 text-muted">Score moyen</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card text-center">
+        <div class="card-body">
+          <h2 class="text-info"><%= @user.friends.count %></h2>
+          <p class="mb-0 text-muted">Amis</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quiz History -->
+  <div class="card">
+    <div class="card-header">
+      <h5 class="mb-0">🎯 Quiz realises</h5>
+    </div>
+    <div class="card-body">
+      <% if @completed_attempts.any? %>
+        <div class="table-responsive">
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th>Quiz</th>
+                <th>Categorie</th>
+                <th>Score</th>
+                <th>Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @completed_attempts.each do |attempt| %>
+                <tr>
+                  <td>
+                    <strong><%= attempt.quiz.title %></strong>
+                    <br>
+                    <small class="text-muted">Niveau <%= attempt.quiz.level %></small>
+                  </td>
+                  <td><%= attempt.quiz.category.title %></td>
+                  <td>
+                    <span class="badge <%= attempt.percentage_score >= 80 ? 'bg-success' : (attempt.percentage_score >= 50 ? 'bg-warning' : 'bg-danger') %>">
+                      <%= attempt.score %>/<%= attempt.total_questions %> (<%= attempt.percentage_score %>%)
+                    </span>
+                  </td>
+                  <td><%= attempt.created_at.strftime("%d/%m/%Y") %></td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      <% else %>
+        <div class="text-center py-4">
+          <div style="font-size: 3rem;">🎯</div>
+          <p class="text-muted">Aucun quiz termine pour le moment</p>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- Back Button -->
+  <div class="lectures-back-section">
+    <%= link_to users_path, class: "btn-back-home" do %>
+      <span>←</span>
+      <span>Retour a la liste</span>
+    <% end %>
+  </div>
+</div>

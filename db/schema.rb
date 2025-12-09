@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_12_08_135008) do
+ActiveRecord::Schema[7.1].define(version: 2025_12_08_233154) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -72,6 +72,24 @@ ActiveRecord::Schema[7.1].define(version: 2025_12_08_135008) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "challenger_users", force: :cascade do |t|
+    t.bigint "challenge_id", null: false
+    t.bigint "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["challenge_id"], name: "index_challenger_users_on_challenge_id"
+    t.index ["user_id"], name: "index_challenger_users_on_user_id"
+  end
+
+  create_table "challenges", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "quiz_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["quiz_id"], name: "index_challenges_on_quiz_id"
+    t.index ["user_id"], name: "index_challenges_on_user_id"
+  end
+
   create_table "flashcard_completions", force: :cascade do |t|
     t.string "status"
     t.bigint "user_id", null: false
@@ -89,6 +107,18 @@ ActiveRecord::Schema[7.1].define(version: 2025_12_08_135008) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["lecture_id"], name: "index_flashcards_on_lecture_id"
+  end
+
+  create_table "friendships", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "friend_id", null: false
+    t.string "status", default: "pending", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["friend_id"], name: "index_friendships_on_friend_id"
+    t.index ["status"], name: "index_friendships_on_status"
+    t.index ["user_id", "friend_id"], name: "index_friendships_on_user_id_and_friend_id", unique: true
+    t.index ["user_id"], name: "index_friendships_on_user_id"
   end
 
   create_table "lectures", force: :cascade do |t|
@@ -149,6 +179,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_12_08_135008) do
     t.bigint "category_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "status", default: "private", null: false
     t.index ["category_id"], name: "index_quizzes_on_category_id"
     t.index ["level"], name: "index_quizzes_on_level"
   end
@@ -183,9 +214,15 @@ ActiveRecord::Schema[7.1].define(version: 2025_12_08_135008) do
   add_foreign_key "answers", "questions"
   add_foreign_key "attempts", "quizzes"
   add_foreign_key "attempts", "users"
+  add_foreign_key "challenger_users", "challenges"
+  add_foreign_key "challenger_users", "users"
+  add_foreign_key "challenges", "quizzes"
+  add_foreign_key "challenges", "users"
   add_foreign_key "flashcard_completions", "flashcards"
   add_foreign_key "flashcard_completions", "users"
   add_foreign_key "flashcards", "lectures"
+  add_foreign_key "friendships", "users"
+  add_foreign_key "friendships", "users", column: "friend_id"
   add_foreign_key "lectures", "categories"
   add_foreign_key "lectures", "users"
   add_foreign_key "messages", "lectures"
