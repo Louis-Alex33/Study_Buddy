@@ -7,7 +7,7 @@ class Quiz < ApplicationRecord
 
   validates :title, presence: true
   validates :level, presence: true, inclusion: { in: 1..5 }
-  validates :status, presence: true, inclusion: { in: %w[private public shared] }
+  validates :status, presence: true, inclusion: { in: %w[public shared] }
 
   scope :by_difficulty, -> { order(:level) }
 end

@@ -218,7 +218,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_12_09_103839) do
     t.bigint "category_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "status", default: "private", null: false
+    t.string "status", default: "shared", null: false
     t.index ["category_id"], name: "index_quizzes_on_category_id"
     t.index ["level"], name: "index_quizzes_on_level"
   end
