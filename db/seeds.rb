@@ -31,6 +31,27 @@ jp = User.create!(
   password: "secret",
 )
 
+jp = User.create!(
+  first_name: "LA",
+  last_name: "Richoux",
+  email: "la@mail.com",
+  password: "secret",
+)
+
+jp = User.create!(
+  first_name: "Léo",
+  last_name: "Gosse",
+  email: "leo@mail.com",
+  password: "secret",
+)
+
+jp = User.create!(
+  first_name: "Kamal",
+  last_name: "Kaims",
+  email: "kamal@mail.com",
+  password: "secret",
+)
+
 puts "Creating categories..."
 categories = {}
 Category::CATEGORIES.each do |cat|
