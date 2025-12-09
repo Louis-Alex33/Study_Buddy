@@ -9,6 +9,7 @@ class User < ApplicationRecord
   has_many :challenges
   has_many :challenger_users
   has_many :invited_challenges, through: :challenger_users, source: :challenge
+  has_one :user_league, dependent: :destroy
 
   # Friendships - demandes envoyées
   has_many :sent_friendships, class_name: 'Friendship', foreign_key: 'user_id', dependent: :destroy

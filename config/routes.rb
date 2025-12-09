@@ -5,6 +5,7 @@ Rails.application.routes.draw do
 
   # Multiplayer section
   get 'multiplayer', to: 'multiplayer#index', as: :multiplayer
+  get 'league', to: 'multiplayer#league', as: :league
 
   # Social / Friends system
   resources :friendships, only: [:index, :create, :destroy] do
