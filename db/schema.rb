@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_12_08_135008) do
+ActiveRecord::Schema[7.1].define(version: 2025_12_09_103839) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -72,6 +72,24 @@ ActiveRecord::Schema[7.1].define(version: 2025_12_08_135008) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "challenger_users", force: :cascade do |t|
+    t.bigint "challenge_id", null: false
+    t.bigint "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["challenge_id"], name: "index_challenger_users_on_challenge_id"
+    t.index ["user_id"], name: "index_challenger_users_on_user_id"
+  end
+
+  create_table "challenges", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "quiz_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["quiz_id"], name: "index_challenges_on_quiz_id"
+    t.index ["user_id"], name: "index_challenges_on_user_id"
+  end
+
   create_table "flashcard_completions", force: :cascade do |t|
     t.string "status"
     t.bigint "user_id", null: false
@@ -89,6 +107,18 @@ ActiveRecord::Schema[7.1].define(version: 2025_12_08_135008) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["lecture_id"], name: "index_flashcards_on_lecture_id"
+  end
+
+  create_table "friendships", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "friend_id", null: false
+    t.string "status", default: "pending", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["friend_id"], name: "index_friendships_on_friend_id"
+    t.index ["status"], name: "index_friendships_on_status"
+    t.index ["user_id", "friend_id"], name: "index_friendships_on_user_id_and_friend_id", unique: true
+    t.index ["user_id"], name: "index_friendships_on_user_id"
   end
 
   create_table "lectures", force: :cascade do |t|
@@ -143,12 +173,52 @@ ActiveRecord::Schema[7.1].define(version: 2025_12_08_135008) do
     t.index ["quiz_id"], name: "index_questions_on_quiz_id"
   end
 
+  create_table "quiz_participants", force: :cascade do |t|
+    t.bigint "quiz_room_id", null: false
+    t.bigint "user_id", null: false
+    t.integer "score"
+    t.integer "correct_answers"
+    t.integer "total_questions"
+    t.datetime "finished_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["quiz_room_id"], name: "index_quiz_participants_on_quiz_room_id"
+    t.index ["user_id"], name: "index_quiz_participants_on_user_id"
+  end
+
+  create_table "quiz_questions", force: :cascade do |t|
+    t.text "content"
+    t.string "correct_answer"
+    t.text "wrong_answers"
+    t.string "category"
+    t.string "difficulty"
+    t.bigint "quiz_room_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["quiz_room_id"], name: "index_quiz_questions_on_quiz_room_id"
+  end
+
+  create_table "quiz_rooms", force: :cascade do |t|
+    t.string "name"
+    t.string "status"
+    t.integer "max_players"
+    t.datetime "started_at"
+    t.datetime "ended_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "category"
+    t.string "difficulty"
+    t.bigint "owner_id", null: false
+    t.index ["owner_id"], name: "index_quiz_rooms_on_owner_id"
+  end
+
   create_table "quizzes", force: :cascade do |t|
     t.string "title", null: false
     t.integer "level", default: 1, null: false
     t.bigint "category_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "status", default: "private", null: false
     t.index ["category_id"], name: "index_quizzes_on_category_id"
     t.index ["level"], name: "index_quizzes_on_level"
   end
@@ -160,6 +230,20 @@ ActiveRecord::Schema[7.1].define(version: 2025_12_08_135008) do
     t.datetime "updated_at", null: false
     t.index ["channel"], name: "index_solid_cable_messages_on_channel"
     t.index ["created_at"], name: "index_solid_cable_messages_on_created_at"
+  end
+
+  create_table "user_leagues", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "rank", default: "iron", null: false
+    t.integer "division", default: 4, null: false
+    t.integer "points", default: 0, null: false
+    t.integer "wins", default: 0, null: false
+    t.integer "losses", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["rank", "division", "points"], name: "index_user_leagues_on_rank_and_division_and_points"
+    t.index ["rank"], name: "index_user_leagues_on_rank"
+    t.index ["user_id"], name: "index_user_leagues_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -183,9 +267,15 @@ ActiveRecord::Schema[7.1].define(version: 2025_12_08_135008) do
   add_foreign_key "answers", "questions"
   add_foreign_key "attempts", "quizzes"
   add_foreign_key "attempts", "users"
+  add_foreign_key "challenger_users", "challenges"
+  add_foreign_key "challenger_users", "users"
+  add_foreign_key "challenges", "quizzes"
+  add_foreign_key "challenges", "users"
   add_foreign_key "flashcard_completions", "flashcards"
   add_foreign_key "flashcard_completions", "users"
   add_foreign_key "flashcards", "lectures"
+  add_foreign_key "friendships", "users"
+  add_foreign_key "friendships", "users", column: "friend_id"
   add_foreign_key "lectures", "categories"
   add_foreign_key "lectures", "users"
   add_foreign_key "messages", "lectures"
@@ -194,5 +284,10 @@ ActiveRecord::Schema[7.1].define(version: 2025_12_08_135008) do
   add_foreign_key "notes", "users"
   add_foreign_key "options", "questions"
   add_foreign_key "questions", "quizzes"
+  add_foreign_key "quiz_participants", "quiz_rooms"
+  add_foreign_key "quiz_participants", "users"
+  add_foreign_key "quiz_questions", "quiz_rooms"
+  add_foreign_key "quiz_rooms", "users", column: "owner_id"
   add_foreign_key "quizzes", "categories"
+  add_foreign_key "user_leagues", "users"
 end

@@ -18,23 +18,23 @@
       <p class="feature-description">
         Lance des quiz multijoueurs et affronte tes amis en direct. Le plus rapide et le plus précis gagne !
       </p>
-      <button class="btn-feature-action" disabled>
-        Bientôt disponible
-      </button>
+      <%= link_to real_time_quizzes_path, class: "btn-feature-action" do %>
+        Jouer maintenant
+      <% end %>
     </div>
 
-    <!-- Salles d'étude -->
+    <!-- Ligue -->
     <div class="multiplayer-feature-card">
       <div class="feature-icon-wrapper">
-        <div class="feature-icon">👥</div>
+        <div class="feature-icon">🏅</div>
       </div>
-      <h3 class="feature-title">Salles d'étude</h3>
+      <h3 class="feature-title">Ligue</h3>
       <p class="feature-description">
-        Crée ou rejoins des salles d'étude virtuelles. Étudiez ensemble et partagez vos connaissances.
+        Monte dans les rangs, gagne des points et deviens le meilleur joueur de Study Buddy.
       </p>
-      <button class="btn-feature-action" disabled>
-        Bientôt disponible
-      </button>
+      <%= link_to league_path, class: "btn-feature-action" do %>
+        Voir la ligue
+      <% end %>
     </div>
 
     <!-- Classements -->
@@ -60,9 +60,9 @@
       <p class="feature-description">
         Crée des défis sur mesure et envoie-les à tes amis pour tester leurs connaissances.
       </p>
-      <button class="btn-feature-action" disabled>
-        Bientôt disponible
-      </button>
+      <%= link_to challenges_path, class: "btn-feature-action" do %>
+        Défie un ami
+      <% end %>
     </div>
 
     <!-- Partage de ressources -->
@@ -73,24 +73,25 @@
       <h3 class="feature-title">Partage de ressources</h3>
       <p class="feature-description">
         Partage tes meilleures flashcards et notes avec ta communauté d'étude.
+        Partage tes meilleures flashcards et notes avec ta communauté d'étude.
       </p>
       <button class="btn-feature-action" disabled>
         Bientôt disponible
       </button>
     </div>
 
-    <!-- Statistiques sociales -->
+    <!-- Communauté -->
     <div class="multiplayer-feature-card">
       <div class="feature-icon-wrapper">
-        <div class="feature-icon">📊</div>
+        <div class="feature-icon">👥</div>
       </div>
-      <h3 class="feature-title">Statistiques sociales</h3>
+      <h3 class="feature-title">Communauté</h3>
       <p class="feature-description">
-        Visualise tes progrès et compare-les avec ceux de tes amis pour rester motivé.
+        Ajoute des amis, consulte leurs profils et compare vos performances sur les quiz.
       </p>
-      <button class="btn-feature-action" disabled>
-        Bientôt disponible
-      </button>
+      <%= link_to friendships_path, class: "btn-feature-action" do %>
+        Acceder a la communaute
+      <% end %>
     </div>
   </div>
 
@@ -101,7 +102,6 @@
       <h4>Fonctionnalités en développement</h4>
       <p>
         Ces fonctionnalités multijoueurs sont actuellement en cours de développement.
-        Elles seront bientôt disponibles pour enrichir ton expérience d'apprentissage !
       </p>
     </div>
   </div>
@@ -164,6 +164,7 @@
   color: #666;
   line-height: 1.6;
   margin-bottom: 1.5rem;
+  height: 80px;
 }
 
 .btn-feature-action {

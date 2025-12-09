@@ -53,11 +53,115 @@
       line-height: 1.2;
     }
 
-    p {
-      color: rgba(255,255,255,0.9);
+  }
+}
+
+// Carte Résumé du cours
+.lecture-resume-card {
+  background: linear-gradient(135deg, #1351AA 0%, #1a66cc 100%);
+  padding: 30px;
+  border-radius: 25px;
+  box-shadow: 0 8px 25px rgba(19, 81, 170, 0.25);
+  margin-bottom: 40px;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: -50px;
+    right: -50px;
+    width: 200px;
+    height: 200px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 50%;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -30px;
+    left: -30px;
+    width: 150px;
+    height: 150px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 50%;
+  }
+
+  .resume-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 25px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid rgba(255,255,255,0.2);
+    position: relative;
+    z-index: 1;
+
+    .resume-icon {
+      width: 45px;
+      height: 45px;
+      background: rgba(255,255,255,0.2);
+      border-radius: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+    }
+
+    .resume-title {
+      h3 {
+        color: white;
+        margin: 0;
+        font-size: 20px;
+        font-weight: 700;
+      }
+
+      p {
+        margin: 0;
+        font-size: 13px;
+        color: rgba(255,255,255,0.9);
+      }
+    }
+  }
+
+  .resume-content {
+    font-size: 15px;
+    line-height: 1.8;
+    color: rgba(255,255,255,0.95);
+    position: relative;
+    z-index: 1;
+
+    // Texte en gras (titres/sous-titres générés par l'IA)
+    strong {
+      display: inline-block;
+      color: #FFD700;
+      font-weight: 700;
       font-size: 16px;
-      margin: 0;
-      line-height: 1.5;
+      margin-top: 8px;
+      padding: 6px 14px;
+      background: linear-gradient(135deg, rgba(255, 215, 0, 0.2) 0%, rgba(255, 165, 0, 0.15) 100%);
+      border-left: 4px solid #FFD700;
+      border-radius: 0 10px 10px 0;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    // Texte en italique (éléments importants)
+    em {
+      color: #98FB98;
+      font-style: normal;
+      font-weight: 600;
+      background: linear-gradient(135deg, rgba(152, 251, 152, 0.25) 0%, rgba(144, 238, 144, 0.2) 100%);
+      padding: 3px 10px;
+      border-radius: 6px;
+      border-bottom: 2px solid rgba(152, 251, 152, 0.5);
+    }
+
+    // Retours à la ligne (espacement entre sections)
+    br {
+      display: block;
+      content: "";
+      margin-bottom: 8px;
     }
   }
 }

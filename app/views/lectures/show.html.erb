@@ -67,9 +67,24 @@
         <%= @lecture.category.title.upcase %>
       </span>
       <h1><%= @lecture.title %></h1>
-      <p><%= sanitize(@lecture.resume, tags: %w[strong em br]) %></p>
     </div>
   </div>
+
+  <!-- Resume Section -->
+  <% if @lecture.resume.present? %>
+    <div class="lecture-resume-card">
+      <div class="resume-header">
+        <div class="resume-icon">📝</div>
+        <div class="resume-title">
+          <h3>Résumé du cours</h3>
+          <p>Généré par l'IA</p>
+        </div>
+      </div>
+      <div class="resume-content">
+        <%= sanitize(@lecture.resume, tags: %w[strong em br]) %>
+      </div>
+    </div>
+  <% end %>
 
   <%= turbo_stream_from @lecture %>
 
@@ -122,18 +137,18 @@
               </button>
             </div>
 
-        <% if @lecture.flashcards.any? %>
-          <div class="flashcards-list" style="max-height: calc(100% - 80px); overflow-y: auto;">
-            <% @lecture.flashcards.each do |flashcard| %>
-              <%
-                completion = current_user.flashcard_completions.find_by(flashcard: flashcard)
-                progress = completion ? completion.status.to_i : 0
-                questions = JSON.parse(flashcard.content)
-                total = questions.count
-                percentage = total > 0 ? (progress.to_f / total * 100).round : 0
-              %>
-              <div class="flashcard-item">
-                <div class="progress-bar" style="width: <%= percentage %>%;"></div>
+            <% if @lecture.flashcards.any? %>
+              <div class="flashcards-list" style="max-height: calc(100% - 80px); overflow-y: auto;">
+                <% @lecture.flashcards.each do |flashcard| %>
+                  <%
+                    completion = current_user.flashcard_completions.find_by(flashcard: flashcard)
+                    progress = completion ? completion.status.to_i : 0
+                    questions = JSON.parse(flashcard.content)
+                    total = questions.count
+                    percentage = total > 0 ? (progress.to_f / total * 100).round : 0
+                  %>
+                  <div class="flashcard-item">
+                    <div class="progress-bar" style="width: <%= percentage %>%;"></div>
 
                     <div class="flashcard-content">
                       <div class="flashcard-info">
@@ -173,6 +188,9 @@
               </div>
             <% end %>
           </div>
+          <button type="button" data-bs-toggle="modal" data-bs-target="#generateFlashcardsModal" class="btn-generate-flashcards">
+            ✨ Generer avec IA
+          </button>
         </div>
 
 <!-- Modal pour générer les flashcards -->
@@ -193,7 +211,7 @@
       </div>
       <div class="modal-footer" >
         <button type="button" data-bs-dismiss="modal" class="btn-modal-cancel">Annuler</button>
-        <%= form_with url: lecture_flashcards_path(@lecture), data: { controller: "upload-loading", action: "submit->upload-loading#submit" },method: :post, local: true, style: "display: inline;" do |f| %>
+        <%= form_with url: lecture_flashcards_path(@lecture), data: { controller: "flashcard-loading", action: "submit->flashcard-loading#submit" }, method: :post, local: true, style: "display: inline;" do |f| %>
           <%= f.submit "Generer maintenant", class: "btn-modal-submit" %>
         <% end %>
       </div>
