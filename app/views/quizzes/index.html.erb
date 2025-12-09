@@ -1,3 +1,13 @@
+<!-- Filter by difficulty - Sticky menu -->
+<aside class="menu-sticky">
+  <div class="menu-sticky-content">
+    <%= link_to "Tous", quizzes_path, class: "filter_button #{params[:level].blank? ? 'active' : ''}" %>
+    <% (1..5).each do |level| %>
+      <%= link_to "Niveau #{level}", quizzes_path(level: level), class: "filter_button #{params[:level].to_i == level ? 'active' : ''}" %>
+    <% end %>
+  </div>
+</aside>
+
 <div class="container my-5">
   <!-- Header Section -->
   <div class="lectures-header">
@@ -5,16 +15,6 @@
       <h1>Quiz</h1>
       <p>Teste tes connaissances par catégorie</p>
     </div>
-  </div>
-
-  <!-- Filter by difficulty -->
-  <div class="filter_button_card">
-    <aside class="menu-sticky">
-    <%= link_to "Tous", quizzes_path, class: "filter_button #{params[:level].blank? ? 'active' : ''}" %>
-    <% (1..5).each do |level| %>
-      <%= link_to "Niveau #{level}", quizzes_path(level: level), class: "filter_button #{params[:level].to_i == level ? 'active' : ''}" %>
-    <% end %>
-    </aside>
   </div>
 
   <!-- Section Quizzes Publics -->

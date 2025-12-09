@@ -330,9 +330,21 @@
 
 .menu-sticky {
   position: sticky;
-  top: 5;
-  background: white;
-  padding: 10px;
-  border-bottom: 1px solid #ddd;
-  z-index: 1000;
+  top: 70px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  padding: 15px 0;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  z-index: 100;
+  margin-bottom: 0;
+}
+
+.menu-sticky-content {
+  max-width: 1140px;
+  margin: 0 auto;
+  padding: 0 15px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
 }
