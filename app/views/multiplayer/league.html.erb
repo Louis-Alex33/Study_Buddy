@@ -1,0 +1,184 @@
+<div class="league-page-wrapper">
+  <!-- Animated Background -->
+  <div class="league-bg-animated">
+    <div class="league-bg-fluid-wave"></div>
+    <div class="league-bg-fluid-wave-2"></div>
+    <div class="league-bg-blob-1"></div>
+    <div class="league-bg-blob-2"></div>
+    <div class="league-bg-blob-3"></div>
+    <div class="league-bg-pulse"></div>
+    <div class="league-bg-particles"></div>
+  </div>
+
+  <div class="container my-5" style="position: relative; z-index: 2;">
+    <!-- Header Section -->
+    <div class="league-header-epic">
+      <div class="league-header-content">
+        <h1 class="league-title-epic">
+          Système de Ligue
+        </h1>
+        <p class="league-subtitle-epic">Monte en divisions et progresse avec tes amis</p>
+        <div class="header-decorative-line"></div>
+      </div>
+    </div>
+
+    <!-- User's Current Rank -->
+    <div class="current-rank-section-epic">
+      <div class="section-label-epic">Ton rang actuel</div>
+      <div class="rank-card-mega <%= @user_league.glow_class %>">
+        <div class="rank-badge-mega">
+          <div class="rank-emblem-container">
+            <div class="emblem-glow-ring <%= @user_league.glow_class %>"></div>
+            <%= render partial: 'rank_logo', locals: { rank: @user_league.rank } %>
+          </div>
+          <div class="rank-info-mega">
+            <div class="rank-name-mega"><%= @user_league.display_name %></div>
+            <div class="rank-subtitle">Tu es ici</div>
+          </div>
+        </div>
+
+        <div class="rank-stats-mega">
+          <div class="rank-stat-epic">
+            <div class="stat-icon"><i class="fas fa-trophy"></i></div>
+            <div class="stat-content">
+              <div class="stat-value-epic"><%= @user_league.points %></div>
+              <div class="stat-label-epic">League Points</div>
+            </div>
+          </div>
+          <div class="rank-stat-epic">
+            <div class="stat-icon"><i class="fas fa-chart-line"></i></div>
+            <div class="stat-content">
+              <div class="stat-value-epic"><%= @user_league.wins %>V / <%= @user_league.losses %>D</div>
+              <div class="stat-label-epic">Victoires / Défaites</div>
+            </div>
+          </div>
+          <div class="rank-stat-epic">
+            <div class="stat-icon"><i class="fas fa-percent"></i></div>
+            <div class="stat-content">
+              <div class="stat-value-epic"><%= @user_league.win_rate %>%</div>
+              <div class="stat-label-epic">Taux de victoire</div>
+            </div>
+          </div>
+          <div class="rank-stat-epic">
+            <div class="stat-icon"><i class="fas fa-gamepad"></i></div>
+            <div class="stat-content">
+              <div class="stat-value-epic"><%= @user_league.total_games %></div>
+              <div class="stat-label-epic">Parties jouées</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="progress-section-epic">
+          <div class="progress-header-epic">
+            <span class="progress-label">PROGRESSION</span>
+            <span class="progress-percentage"><%= @user_league.points %> / 100 LP</span>
+          </div>
+          <div class="progress-bar-epic">
+            <div class="progress-bar-bg"></div>
+            <div class="progress-bar-fill-epic" style="width: <%= @user_league.points %>%;">
+              <div class="progress-bar-shine"></div>
+            </div>
+            <div class="progress-bar-glow" style="width: <%= @user_league.points %>%;"></div>
+          </div>
+          <div class="progress-hint">Monte à 100 LP pour passer au prochain rang</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Leaderboard Section -->
+    <div class="leaderboard-section-epic mt-5">
+      <div class="section-label-epic">Top joueurs</div>
+      <div class="leaderboard-card-epic">
+        <div class="leaderboard-header-epic">
+          <h3 class="leaderboard-title-epic">
+            <i class="fas fa-crown"></i> Classement
+          </h3>
+          <p class="leaderboard-subtitle-epic">Les 10 meilleurs joueurs de Study Buddy</p>
+        </div>
+
+        <div class="leaderboard-podium">
+          <% @leaderboard.first(3).each_with_index do |league, index| %>
+            <div class="podium-position podium-<%= index + 1 %> <%= 'is-current-user' if league.user == current_user %>">
+              <div class="podium-rank-number">#<%= index + 1 %></div>
+              <div class="podium-medal">
+                <i class="fas fa-<%= ['medal', 'medal', 'medal'][index] %>"></i>
+              </div>
+              <div class="podium-user-name"><%= league.user.email.split('@').first %></div>
+              <div class="podium-rank-badge" style="background: <%= league.rank_color %>;">
+                <%= league.display_name %>
+              </div>
+              <div class="podium-stats">
+                <div class="podium-lp"><%= league.points %> LP</div>
+                <div class="podium-wr"><%= league.win_rate %>% WR</div>
+              </div>
+            </div>
+          <% end %>
+        </div>
+
+        <div class="leaderboard-list-epic">
+          <% @leaderboard.drop(3).each_with_index do |league, index| %>
+            <div class="leaderboard-item-epic <%= 'is-current-user' if league.user == current_user %>">
+              <div class="item-rank">#<%= index + 4 %></div>
+              <div class="item-user-info">
+                <div class="item-user-name"><%= league.user.email.split('@').first %></div>
+                <div class="item-user-rank" style="background: <%= league.rank_color %>;">
+                  <%= league.display_name %>
+                </div>
+              </div>
+              <div class="item-stats">
+                <div class="item-stat lp"><%= league.points %> LP</div>
+                <div class="item-stat wr"><%= league.win_rate %>%</div>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+
+    <!-- Rank Ladder Section -->
+    <div class="rank-ladder-section-epic mt-5">
+      <div class="section-label-epic">Échelle des rangs</div>
+      <div class="rank-ladder-card-epic">
+        <h3 class="ladder-title-epic">
+          <i class="fas fa-layer-group"></i> Tous les rangs
+        </h3>
+    <div class="rank-ladder-horizontal-scroll">
+      <% UserLeague::RANKS.each do |rank| %>
+        <div class="rank-tier-card <%= 'current' if rank == @user_league.rank %>">
+          <div class="tier-badge-large" style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);">
+            <div class="tier-emblem-large" style="transform: scale(0.7);">
+              <%= render partial: 'rank_logo', locals: { rank: rank } %>
+            </div>
+          </div>
+          <div class="tier-name-card"><%= UserLeague::RANK_NAMES[rank] %></div>
+          <% if UserLeague::DIVISIONED_RANKS.include?(rank) %>
+            <div class="tier-divisions-card">IV → I</div>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+    <!-- Info Banner STYLISÉ -->
+    <div class="info-banner-epic mt-5">
+      <div class="info-banner-glow"></div>
+      <div class="info-banner-icon-epic"><i class="fas fa-info-circle"></i></div>
+      <div class="info-banner-content-epic">
+        <h4 class="info-title">Comment monter de rang ?</h4>
+        <p class="info-text">
+          Gagne des parties de quiz multijoueur pour gagner des <strong>LP (League Points)</strong>.
+          À <strong>100 LP</strong>, tu montes de division ! Atteins <strong>Challenger</strong> et deviens le meilleur joueur de Study Buddy.
+        </p>
+      </div>
+    </div>
+
+    <!-- Back Button STYLISÉ -->
+    <div class="back-section-epic">
+      <%= link_to multiplayer_path, class: "btn-back-epic" do %>
+        <span class="back-icon">←</span>
+        <span class="back-text">Retour au Multijoueur</span>
+      <% end %>
+    </div>
+  </div>
+</div>
+

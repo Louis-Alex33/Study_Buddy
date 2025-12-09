@@ -18,23 +18,23 @@
       <p class="feature-description">
         Lance des quiz multijoueurs et affronte tes amis en direct. Le plus rapide et le plus précis gagne !
       </p>
-      <button class="btn-feature-action" disabled>
-        Bientôt disponible
-      </button>
+      <%= link_to real_time_quizzes_path, class: "btn-feature-action" do %>
+        Jouer maintenant
+      <% end %>
     </div>
 
-    <!-- Salles d'étude -->
+    <!-- Ligue -->
     <div class="multiplayer-feature-card">
       <div class="feature-icon-wrapper">
-        <div class="feature-icon">👥</div>
+        <div class="feature-icon">🏅</div>
       </div>
-      <h3 class="feature-title">Salles d'étude</h3>
+      <h3 class="feature-title">Ligue</h3>
       <p class="feature-description">
-        Crée ou rejoins des salles d'étude virtuelles. Étudiez ensemble et partagez vos connaissances.
+        Monte dans les rangs, gagne des points et deviens le meilleur joueur de Study Buddy.
       </p>
-      <button class="btn-feature-action" disabled>
-        Bientôt disponible
-      </button>
+      <%= link_to league_path, class: "btn-feature-action" do %>
+        Voir la ligue
+      <% end %>
     </div>
 
     <!-- Classements -->

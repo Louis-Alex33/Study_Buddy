@@ -5,6 +5,18 @@ Rails.application.routes.draw do
 
   # Multiplayer section
   get 'multiplayer', to: 'multiplayer#index', as: :multiplayer
+  get 'league', to: 'multiplayer#league', as: :league
+
+  # Real-time quizzes
+  resources :real_time_quizzes, only: [:index, :new, :create, :show] do
+    member do
+      post :join
+      delete :leave
+      post :start
+      post :submit_answer
+      post :finish
+    end
+  end
 
   # Social / Friends system
   resources :friendships, only: [:index, :create, :destroy] do

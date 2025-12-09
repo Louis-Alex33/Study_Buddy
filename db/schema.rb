@@ -173,6 +173,45 @@ ActiveRecord::Schema[7.1].define(version: 2025_12_09_110009) do
     t.index ["quiz_id"], name: "index_questions_on_quiz_id"
   end
 
+  create_table "quiz_participants", force: :cascade do |t|
+    t.bigint "quiz_room_id", null: false
+    t.bigint "user_id", null: false
+    t.integer "score"
+    t.integer "correct_answers"
+    t.integer "total_questions"
+    t.datetime "finished_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["quiz_room_id"], name: "index_quiz_participants_on_quiz_room_id"
+    t.index ["user_id"], name: "index_quiz_participants_on_user_id"
+  end
+
+  create_table "quiz_questions", force: :cascade do |t|
+    t.text "content"
+    t.string "correct_answer"
+    t.text "wrong_answers"
+    t.string "category"
+    t.string "difficulty"
+    t.bigint "quiz_room_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["quiz_room_id"], name: "index_quiz_questions_on_quiz_room_id"
+  end
+
+  create_table "quiz_rooms", force: :cascade do |t|
+    t.string "name"
+    t.string "status"
+    t.integer "max_players"
+    t.datetime "started_at"
+    t.datetime "ended_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "category"
+    t.string "difficulty"
+    t.bigint "owner_id", null: false
+    t.index ["owner_id"], name: "index_quiz_rooms_on_owner_id"
+  end
+
   create_table "quizzes", force: :cascade do |t|
     t.string "title", null: false
     t.integer "level", default: 1, null: false
@@ -191,6 +230,20 @@ ActiveRecord::Schema[7.1].define(version: 2025_12_09_110009) do
     t.datetime "updated_at", null: false
     t.index ["channel"], name: "index_solid_cable_messages_on_channel"
     t.index ["created_at"], name: "index_solid_cable_messages_on_created_at"
+  end
+
+  create_table "user_leagues", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "rank", default: "iron", null: false
+    t.integer "division", default: 4, null: false
+    t.integer "points", default: 0, null: false
+    t.integer "wins", default: 0, null: false
+    t.integer "losses", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["rank", "division", "points"], name: "index_user_leagues_on_rank_and_division_and_points"
+    t.index ["rank"], name: "index_user_leagues_on_rank"
+    t.index ["user_id"], name: "index_user_leagues_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -231,5 +284,10 @@ ActiveRecord::Schema[7.1].define(version: 2025_12_09_110009) do
   add_foreign_key "notes", "users"
   add_foreign_key "options", "questions"
   add_foreign_key "questions", "quizzes"
+  add_foreign_key "quiz_participants", "quiz_rooms"
+  add_foreign_key "quiz_participants", "users"
+  add_foreign_key "quiz_questions", "quiz_rooms"
+  add_foreign_key "quiz_rooms", "users", column: "owner_id"
   add_foreign_key "quizzes", "categories"
+  add_foreign_key "user_leagues", "users"
 end

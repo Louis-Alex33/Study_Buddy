@@ -135,24 +135,26 @@
     // Texte en gras (titres/sous-titres générés par l'IA)
     strong {
       display: inline-block;
-      color: white;
+      color: #FFD700;
       font-weight: 700;
       font-size: 16px;
       margin-top: 8px;
-      padding: 4px 12px;
-      background: rgba(255,255,255,0.15);
-      border-left: 3px solid rgba(255,255,255,0.5);
-      border-radius: 0 8px 8px 0;
+      padding: 6px 14px;
+      background: linear-gradient(135deg, rgba(255, 215, 0, 0.2) 0%, rgba(255, 165, 0, 0.15) 100%);
+      border-left: 4px solid #FFD700;
+      border-radius: 0 10px 10px 0;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     }
 
     // Texte en italique (éléments importants)
     em {
-      color: #90EE90;
+      color: #98FB98;
       font-style: normal;
       font-weight: 600;
-      background: rgba(255,255,255,0.1);
-      padding: 2px 8px;
-      border-radius: 4px;
+      background: linear-gradient(135deg, rgba(152, 251, 152, 0.25) 0%, rgba(144, 238, 144, 0.2) 100%);
+      padding: 3px 10px;
+      border-radius: 6px;
+      border-bottom: 2px solid rgba(152, 251, 152, 0.5);
     }
 
     // Retours à la ligne (espacement entre sections)
