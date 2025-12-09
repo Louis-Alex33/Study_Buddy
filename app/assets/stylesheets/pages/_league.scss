@@ -92,7 +92,7 @@
 .league-page-wrapper {
   position: relative;
   min-height: 100vh;
-  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  background: linear-gradient(135deg, #e8eaed 0%, #d4d7db 100%);
   padding: 2rem 0;
 }
 
@@ -211,7 +211,7 @@
   text-align: center;
   padding: 3rem 2rem 2.5rem;
   margin-bottom: 3rem;
-  background: white;
+  background: #f5f7f9;
   border-radius: 16px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
   animation: slide-in-up 0.6s ease;
@@ -362,7 +362,7 @@
 }
 
 .rank-card-mega {
-  background: white;
+  background: #f5f7f9;
   border-radius: 16px;
   padding: 2.5rem;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
@@ -375,8 +375,8 @@
   padding: 2rem;
   border-radius: 12px;
   margin-bottom: 2rem;
-  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-  border: 2px solid #e9ecef;
+  background: linear-gradient(135deg, #e8eaed 0%, #d8dade 100%);
+  border: 2px solid #d4d7db;
 }
 
 .rank-emblem-container {
@@ -428,9 +428,9 @@
   align-items: center;
   gap: 1.25rem;
   padding: 1.25rem;
-  background: #f8f9fa;
+  background: #e8eaed;
   border-radius: 12px;
-  border: 2px solid #e9ecef;
+  border: 2px solid #d4d7db;
   transition: all 0.3s ease;
 }
 
@@ -490,7 +490,7 @@
   position: relative;
   height: 24px;
   border-radius: 12px;
-  background: #e9ecef;
+  background: #d4d7db;
   overflow: hidden;
   margin-bottom: 0.5rem;
 }
@@ -525,7 +525,7 @@
 }
 
 .leaderboard-card-epic {
-  background: white;
+  background: #f5f7f9;
   border-radius: 16px;
   padding: 2.5rem;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
@@ -563,10 +563,10 @@
 }
 
 .podium-position {
-  background: #f8f9fa;
+  background: #e8eaed;
   border-radius: 12px;
   padding: 2rem 1.5rem;
-  border: 2px solid #e9ecef;
+  border: 2px solid #d4d7db;
   text-align: center;
   transition: all 0.3s ease;
   position: relative;
@@ -579,12 +579,12 @@
 }
 
 .podium-1 {
-  background: linear-gradient(135deg, #fff9e6 0%, #ffffff 100%);
+  background: linear-gradient(135deg, #fff9e6 0%, #f5f2e6 100%);
   border-color: #ffd700;
 }
 
 .podium-position.is-current-user {
-  background: linear-gradient(135deg, #e7f3ff 0%, #ffffff 100%);
+  background: linear-gradient(135deg, #e7f3ff 0%, #d8ecff 100%);
   border-color: #1351AA;
   box-shadow: 0 4px 16px rgba(19, 81, 170, 0.15);
 }
@@ -657,7 +657,7 @@
 
 .podium-lp, .podium-wr {
   padding: 0.375rem 0.875rem;
-  background: #e9ecef;
+  background: #d4d7db;
   border-radius: 8px;
   font-size: 0.875rem;
   font-weight: 600;
@@ -676,9 +676,9 @@
   align-items: center;
   gap: 1.5rem;
   padding: 1.25rem;
-  background: #f8f9fa;
+  background: #e8eaed;
   border-radius: 12px;
-  border: 2px solid #e9ecef;
+  border: 2px solid #d4d7db;
   transition: all 0.3s ease;
 }
 
@@ -689,7 +689,7 @@
 }
 
 .leaderboard-item-epic.is-current-user {
-  background: linear-gradient(135deg, #e7f3ff 0%, #f8f9fa 100%);
+  background: linear-gradient(135deg, #e7f3ff 0%, #d8ecff 100%);
   border-color: #1351AA;
 }
 
@@ -749,7 +749,7 @@
 }
 
 .rank-ladder-card-epic {
-  background: white;
+  background: #f5f7f9;
   border-radius: 16px;
   padding: 2.5rem;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
@@ -773,7 +773,7 @@
 
 .rank-tier-card {
   min-width: 150px;
-  background: #f8f9fa;
+  background: #e8eaed;
   border-radius: 12px;
   padding: 1.75rem 1.25rem;
   display: flex;
@@ -781,7 +781,7 @@
   align-items: center;
   gap: 1rem;
   transition: all 0.3s ease;
-  border: 2px solid #e9ecef;
+  border: 2px solid #d4d7db;
   flex-shrink: 0;
 }
 
@@ -792,7 +792,7 @@
 }
 
 .rank-tier-card.current {
-  background: linear-gradient(135deg, #e7f3ff 0%, #f8f9fa 100%);
+  background: linear-gradient(135deg, #e7f3ff 0%, #d8ecff 100%);
   border-color: #1351AA;
   border-width: 3px;
   box-shadow: 0 8px 20px rgba(19, 81, 170, 0.15);
@@ -824,7 +824,7 @@
 
 /* Info Banner */
 .info-banner-epic {
-  background: linear-gradient(135deg, #fff9e6 0%, #ffffff 100%);
+  background: linear-gradient(135deg, #fff9e6 0%, #f5f2e6 100%);
   border: 2px solid #ffd700;
   border-radius: 12px;
   padding: 2rem;
@@ -872,8 +872,8 @@
   align-items: center;
   gap: 0.75rem;
   padding: 0.875rem 1.75rem;
-  background: white;
-  border: 2px solid #e9ecef;
+  background: #f5f7f9;
+  border: 2px solid #d4d7db;
   border-radius: 12px;
   color: #1351AA;
   font-size: 1rem;
