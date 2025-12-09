@@ -18,9 +18,9 @@
       <p class="feature-description">
         Lance des quiz multijoueurs et affronte tes amis en direct. Le plus rapide et le plus précis gagne !
       </p>
-      <button class="btn-feature-action" disabled>
-        Bientôt disponible
-      </button>
+      <%= link_to real_time_quizzes_path, class: "btn-feature-action" do %>
+        Jouer maintenant
+      <% end %>
     </div>
 
     <!-- Ligue -->

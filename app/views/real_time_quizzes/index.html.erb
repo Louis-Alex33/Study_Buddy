@@ -1,0 +1,128 @@
+<div class="container my-5">
+  <div class="lectures-header">
+    <div class="lectures-header-content">
+      <h1>Quiz en Temps Réel</h1>
+      <p>Affronte tes amis en direct et gagne des LP!</p>
+    </div>
+    <%= link_to new_real_time_quiz_path, class: "btn btn-primary" do %>
+      <i class="fas fa-plus"></i> Créer une Room
+    <% end %>
+  </div>
+
+  <!-- Mes Rooms en cours -->
+  <% if @my_rooms.any? %>
+    <div class="mb-5">
+      <h3 class="mb-3">Mes Rooms</h3>
+      <div class="row g-3">
+        <% @my_rooms.each do |room| %>
+          <div class="col-md-6 col-lg-4">
+            <div class="card h-100 shadow-sm">
+              <div class="card-body">
+                <h5 class="card-title"><%= room.name %></h5>
+                <p class="text-muted mb-2" style="font-size: 0.9rem;">
+                  <i class="fas fa-tag"></i> <%= QuizRoom::CATEGORIES.key(room.category) %> •
+                  <i class="fas fa-signal"></i> <%= QuizRoom::DIFFICULTIES.key(room.difficulty) %>
+                </p>
+                <div class="mb-3">
+                  <span class="badge bg-<%= room.status == 'waiting' ? 'warning' : 'success' %>">
+                    <%= room.status == 'waiting' ? 'En attente' : 'En cours' %>
+                  </span>
+                  <span class="badge bg-info">
+                    <i class="fas fa-users"></i> <%= room.quiz_participants.count %>/<%= room.max_players %>
+                  </span>
+                </div>
+                <%= link_to 'Rejoindre', real_time_quiz_path(room), class: 'btn btn-primary btn-sm w-100' %>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+
+  <!-- Rooms disponibles -->
+  <div>
+    <h3 class="mb-3">Rooms Disponibles</h3>
+    <% if @available_rooms.any? %>
+      <div class="row g-3">
+        <% @available_rooms.each do |room| %>
+          <div class="col-md-6 col-lg-4">
+            <div class="card h-100 shadow-sm">
+              <div class="card-body">
+                <h5 class="card-title"><%= room.name %></h5>
+                <p class="text-muted mb-2" style="font-size: 0.9rem;">
+                  <i class="fas fa-tag"></i> <%= QuizRoom::CATEGORIES.key(room.category) %> •
+                  <i class="fas fa-signal"></i> <%= QuizRoom::DIFFICULTIES.key(room.difficulty) %>
+                </p>
+                <div class="mb-3">
+                  <span class="badge bg-warning">En attente</span>
+                  <span class="badge bg-info">
+                    <i class="fas fa-users"></i> <%= room.quiz_participants.count %>/<%= room.max_players %>
+                  </span>
+                </div>
+                <%= button_to 'Rejoindre', join_real_time_quiz_path(room), method: :post, class: 'btn btn-success btn-sm w-100' %>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="alert alert-info">
+        <i class="fas fa-info-circle"></i> Aucune room disponible pour le moment. Crée-en une !
+      </div>
+    <% end %>
+  </div>
+
+  <!-- Historique des Quiz -->
+  <% if @finished_rooms.any? %>
+    <div class="mt-5">
+      <h3 class="mb-3">Historique des Quiz</h3>
+      <div class="row g-3">
+        <% @finished_rooms.each do |room| %>
+          <div class="col-md-6 col-lg-4">
+            <div class="card h-100 shadow-sm">
+              <div class="card-body">
+                <h5 class="card-title"><%= room.name %></h5>
+                <p class="text-muted mb-2" style="font-size: 0.9rem;">
+                  <i class="fas fa-tag"></i> <%= QuizRoom::CATEGORIES.key(room.category) %> •
+                  <i class="fas fa-signal"></i> <%= QuizRoom::DIFFICULTIES.key(room.difficulty) %>
+                </p>
+                <div class="mb-2">
+                  <span class="badge bg-secondary">Terminé</span>
+                  <span class="badge bg-info">
+                    <i class="fas fa-users"></i> <%= room.quiz_participants.count %> joueurs
+                  </span>
+                </div>
+                <% if room.ended_at %>
+                  <p class="text-muted mb-3" style="font-size: 0.85rem;">
+                    <i class="far fa-clock"></i> <%= time_ago_in_words(room.ended_at) %>
+                  </p>
+                <% end %>
+                <div class="d-flex gap-2">
+                  <%= link_to real_time_quiz_path(room), class: 'btn btn-outline-primary btn-sm flex-grow-1' do %>
+                    <i class="fas fa-eye"></i> Voir
+                  <% end %>
+                  <% if room.owner == current_user %>
+                    <%= button_to real_time_quiz_path(room), method: :delete,
+                        data: { turbo_confirm: 'Êtes-vous sûr de vouloir supprimer ce quiz ?' },
+                        class: 'btn btn-outline-danger btn-sm' do %>
+                      <i class="fas fa-trash"></i>
+                    <% end %>
+                  <% end %>
+                </div>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+
+  <!-- Back Button -->
+  <div class="lectures-back-section mt-5">
+    <%= link_to multiplayer_path, class: "btn-back-home" do %>
+      <span>←</span>
+      <span>Retour au Multijoueur</span>
+    <% end %>
+  </div>
+</div>

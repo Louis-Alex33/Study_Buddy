@@ -1,0 +1,41 @@
+<div class="container my-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card shadow">
+        <div class="card-body p-4">
+          <h2 class="card-title mb-4 text-center">Créer une Room de Quiz</h2>
+
+          <%= form_with(model: @quiz_room, url: real_time_quizzes_path, class: 'needs-validation', novalidate: true) do |form| %>
+            <div class="mb-3">
+              <%= form.label :name, 'Nom de la Room', class: 'form-label' %>
+              <%= form.text_field :name, class: 'form-control', placeholder: 'Ex: Battle Mathématiques', required: true %>
+            </div>
+
+            <div class="mb-3">
+              <%= form.label :category, 'Catégorie', class: 'form-label' %>
+              <%= form.select :category, options_for_select(QuizRoom::CATEGORIES), {}, class: 'form-select', required: true %>
+              <div class="form-text">Choisissez le thème des questions</div>
+            </div>
+
+            <div class="mb-3">
+              <%= form.label :difficulty, 'Difficulté', class: 'form-label' %>
+              <%= form.select :difficulty, options_for_select(QuizRoom::DIFFICULTIES), {}, class: 'form-select', required: true %>
+              <div class="form-text">Niveau de difficulté des questions</div>
+            </div>
+
+            <div class="mb-4">
+              <%= form.label :max_players, 'Nombre maximum de joueurs', class: 'form-label' %>
+              <%= form.number_field :max_players, class: 'form-control', min: 2, max: 10, value: 4, required: true %>
+              <div class="form-text">Entre 2 et 10 joueurs</div>
+            </div>
+
+            <div class="d-grid gap-2">
+              <%= form.submit 'Créer la Room', class: 'btn btn-primary btn-lg' %>
+              <%= link_to 'Annuler', real_time_quizzes_path, class: 'btn btn-outline-secondary' %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
