@@ -6,7 +6,7 @@ class Category < ApplicationRecord
 
 
   CATEGORIES = [
-     "Droit",
+     "Mathématiques",
      "Physique",
      "Histoire",
      "Langues",
