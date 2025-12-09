@@ -351,6 +351,51 @@ body[data-theme="dark"] {
     }
   }
 
+  // Challenge creation form - friends and level bubbles
+  .friends-checkboxes {
+    .form-check {
+      .form-check-label {
+        background: var(--bg-tertiary) !important;
+        border-color: var(--border-color) !important;
+        color: var(--text-primary) !important;
+
+        &:hover {
+          border-color: var(--blue-primary) !important;
+          background: rgba(74, 144, 226, 0.15) !important;
+          color: var(--blue-primary) !important;
+        }
+      }
+
+      .form-check-input:checked + .form-check-label {
+        background: linear-gradient(135deg, var(--blue-primary) 0%, var(--blue-secondary) 100%) !important;
+        color: white !important;
+        border-color: transparent !important;
+      }
+    }
+  }
+
+  .level-radio-group {
+    .form-check {
+      .form-check-label {
+        background: var(--bg-tertiary) !important;
+        border-color: var(--border-color) !important;
+        color: var(--text-primary) !important;
+
+        &:hover {
+          border-color: var(--blue-primary) !important;
+          background: rgba(74, 144, 226, 0.15) !important;
+          color: var(--blue-primary) !important;
+        }
+      }
+
+      .form-check-input:checked + .form-check-label {
+        background: linear-gradient(135deg, var(--blue-primary) 0%, var(--blue-secondary) 100%) !important;
+        color: white !important;
+        border-color: transparent !important;
+      }
+    }
+  }
+
 
   .lectures-header {
     background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%) !important;
