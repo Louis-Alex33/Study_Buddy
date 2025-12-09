@@ -704,4 +704,161 @@ body[data-theme="dark"] {
       color: var(--text-secondary) !important;
     }
   }
+
+  // Real-time quiz dark mode
+  .quiz-arena {
+    background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%) !important;
+  }
+
+  .quiz-header {
+    background: var(--bg-secondary) !important;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.5) !important;
+
+    h2 {
+      color: var(--blue-primary) !important;
+    }
+  }
+
+  .quiz-timer {
+    background: linear-gradient(135deg, rgba(74, 144, 226, 0.15) 0%, rgba(107, 164, 231, 0.15) 100%) !important;
+    color: var(--blue-primary) !important;
+  }
+
+  .quiz-score {
+    background: var(--bg-tertiary) !important;
+    color: var(--blue-primary) !important;
+  }
+
+  .quiz-progress {
+    color: var(--text-secondary) !important;
+  }
+
+  .quiz-question-container {
+    background: var(--bg-secondary) !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5) !important;
+  }
+
+  .question-number {
+    background: var(--blue-primary) !important;
+  }
+
+  .question-text {
+    color: var(--text-primary) !important;
+  }
+
+  .question-category {
+    background: linear-gradient(135deg, rgba(74, 144, 226, 0.2) 0%, rgba(107, 164, 231, 0.2) 100%) !important;
+    color: var(--blue-primary) !important;
+  }
+
+  .answer-option {
+    background: linear-gradient(135deg, var(--bg-tertiary) 0%, var(--bg-secondary) 100%) !important;
+    border-color: var(--border-color) !important;
+    color: var(--text-primary) !important;
+
+    &:hover {
+      border-color: var(--blue-primary) !important;
+      box-shadow: 0 6px 16px rgba(74, 144, 226, 0.3) !important;
+    }
+
+    &.selected {
+      background: linear-gradient(135deg, var(--blue-primary) 0%, #1a66cc 100%) !important;
+      border-color: var(--blue-primary) !important;
+      color: white !important;
+      transform: translateY(-3px);
+      box-shadow: 0 6px 16px rgba(74, 144, 226, 0.5) !important;
+
+      .answer-letter {
+        background: rgba(255, 255, 255, 0.3) !important;
+        color: white !important;
+      }
+    }
+
+    &.correct {
+      background: linear-gradient(135deg, #28a745 0%, #20c997 100%) !important;
+      border-color: #28a745 !important;
+      color: white !important;
+
+      .answer-letter {
+        background: rgba(255, 255, 255, 0.3) !important;
+        color: white !important;
+      }
+    }
+
+    &.wrong {
+      background: linear-gradient(135deg, #dc3545 0%, #c82333 100%) !important;
+      border-color: #dc3545 !important;
+      color: white !important;
+
+      .answer-letter {
+        background: rgba(255, 255, 255, 0.3) !important;
+        color: white !important;
+      }
+    }
+
+    .answer-letter {
+      background: var(--bg-primary) !important;
+      color: var(--blue-primary) !important;
+    }
+  }
+
+  .live-leaderboard {
+    background: var(--bg-secondary) !important;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.5) !important;
+
+    h4 {
+      color: var(--blue-primary) !important;
+    }
+  }
+
+  .leaderboard-item {
+    background: var(--bg-tertiary) !important;
+
+    &:hover {
+      background: var(--border-color) !important;
+    }
+
+    .player-score {
+      color: var(--blue-primary) !important;
+    }
+  }
+
+  .quiz-loading-overlay {
+    background: linear-gradient(135deg, var(--bg-primary) 0%, var(--blue-dark) 100%) !important;
+  }
+
+  .card {
+    background: var(--bg-secondary) !important;
+    color: var(--text-primary) !important;
+    border-color: var(--border-color) !important;
+
+    .card-header {
+      background: linear-gradient(135deg, var(--blue-primary) 0%, var(--blue-secondary) 100%) !important;
+      border-color: var(--border-color) !important;
+    }
+
+    .card-body {
+      background: var(--bg-secondary) !important;
+    }
+  }
+
+  .alert-info {
+    background: rgba(74, 144, 226, 0.15) !important;
+    border-color: rgba(74, 144, 226, 0.3) !important;
+    color: var(--text-primary) !important;
+
+    i {
+      color: var(--blue-primary) !important;
+    }
+  }
+
+  .list-group-item {
+    background: var(--bg-tertiary) !important;
+    border-color: var(--border-color) !important;
+    color: var(--text-primary) !important;
+  }
+
+  .bg-light {
+    background: var(--bg-tertiary) !important;
+  }
 }
