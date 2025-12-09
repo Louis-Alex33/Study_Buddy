@@ -1,0 +1,534 @@
+<% if @quiz_room.status == 'waiting' %>
+  <!-- LOBBY - En attente -->
+  <div class="container my-5">
+    <div class="card shadow-lg">
+      <div class="card-header bg-primary text-white">
+        <h2 class="mb-0"><i class="fas fa-door-open"></i> <%= @quiz_room.name %></h2>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-8">
+            <h4 class="mb-3">Joueurs en attente (<%= @participants.count %>/<%= @quiz_room.max_players %>)</h4>
+            <div class="list-group mb-4">
+              <% @participants.each do |participant| %>
+                <div class="list-group-item d-flex justify-content-between align-items-center">
+                  <div>
+                    <i class="fas fa-user"></i>
+                    <strong><%= participant.user.display_name %></strong>
+                    <% if participant.user == @quiz_room.owner %>
+                      <span class="badge bg-warning text-dark"><i class="fas fa-crown"></i> Hôte</span>
+                    <% end %>
+                    <% if participant.user == current_user %>
+                      <span class="badge bg-primary">Vous</span>
+                    <% end %>
+                  </div>
+                  <span class="badge bg-success">Prêt</span>
+                </div>
+              <% end %>
+            </div>
+
+            <div class="alert alert-info">
+              <i class="fas fa-info-circle"></i>
+              <% if @quiz_room.can_start? %>
+                Tous les joueurs sont prêts ! Vous pouvez lancer la partie.
+              <% else %>
+                En attente de <%= 2 - @participants.count %> joueur(s) supplémentaire(s) pour commencer...
+              <% end %>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div class="card bg-light">
+              <div class="card-body">
+                <h5 class="card-title">Informations</h5>
+                <ul class="list-unstyled">
+                  <li><i class="fas fa-users"></i> <strong>Max:</strong> <%= @quiz_room.max_players %> joueurs</li>
+                  <li><i class="fas fa-tag"></i> <strong>Catégorie:</strong> <%= QuizRoom::CATEGORIES.key(@quiz_room.category) %></li>
+                  <li><i class="fas fa-signal"></i> <strong>Difficulté:</strong> <%= QuizRoom::DIFFICULTIES.key(@quiz_room.difficulty) %></li>
+                  <li><i class="fas fa-question-circle"></i> <strong>Questions:</strong> 10</li>
+                  <li><i class="fas fa-clock"></i> <strong>Temps:</strong> 30s par question</li>
+                  <li><i class="fas fa-trophy"></i> <strong>Récompense:</strong> +20 LP (gagnant)</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="d-flex gap-2 mt-4">
+          <% if @quiz_room.can_start? && @quiz_room.owner == current_user %>
+            <%= button_to start_real_time_quiz_path(@quiz_room), method: :post, class: 'btn btn-success btn-lg', id: 'start-quiz-btn' do %>
+              <i class="fas fa-play"></i> Lancer le Quiz
+            <% end %>
+          <% elsif @quiz_room.can_start? %>
+            <div class="alert alert-info mb-0">
+              <i class="fas fa-info-circle"></i> En attente que <%= @quiz_room.owner.display_name %> lance le quiz...
+            </div>
+          <% end %>
+          <%= button_to 'Quitter la Room', leave_real_time_quiz_path(@quiz_room), method: :delete, class: 'btn btn-outline-danger', data: { confirm: 'Êtes-vous sûr de vouloir quitter ?' } %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Initialiser ActionCable pour le lobby
+    console.log('Initializing lobby channel for room <%= @quiz_room.id %>');
+    const lobbyChannel = App.cable.subscriptions.create(
+      { channel: "QuizRoomChannel", quiz_room_id: <%= @quiz_room.id %> },
+      {
+        connected() {
+          console.log('Connected to lobby channel');
+        },
+
+        disconnected() {
+          console.log('Disconnected from lobby channel');
+        },
+
+        received(data) {
+          console.log('Received lobby data:', data);
+
+          if (data.type === 'player_joined') {
+            // Recharger immédiatement pour voir le nouveau joueur
+            console.log('A player joined, reloading immediately...');
+            window.location.replace(window.location.href);
+          } else if (data.type === 'quiz_started') {
+            // Le quiz a démarré, afficher un écran de transition
+            console.log('Quiz started! Starting transition...');
+
+            // Créer un overlay de transition
+            const overlay = document.createElement('div');
+            overlay.style.cssText = `
+              position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+              background: linear-gradient(135deg, #1351AA 0%, #1a66cc 100%);
+              display: flex; align-items: center; justify-content: center;
+              z-index: 99999; animation: fadeIn 0.3s ease;
+            `;
+            overlay.innerHTML = `
+              <div style="text-align: center; color: white;">
+                <div style="font-size: 5rem; margin-bottom: 1.5rem;">
+                  <i class="fas fa-rocket" style="animation: pulse 1s infinite;"></i>
+                </div>
+                <h1 style="font-size: 3rem; font-weight: 700; margin-bottom: 1rem;">
+                  Le Quiz Commence !
+                </h1>
+                <p style="font-size: 1.5rem; opacity: 0.9;">
+                  Prépare-toi à affronter ton adversaire...
+                </p>
+              </div>
+              <style>
+                @keyframes pulse {
+                  0%, 100% { transform: scale(1); opacity: 1; }
+                  50% { transform: scale(1.2); opacity: 0.8; }
+                }
+                @keyframes fadeIn {
+                  from { opacity: 0; }
+                  to { opacity: 1; }
+                }
+              </style>
+            `;
+            document.body.appendChild(overlay);
+
+            // Rediriger après 2 secondes
+            setTimeout(() => {
+              window.location.replace('<%= real_time_quiz_path(@quiz_room) %>');
+            }, 2000);
+          }
+        }
+      }
+    );
+
+    // Ajouter un spinner au bouton de démarrage
+    const startBtn = document.getElementById('start-quiz-btn');
+    if (startBtn) {
+      startBtn.addEventListener('click', function() {
+        const icon = this.querySelector('i');
+        if (icon) {
+          icon.className = 'fas fa-spinner fa-spin';
+        }
+        this.disabled = true;
+        this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Démarrage...';
+      });
+    }
+  </script>
+
+<% elsif @quiz_room.status == 'in_progress' %>
+  <!-- Loading Overlay -->
+  <div class="quiz-loading-overlay" id="quiz-loading">
+    <div class="quiz-loading-content">
+      <div class="loading-icon">
+        <i class="fas fa-brain"></i>
+      </div>
+      <div class="loading-spinner">
+        <div class="spinner-circle"></div>
+        <div class="spinner-circle"></div>
+        <div class="spinner-circle"></div>
+      </div>
+      <div class="loading-text">Préparation du quiz</div>
+      <div class="loading-subtext">Les questions arrivent...</div>
+    </div>
+  </div>
+
+  <!-- QUIZ EN COURS -->
+  <div class="quiz-arena">
+    <!-- Zone principale du quiz -->
+    <div class="quiz-main">
+      <div class="quiz-header">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <h2 class="mb-0"><%= @quiz_room.name %></h2>
+          <%= button_to leave_real_time_quiz_path(@quiz_room), method: :delete, class: 'btn btn-outline-danger btn-sm', data: { confirm: 'Êtes-vous sûr de vouloir abandonner le quiz ?' } do %>
+            <i class="fas fa-sign-out-alt"></i> Quitter
+          <% end %>
+        </div>
+        <div class="d-flex justify-content-between align-items-center">
+          <div class="quiz-timer" id="timer-display">
+            <i class="fas fa-clock"></i> <span id="timer">30</span>s
+          </div>
+          <div class="quiz-score">
+            Score: <span id="current-score"><%= @participant.score || 0 %></span>
+          </div>
+          <div class="quiz-progress">
+            Question <span id="question-number">1</span>/10
+          </div>
+        </div>
+      </div>
+
+      <!-- Zone de question -->
+      <div id="quiz-container">
+        <% if @questions.any? %>
+          <% @questions.each_with_index do |question, index| %>
+            <div class="question-card <%= 'active' if index == 0 %>" data-question="<%= index %>">
+              <div class="quiz-question-container">
+                <div class="mb-3">
+                  <span class="question-number">Question <%= index + 1 %></span>
+                  <span class="question-category"><%= question.category %></span>
+                </div>
+
+                <h3 class="question-text"><%= question.content %></h3>
+
+                <div class="answer-options">
+                  <% question.all_answers_shuffled.each_with_index do |answer, i| %>
+                    <div class="answer-option" data-answer="<%= answer %>" data-correct="<%= question.correct_answer %>">
+                      <div class="d-flex align-items-center">
+                        <div class="answer-letter"><%= ('A'.ord + i).chr %></div>
+                        <div class="answer-text"><%= answer %></div>
+                      </div>
+                    </div>
+                  <% end %>
+                </div>
+              </div>
+            </div>
+          <% end %>
+        <% else %>
+          <div class="alert alert-warning">
+            Aucune question disponible. Erreur lors du chargement.
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+    <!-- Leaderboard en direct -->
+    <div class="live-leaderboard">
+      <h4><i class="fas fa-trophy"></i> Classement</h4>
+      <div id="leaderboard-container">
+        <% @participants.order(score: :desc).each_with_index do |participant, index| %>
+          <div class="leaderboard-item rank-<%= index + 1 %>" data-participant-id="<%= participant.id %>">
+            <div class="player-rank">#<%= index + 1 %></div>
+            <div class="player-name-with-rank">
+              <%= participant.user.display_name %>
+              <%= rank_icon_inline(participant.user.user_league&.rank || 'iron') %>
+            </div>
+            <div class="player-score"><%= participant.score || 0 %> pts</div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+<% else %>
+  <!-- QUIZ TERMINÉ -->
+  <div class="quiz-results">
+    <div class="container">
+      <div class="card shadow-lg">
+        <div class="card-header bg-success text-white text-center">
+          <h2><i class="fas fa-flag-checkered"></i> Quiz Terminé!</h2>
+        </div>
+        <div class="card-body">
+          <h3 class="text-center mb-4">Classement Final</h3>
+          <div class="podium">
+            <% @participants.order(score: :desc).each_with_index do |participant, index| %>
+              <div class="podium-item rank-<%= index + 1 %> <%= 'winner' if index == 0 %>">
+                <div class="rank-badge">#<%= index + 1 %></div>
+                <div class="player-name"><%= participant.user.display_name %></div>
+                <div class="player-score"><%= participant.score %> pts</div>
+                <div class="player-accuracy"><%= participant.accuracy %>% précision</div>
+                <% if index == 0 %>
+                  <div class="winner-badge">
+                    <i class="fas fa-crown"></i> Gagnant +20 LP
+                  </div>
+                <% end %>
+              </div>
+            <% end %>
+          </div>
+
+          <div class="text-center">
+            <%= link_to 'Retour aux Rooms', real_time_quizzes_path, class: 'btn btn-primary btn-lg' %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>
+
+<% if @quiz_room.status == 'in_progress' %>
+<script>
+  let currentQuestion = 0;
+  let timeLeft = 30;
+  let timerInterval;
+  let selectedAnswer = null;
+  let quizChannel;
+
+  // Fonction pour obtenir les couleurs des ranks
+  function getRankColor(rank) {
+    const rankColors = {
+      'iron': '#6B5B4F',
+      'bronze': '#CD7F32',
+      'silver': '#C0C0C0',
+      'gold': '#FFD700',
+      'platinum': '#00CED1',
+      'diamond': '#B9F2FF',
+      'master': '#8B00FF',
+      'grandmaster': '#FF1493',
+      'challenger': '#FF6B00'
+    };
+    return rankColors[rank] || rankColors['iron'];
+  }
+
+  // Fonction pour obtenir le SVG du rank (version simplifiée pour le temps réel)
+  function getRankSVG(rank) {
+    // On retourne une version simplifiée du logo pour le temps réel
+    return `<span class="rank-icon-inline">
+      <svg viewBox="0 0 80 80" width="28" height="28">
+        ${getRankSVGContent(rank)}
+      </svg>
+    </span>`;
+  }
+
+  function getRankSVGContent(rank) {
+    const svgs = {
+      'iron': '<g transform="translate(40,40) scale(0.8)"><rect x="-22" y="-15" width="20" height="28" rx="2" fill="#8A8A8A"/><rect x="2" y="-15" width="20" height="28" rx="2" fill="#8A8A8A"/></g>',
+      'bronze': '<g transform="translate(40,40) scale(0.8)"><rect x="-22" y="-15" width="20" height="28" rx="2" fill="#CD7F32"/><rect x="2" y="-15" width="20" height="28" rx="2" fill="#CD7F32"/><rect x="-2" y="-18" width="4" height="22" fill="#D2691E"/></g>',
+      'silver': '<g transform="translate(40,40) scale(0.8)"><rect x="-20" y="-12" width="18" height="24" rx="2" fill="#C0C0C0"/><rect x="5" y="-12" width="18" height="24" rx="2" fill="#C0C0C0"/><rect x="-8" y="-18" width="6" height="32" rx="1" fill="#FFD700" transform="rotate(25 -5 0)"/></g>',
+      'gold': '<g transform="translate(40,40) scale(0.8)"><ellipse cx="-15" cy="0" rx="6" ry="15" fill="#FFD700"/><rect x="-10" y="-15" width="20" height="30" rx="1" fill="#FFD700"/><ellipse cx="15" cy="0" rx="6" ry="15" fill="#FFD700"/><circle cx="0" cy="0" r="7" fill="none" stroke="#FF6347" stroke-width="2"/></g>',
+      'platinum': '<g transform="translate(40,40) scale(0.8)"><rect x="-20" y="-12" width="40" height="24" rx="2" fill="#00CED1"/><circle cx="10" cy="10" r="8" fill="none" stroke="#FFD700" stroke-width="3"/><line x1="16" y1="16" x2="22" y2="22" stroke="#FFD700" stroke-width="3"/></g>',
+      'emerald': '<g transform="translate(40,40) scale(0.8)"><ellipse cx="0" cy="0" rx="20" ry="16" fill="#50C878"/><circle cx="-8" cy="-4" r="2" fill="#FFD700"/><circle cx="8" cy="-4" r="2" fill="#FFD700"/><circle cx="0" cy="4" r="2" fill="#FFD700"/></g>',
+      'diamond': '<g transform="translate(40,40) scale(0.8)"><polygon points="0,-15 -25,0 0,8 25,0" fill="#B9F2FF"/><rect x="-15" y="5" width="30" height="3" fill="#B9F2FF"/><line x1="0" y1="-15" x2="0" y2="20" stroke="#FFD700" stroke-width="2"/></g>',
+      'master': '<g transform="translate(40,40) scale(0.8)"><polygon points="0,-20 5,-7 19,-7 9,2 13,15 0,7 -13,15 -9,2 -19,-7 -5,-7" fill="#9B30FF"/><circle cx="0" cy="0" r="8" fill="#FFD700"/></g>',
+      'grandmaster': '<g transform="translate(40,40) scale(0.8)"><ellipse cx="0" cy="-3" rx="12" ry="15" fill="#FF8C00"/><rect x="-6" y="12" width="12" height="4" rx="1" fill="#C0C0C0"/><line x1="-18" y1="-5" x2="-22" y2="-8" stroke="#FFD700" stroke-width="2"/><line x1="18" y1="-5" x2="22" y2="-8" stroke="#FFD700" stroke-width="2"/></g>',
+      'challenger': '<g transform="translate(40,40) scale(0.8)"><path d="M-12,-15 L-12,5 Q-12,10 0,10 Q12,10 12,5 L12,-15 Q12,-18 8,-18 L-8,-18 Q-12,-18 -12,-15 Z" fill="#FFD700"/><ellipse cx="0" cy="-15" rx="12" ry="3" fill="#FFD700"/><rect x="-3" y="10" width="6" height="8" fill="#FFD700"/><rect x="-10" y="18" width="20" height="4" rx="1" fill="#FFD700"/></g>'
+    };
+    return svgs[rank] || svgs['iron'];
+  }
+
+  // Initialiser ActionCable
+  function initializeQuizChannel() {
+    console.log('Initializing QuizRoomChannel for room <%= @quiz_room.id %>');
+    quizChannel = App.cable.subscriptions.create(
+      { channel: "QuizRoomChannel", quiz_room_id: <%= @quiz_room.id %> },
+      {
+        connected() {
+          console.log('Connected to QuizRoomChannel');
+        },
+
+        disconnected() {
+          console.log('Disconnected from QuizRoomChannel');
+        },
+
+        received(data) {
+          console.log('Received data from QuizRoomChannel:', data);
+          if (data.type === 'score_update') {
+            updateLeaderboard(data.leaderboard);
+          }
+        }
+      }
+    );
+  }
+
+  // Mettre à jour le leaderboard en temps réel
+  function updateLeaderboard(leaderboard) {
+    console.log('Updating leaderboard with', leaderboard.length, 'participants');
+    const container = document.getElementById('leaderboard-container');
+    container.innerHTML = '';
+
+    leaderboard.forEach((participant, index) => {
+      const rankClass = `rank-${index + 1}`;
+      const item = document.createElement('div');
+      item.className = `leaderboard-item ${rankClass}`;
+      item.dataset.participantId = participant.id;
+      item.style.animation = 'slide-in 0.3s ease';
+
+      const rankSVG = getRankSVG(participant.rank);
+
+      item.innerHTML = `
+        <div class="player-rank">#${index + 1}</div>
+        <div class="player-name-with-rank">
+          ${participant.display_name}
+          ${rankSVG}
+        </div>
+        <div class="player-score">${participant.score} pts</div>
+      `;
+
+      container.appendChild(item);
+    });
+  }
+
+  function startTimer() {
+    timerInterval = setInterval(() => {
+      timeLeft--;
+      document.getElementById('timer').textContent = timeLeft;
+
+      // Warning animation quand il reste moins de 10s
+      if (timeLeft <= 10) {
+        document.getElementById('timer-display').classList.add('warning');
+      }
+
+      if (timeLeft <= 0) {
+        clearInterval(timerInterval);
+        submitAnswer(false);
+      }
+    }, 1000);
+  }
+
+  function showPointsEarned(points) {
+    if (points > 0) {
+      const pointsDiv = document.createElement('div');
+      pointsDiv.className = 'points-earned';
+      pointsDiv.textContent = `+${points} pts`;
+      document.body.appendChild(pointsDiv);
+
+      setTimeout(() => {
+        pointsDiv.remove();
+      }, 1500);
+    }
+  }
+
+  function submitAnswer(isCorrect) {
+    clearInterval(timerInterval);
+
+    // Envoyer la réponse au serveur
+    fetch('<%= submit_answer_real_time_quiz_path(@quiz_room) %>', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRF-Token': document.querySelector('[name="csrf-token"]').content
+      },
+      body: JSON.stringify({
+        correct: isCorrect,
+        time_remaining: timeLeft
+      })
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        document.getElementById('current-score').textContent = data.score;
+
+        // Afficher les points gagnés
+        if (data.correct && data.points_earned > 0) {
+          showPointsEarned(data.points_earned);
+        }
+
+        // Le broadcast est maintenant fait automatiquement côté serveur
+        // après la sauvegarde du score
+      }
+    });
+
+    // Attendre 1.5s pour montrer la bonne/mauvaise réponse
+    setTimeout(() => {
+      nextQuestion();
+    }, 1500);
+  }
+
+  function nextQuestion() {
+    const currentCard = document.querySelector(`.question-card[data-question="${currentQuestion}"]`);
+    currentQuestion++;
+
+    if (currentQuestion < 10) {
+      currentCard.classList.remove('active');
+      const nextCard = document.querySelector(`.question-card[data-question="${currentQuestion}"]`);
+      if (nextCard) {
+        nextCard.classList.add('active');
+        document.getElementById('question-number').textContent = currentQuestion + 1;
+        timeLeft = 30;
+        selectedAnswer = null;
+        document.getElementById('timer-display').classList.remove('warning');
+
+        // Réinitialiser les options de réponse de la nouvelle question
+        const nextOptions = nextCard.querySelectorAll('.answer-option');
+        nextOptions.forEach(opt => {
+          opt.classList.remove('selected', 'correct', 'wrong');
+          opt.style.pointerEvents = 'auto';
+        });
+
+        startTimer();
+      }
+    } else {
+      // Quiz terminé - rediriger vers la page de résultats
+      fetch('<%= finish_real_time_quiz_path(@quiz_room) %>', {
+        method: 'POST',
+        headers: {
+          'X-CSRF-Token': document.querySelector('[name="csrf-token"]').content
+        }
+      }).then(() => {
+        window.location.reload();
+      });
+    }
+  }
+
+  // Event listeners sur les réponses
+  document.querySelectorAll('.answer-option').forEach(option => {
+    option.addEventListener('click', function() {
+      // Empêcher de cliquer plusieurs fois
+      if (selectedAnswer) return;
+
+      selectedAnswer = this.dataset.answer;
+      const correctAnswer = this.dataset.correct;
+      const isCorrect = selectedAnswer === correctAnswer;
+
+      // Marquer la réponse sélectionnée
+      this.classList.add('selected');
+
+      // Afficher la bonne réponse
+      document.querySelectorAll('.answer-option').forEach(opt => {
+        if (opt.dataset.answer === correctAnswer) {
+          opt.classList.add('correct');
+        } else if (opt.dataset.answer === selectedAnswer && !isCorrect) {
+          opt.classList.add('wrong');
+        }
+        // Désactiver tous les boutons
+        opt.style.pointerEvents = 'none';
+      });
+
+      submitAnswer(isCorrect);
+    });
+  });
+
+  // Fonction pour cacher le loading et démarrer le quiz
+  function startQuiz() {
+    const loadingOverlay = document.getElementById('quiz-loading');
+    if (loadingOverlay) {
+      loadingOverlay.classList.add('hide');
+      setTimeout(() => {
+        loadingOverlay.remove();
+      }, 500);
+    }
+
+    // Initialiser le canal et démarrer le timer
+    initializeQuizChannel();
+    startTimer();
+  }
+
+  // Attendre 2 secondes avant de commencer le quiz (temps de chargement)
+  setTimeout(() => {
+    startQuiz();
+  }, 2000);
+</script>
+<% end %>
