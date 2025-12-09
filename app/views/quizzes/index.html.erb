@@ -9,10 +9,12 @@
 
   <!-- Filter by difficulty -->
   <div class="filter_button_card">
+    <aside class="menu-sticky">
     <%= link_to "Tous", quizzes_path, class: "filter_button #{params[:level].blank? ? 'active' : ''}" %>
     <% (1..5).each do |level| %>
       <%= link_to "Niveau #{level}", quizzes_path(level: level), class: "filter_button #{params[:level].to_i == level ? 'active' : ''}" %>
     <% end %>
+    </aside>
   </div>
 
   <!-- Section Quizzes Publics -->
