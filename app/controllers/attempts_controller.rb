@@ -39,7 +39,16 @@ class AttemptsController < ApplicationController
       done: true
     )
 
-    redirect_to quiz_attempt_path(@quiz, @attempt), notice: "Quiz terminé ! Score: #{@attempt.score}/#{@attempt.total_questions}"
+    # Award points based on quiz completion
+    current_user.ensure_league!
+    result = PointsService.award_quiz_completion(
+      current_user,
+      @quiz.level,
+      @attempt.percentage_score
+    )
+
+    redirect_to quiz_attempt_path(@quiz, @attempt),
+      notice: "Quiz terminé ! Score: #{@attempt.score}/#{@attempt.total_questions} | +#{result[:points]} points ! | +#{result[:league_points]} LP"
   end
 
   private

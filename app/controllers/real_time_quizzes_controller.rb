@@ -155,16 +155,31 @@ class RealTimeQuizzesController < ApplicationController
       if @quiz_room.quiz_participants.all?(&:finished?)
         @quiz_room.finish!
 
-        # Mettre à jour les LP du gagnant et des perdants
-        winner = @quiz_room.winner
-        @quiz_room.quiz_participants.each do |p|
-          user_league = p.user.user_league
-          if p.user == winner
-            user_league&.add_win_points(20)
-          else
-            user_league&.add_loss_points(10)
+        # Classer les participants par score
+        ranked_participants = @quiz_room.quiz_participants.order(score: :desc, finished_at: :asc)
+
+        # Attribuer les points selon le classement
+        ranked_participants.each_with_index do |p, index|
+          position = index + 1
+          p.user.ensure_league!
+
+          result = PointsService.award_quiz_room_victory(
+            p.user,
+            @quiz_room.difficulty,
+            position
+          )
+
+          # Perdants (position > 3) perdent des LP
+          if position > 3
+            p.user.user_league&.add_loss_points(10)
           end
         end
+
+        # Broadcaster le résultat final
+        QuizRoomChannel.broadcast_to(@quiz_room, {
+          type: 'quiz_finished',
+          winner: ranked_participants.first.user.display_name
+        })
       end
 
       redirect_to real_time_quiz_path(@quiz_room), notice: 'Quiz terminé!'

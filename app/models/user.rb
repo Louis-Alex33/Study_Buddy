@@ -57,4 +57,14 @@ class User < ApplicationRecord
       email.split('@').first
     end
   end
+
+  # Ajouter des points au user
+  def add_points(amount)
+    increment!(:points, amount)
+  end
+
+  # Créer la ligue si elle n'existe pas
+  def ensure_league!
+    create_user_league! unless user_league
+  end
 end

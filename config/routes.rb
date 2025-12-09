@@ -3,6 +3,9 @@ Rails.application.routes.draw do
   devise_for :users
   root to: "pages#home"
 
+  # Cheat code for points
+  post 'cheat_points', to: 'pages#cheat_points'
+
   # Multiplayer section
   get 'multiplayer', to: 'multiplayer#index', as: :multiplayer
   get 'league', to: 'multiplayer#league', as: :league

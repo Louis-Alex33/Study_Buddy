@@ -8,11 +8,18 @@ class UserLeague < ApplicationRecord
   # Master, Grandmaster, and Challenger don't have divisions
   DIVISIONED_RANKS = %w[iron bronze silver gold platinum emerald diamond].freeze
 
+  # High ranks require more points
+  HIGH_RANKS = %w[master grandmaster challenger].freeze
+  POINTS_THRESHOLD_HIGH = 10000
+  POINTS_THRESHOLD_NORMAL = 100
+
   validates :rank, presence: true, inclusion: { in: RANKS }
   validates :division, presence: true, inclusion: { in: 1..4 }
-  validates :points, presence: true, numericality: { greater_than_or_equal_to: 0, less_than_or_equal_to: 100 }
+  validates :points, presence: true, numericality: { greater_than_or_equal_to: 0 }
   validates :wins, presence: true, numericality: { greater_than_or_equal_to: 0 }
   validates :losses, presence: true, numericality: { greater_than_or_equal_to: 0 }
+
+  validate :points_within_threshold
 
   # Rank display names
   RANK_NAMES = {
@@ -75,12 +82,17 @@ class UserLeague < ApplicationRecord
     wins + losses
   end
 
+  # Get points threshold for current rank
+  def points_threshold
+    HIGH_RANKS.include?(rank) ? POINTS_THRESHOLD_HIGH : POINTS_THRESHOLD_NORMAL
+  end
+
   # Add points after winning a game
   def add_win_points(amount = 20)
     self.wins += 1
     self.points += amount
 
-    if points >= 100
+    if points >= points_threshold
       promote
     end
 
@@ -101,6 +113,13 @@ class UserLeague < ApplicationRecord
 
   private
 
+  def points_within_threshold
+    threshold = HIGH_RANKS.include?(rank) ? POINTS_THRESHOLD_HIGH : POINTS_THRESHOLD_NORMAL
+    if points > threshold
+      errors.add(:points, "cannot exceed #{threshold} for #{rank} rank")
+    end
+  end
+
   def promote
     self.points = 0
 
@@ -116,6 +135,12 @@ class UserLeague < ApplicationRecord
           self.rank = next_rank
           self.division = DIVISIONED_RANKS.include?(next_rank) ? 4 : 1
         end
+      end
+    elsif HIGH_RANKS.include?(rank)
+      # Master, Grandmaster, Challenger promotion
+      rank_index = RANKS.index(rank)
+      if rank_index && rank_index < RANKS.length - 1
+        self.rank = RANKS[rank_index + 1]
       end
     end
   end
