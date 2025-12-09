@@ -1,0 +1,718 @@
+// League-specific visual effects that get more impressive as you rank up
+
+// Base league page styling
+.league-page {
+  position: relative;
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+// Animated background particles based on rank
+.league-particles {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.league-particle {
+  position: absolute;
+  pointer-events: none;
+  opacity: 0.6;
+  animation: fluid-float 12s ease-in-out infinite;
+  will-change: transform, opacity;
+}
+
+// Fluid floating animation for particles
+@keyframes fluid-float {
+  0% {
+    transform: translateX(0) translateY(0) rotate(0deg) scale(1);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.6;
+  }
+  25% {
+    transform: translateX(-40px) translateY(-60px) rotate(120deg) scale(1.1);
+  }
+  50% {
+    transform: translateX(30px) translateY(-120px) rotate(240deg) scale(0.9);
+  }
+  75% {
+    transform: translateX(-20px) translateY(-180px) rotate(360deg) scale(1.05);
+  }
+  90% {
+    opacity: 0.6;
+  }
+  100% {
+    transform: translateX(0) translateY(-250px) rotate(480deg) scale(1);
+    opacity: 0;
+  }
+}
+
+// Lightning effects for rank emblem - Electric bolts on logo
+.rank-emblem-container {
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: radial-gradient(circle, currentColor 0%, transparent 75%);
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    animation: electric-pulse 5s ease-in-out infinite;
+    filter: blur(20px);
+    transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+  }
+}
+
+.rank-lightning {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 60px;
+  height: 60px;
+  opacity: 0;
+  animation: lightning-flash 5s ease-in-out infinite;
+  transform-origin: center center;
+  pointer-events: none;
+  z-index: 10;
+  transition: opacity 0.3s ease-out, transform 0.4s ease-out;
+
+  svg {
+    width: 100%;
+    height: 100%;
+    filter: drop-shadow(0 0 5px currentColor) drop-shadow(0 0 10px currentColor);
+    transition: filter 0.4s ease-out;
+  }
+
+  path {
+    stroke: currentColor;
+    stroke-width: 1.5;
+    fill: currentColor;
+    fill-opacity: 0.2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+}
+
+// Position lightnings OVER the emblem (8 directions crossing the logo)
+.rank-lightning-1 {
+  transform: translate(-50%, -50%) rotate(0deg);
+  animation-delay: 0s;
+}
+
+.rank-lightning-2 {
+  transform: translate(-50%, -50%) rotate(45deg);
+  animation-delay: 0.5s;
+}
+
+.rank-lightning-3 {
+  transform: translate(-50%, -50%) rotate(90deg);
+  animation-delay: 1s;
+}
+
+.rank-lightning-4 {
+  transform: translate(-50%, -50%) rotate(135deg);
+  animation-delay: 1.5s;
+}
+
+.rank-lightning-5 {
+  transform: translate(-50%, -50%) rotate(180deg);
+  animation-delay: 2s;
+}
+
+.rank-lightning-6 {
+  transform: translate(-50%, -50%) rotate(225deg);
+  animation-delay: 2.5s;
+}
+
+.rank-lightning-7 {
+  transform: translate(-50%, -50%) rotate(270deg);
+  animation-delay: 3s;
+}
+
+.rank-lightning-8 {
+  transform: translate(-50%, -50%) rotate(315deg);
+  animation-delay: 3.5s;
+}
+
+@keyframes lightning-flash {
+  0%, 100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) rotate(var(--rotation, 0deg)) scale(0.8);
+  }
+  1% {
+    opacity: 0.3;
+    transform: translate(-50%, -50%) rotate(var(--rotation, 0deg)) scale(0.9);
+  }
+  2% {
+    opacity: 0.6;
+    transform: translate(-50%, -50%) rotate(var(--rotation, 0deg)) scale(1);
+  }
+  3% {
+    opacity: 0.2;
+    transform: translate(-50%, -50%) rotate(var(--rotation, 0deg)) scale(0.98);
+  }
+  4% {
+    opacity: 0.7;
+    transform: translate(-50%, -50%) rotate(var(--rotation, 0deg)) scale(1);
+  }
+  6% {
+    opacity: 0.5;
+    transform: translate(-50%, -50%) rotate(var(--rotation, 0deg)) scale(0.99);
+  }
+  8% {
+    opacity: 0.3;
+    transform: translate(-50%, -50%) rotate(var(--rotation, 0deg)) scale(0.95);
+  }
+  10% {
+    opacity: 0;
+    transform: translate(-50%, -50%) rotate(var(--rotation, 0deg)) scale(0.85);
+  }
+}
+
+@keyframes electric-pulse {
+  0%, 100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.5);
+  }
+  1% {
+    opacity: 0.15;
+    transform: translate(-50%, -50%) scale(0.85);
+  }
+  4% {
+    opacity: 0.3;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  8% {
+    opacity: 0.15;
+    transform: translate(-50%, -50%) scale(1.2);
+  }
+  10% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(1.4);
+  }
+}
+
+// Fix rotation for each lightning
+.rank-lightning-1 { --rotation: 0deg; }
+.rank-lightning-2 { --rotation: 45deg; }
+.rank-lightning-3 { --rotation: 90deg; }
+.rank-lightning-4 { --rotation: 135deg; }
+.rank-lightning-5 { --rotation: 180deg; }
+.rank-lightning-6 { --rotation: 225deg; }
+.rank-lightning-7 { --rotation: 270deg; }
+.rank-lightning-8 { --rotation: 315deg; }
+
+// IRON RANK - Basic grey particles
+body[data-league="iron"] {
+  .league-page {
+    background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+  }
+
+  .league-particle {
+    color: #4A4A4A;
+    font-size: 1rem;
+    animation: float-slow 8s infinite ease-in-out;
+  }
+}
+
+// BRONZE RANK - Bronze glow
+body[data-league="bronze"] {
+  .league-page {
+    background: linear-gradient(135deg, #1a1a1a 0%, #2a1a1a 100%);
+
+    &::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at 50% 50%, rgba(205, 127, 50, 0.1) 0%, transparent 50%);
+      pointer-events: none;
+      z-index: 0;
+    }
+  }
+
+  .league-particle {
+    color: #CD7F32;
+    font-size: 1.2rem;
+    animation: float-medium 7s infinite ease-in-out;
+    filter: drop-shadow(0 0 5px #CD7F32);
+  }
+}
+
+// SILVER RANK - Silver shimmer
+body[data-league="silver"] {
+  .league-page {
+    background: linear-gradient(135deg, #1a1a1a 0%, #1a1a2a 100%);
+
+    &::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at 50% 50%, rgba(192, 192, 192, 0.15) 0%, transparent 60%);
+      animation: pulse-glow 4s infinite ease-in-out;
+      pointer-events: none;
+      z-index: 0;
+    }
+  }
+
+  .league-particle {
+    color: #C0C0C0;
+    font-size: 1.4rem;
+    animation: float-shimmer 6s infinite ease-in-out;
+    filter: drop-shadow(0 0 8px #C0C0C0);
+  }
+}
+
+// GOLD RANK - Golden aura
+body[data-league="gold"] {
+  .league-page {
+    background: linear-gradient(135deg, #1a1a1a 0%, #2a2010 100%);
+
+    &::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background:
+        radial-gradient(circle at 30% 40%, rgba(255, 215, 0, 0.2) 0%, transparent 50%),
+        radial-gradient(circle at 70% 60%, rgba(255, 215, 0, 0.15) 0%, transparent 60%);
+      animation: pulse-glow 3s infinite ease-in-out;
+      pointer-events: none;
+      z-index: 0;
+    }
+  }
+
+  .league-particle {
+    color: #FFD700;
+    font-size: 1.6rem;
+    animation: float-gold 5s infinite ease-in-out;
+    filter: drop-shadow(0 0 12px #FFD700) drop-shadow(0 0 20px rgba(255, 215, 0, 0.5));
+  }
+}
+
+// PLATINUM RANK - Cyan energy
+body[data-league="platinum"] {
+  .league-page {
+    background: linear-gradient(135deg, #0a1a1a 0%, #0a2a2a 100%);
+
+    &::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background:
+        radial-gradient(circle at 40% 30%, rgba(0, 206, 209, 0.25) 0%, transparent 50%),
+        radial-gradient(circle at 60% 70%, rgba(0, 206, 209, 0.2) 0%, transparent 60%);
+      animation: pulse-energy 2.5s infinite ease-in-out;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    &::after {
+      content: '';
+      position: fixed;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(45deg, transparent 30%, rgba(0, 206, 209, 0.1) 50%, transparent 70%);
+      animation: sweep-light 10s infinite linear;
+      pointer-events: none;
+      z-index: 0;
+    }
+  }
+
+  .league-particle {
+    color: #00CED1;
+    font-size: 1.8rem;
+    animation: float-energy 4.5s infinite ease-in-out;
+    filter: drop-shadow(0 0 15px #00CED1) drop-shadow(0 0 25px rgba(0, 206, 209, 0.6));
+  }
+}
+
+// EMERALD RANK - Green mystical aura
+body[data-league="emerald"] {
+  .league-page {
+    background: linear-gradient(135deg, #0a1a0a 0%, #0a2a1a 100%);
+
+    &::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background:
+        radial-gradient(circle at 35% 35%, rgba(80, 200, 120, 0.3) 0%, transparent 50%),
+        radial-gradient(circle at 65% 65%, rgba(80, 200, 120, 0.25) 0%, transparent 60%);
+      animation: pulse-mystic 2s infinite ease-in-out;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    &::after {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background:
+        linear-gradient(0deg, transparent 0%, rgba(80, 200, 120, 0.1) 50%, transparent 100%),
+        linear-gradient(90deg, transparent 0%, rgba(80, 200, 120, 0.1) 50%, transparent 100%);
+      animation: grid-pulse 6s infinite ease-in-out;
+      pointer-events: none;
+      z-index: 0;
+    }
+  }
+
+  .league-particle {
+    color: #50C878;
+    font-size: 2rem;
+    animation: float-mystic 4s infinite ease-in-out;
+    filter: drop-shadow(0 0 18px #50C878) drop-shadow(0 0 30px rgba(80, 200, 120, 0.7));
+  }
+}
+
+// DIAMOND RANK - Crystal brilliance
+body[data-league="diamond"] {
+  .league-page {
+    background: linear-gradient(135deg, #0a0a1a 0%, #1a1a3a 100%);
+
+    &::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background:
+        radial-gradient(circle at 40% 40%, rgba(185, 242, 255, 0.35) 0%, transparent 50%),
+        radial-gradient(circle at 60% 60%, rgba(185, 242, 255, 0.3) 0%, transparent 60%);
+      animation: pulse-crystal 1.8s infinite ease-in-out;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    &::after {
+      content: '';
+      position: fixed;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background:
+        linear-gradient(60deg, transparent 30%, rgba(185, 242, 255, 0.15) 50%, transparent 70%),
+        linear-gradient(120deg, transparent 30%, rgba(185, 242, 255, 0.15) 50%, transparent 70%);
+      animation: diamond-sparkle 8s infinite linear;
+      pointer-events: none;
+      z-index: 0;
+    }
+  }
+
+  .league-particle {
+    color: #B9F2FF;
+    font-size: 2.2rem;
+    animation: float-crystal 3.5s infinite ease-in-out;
+    filter: drop-shadow(0 0 20px #B9F2FF) drop-shadow(0 0 35px rgba(185, 242, 255, 0.8));
+  }
+}
+
+// MASTER RANK - Purple majesty
+body[data-league="master"] {
+  .league-page {
+    background: linear-gradient(135deg, #1a0a1a 0%, #2a0a3a 100%);
+
+    &::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background:
+        radial-gradient(circle at 45% 45%, rgba(155, 48, 255, 0.4) 0%, transparent 50%),
+        radial-gradient(circle at 55% 55%, rgba(155, 48, 255, 0.35) 0%, transparent 60%);
+      animation: pulse-master 1.5s infinite ease-in-out;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    &::after {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 50px,
+        rgba(155, 48, 255, 0.1) 50px,
+        rgba(155, 48, 255, 0.1) 51px
+      );
+      animation: scan-lines 4s infinite linear;
+      pointer-events: none;
+      z-index: 0;
+    }
+  }
+
+  .league-particle {
+    color: #9B30FF;
+    font-size: 2.5rem;
+    animation: float-master 3s infinite ease-in-out;
+    filter:
+      drop-shadow(0 0 25px #9B30FF)
+      drop-shadow(0 0 40px rgba(155, 48, 255, 0.8))
+      drop-shadow(0 0 60px rgba(155, 48, 255, 0.5));
+  }
+}
+
+// GRANDMASTER RANK - Fiery orange power
+body[data-league="grandmaster"] {
+  .league-page {
+    background: linear-gradient(135deg, #1a0a00 0%, #3a1500 100%);
+
+    &::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background:
+        radial-gradient(circle at 50% 30%, rgba(255, 69, 0, 0.45) 0%, transparent 50%),
+        radial-gradient(circle at 50% 70%, rgba(255, 140, 0, 0.4) 0%, transparent 60%);
+      animation: pulse-fire 1.2s infinite ease-in-out;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    &::after {
+      content: '';
+      position: fixed;
+      top: -100%;
+      left: -50%;
+      width: 200%;
+      height: 300%;
+      background:
+        linear-gradient(45deg, transparent 40%, rgba(255, 69, 0, 0.2) 50%, transparent 60%),
+        linear-gradient(135deg, transparent 40%, rgba(255, 140, 0, 0.2) 50%, transparent 60%);
+      animation: fire-waves 6s infinite linear;
+      pointer-events: none;
+      z-index: 0;
+    }
+  }
+
+  .league-particle {
+    color: #FF4500;
+    font-size: 3rem;
+    animation: float-fire 2.5s infinite ease-in-out;
+    filter:
+      drop-shadow(0 0 30px #FF4500)
+      drop-shadow(0 0 50px rgba(255, 69, 0, 0.8))
+      drop-shadow(0 0 80px rgba(255, 140, 0, 0.6));
+  }
+}
+
+// CHALLENGER RANK - Ultimate golden glory
+body[data-league="challenger"] {
+  .league-page {
+    background: linear-gradient(135deg, #1a1500 0%, #3a2a00 100%);
+
+    &::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background:
+        radial-gradient(circle at 50% 50%, rgba(244, 196, 48, 0.5) 0%, transparent 50%),
+        radial-gradient(circle at 30% 30%, rgba(255, 215, 0, 0.45) 0%, transparent 60%),
+        radial-gradient(circle at 70% 70%, rgba(255, 140, 0, 0.4) 0%, transparent 60%);
+      animation: pulse-ultimate 1s infinite ease-in-out;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    &::after {
+      content: '';
+      position: fixed;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background:
+        conic-gradient(from 0deg at 50% 50%,
+          transparent 0deg,
+          rgba(244, 196, 48, 0.3) 45deg,
+          transparent 90deg,
+          rgba(255, 215, 0, 0.3) 135deg,
+          transparent 180deg,
+          rgba(244, 196, 48, 0.3) 225deg,
+          transparent 270deg,
+          rgba(255, 215, 0, 0.3) 315deg,
+          transparent 360deg
+        );
+      animation: ultimate-rotate 10s infinite linear;
+      pointer-events: none;
+      z-index: 0;
+    }
+  }
+
+  .league-particle {
+    color: #F4C430;
+    font-size: 3.5rem;
+    animation: float-ultimate 2s infinite ease-in-out;
+    filter:
+      drop-shadow(0 0 35px #F4C430)
+      drop-shadow(0 0 60px rgba(244, 196, 48, 0.9))
+      drop-shadow(0 0 100px rgba(255, 215, 0, 0.7))
+      drop-shadow(0 0 140px rgba(255, 140, 0, 0.5));
+  }
+}
+
+// Animations
+@keyframes float-slow {
+  0%, 100% { transform: translateY(0) translateX(0); }
+  25% { transform: translateY(-20px) translateX(10px); }
+  50% { transform: translateY(-10px) translateX(-10px); }
+  75% { transform: translateY(-30px) translateX(5px); }
+}
+
+@keyframes float-medium {
+  0%, 100% { transform: translateY(0) translateX(0) rotate(0deg); }
+  33% { transform: translateY(-25px) translateX(15px) rotate(10deg); }
+  66% { transform: translateY(-15px) translateX(-15px) rotate(-10deg); }
+}
+
+@keyframes float-shimmer {
+  0%, 100% { transform: translateY(0) scale(1); opacity: 0.6; }
+  50% { transform: translateY(-30px) scale(1.2); opacity: 1; }
+}
+
+@keyframes float-gold {
+  0%, 100% { transform: translateY(0) rotate(0deg) scale(1); }
+  50% { transform: translateY(-40px) rotate(180deg) scale(1.3); }
+}
+
+@keyframes float-energy {
+  0%, 100% { transform: translateY(0) translateX(0) rotate(0deg) scale(1); }
+  50% { transform: translateY(-50px) translateX(20px) rotate(180deg) scale(1.4); }
+}
+
+@keyframes float-mystic {
+  0%, 100% { transform: translateY(0) scale(1) rotate(0deg); opacity: 0.7; }
+  50% { transform: translateY(-60px) scale(1.5) rotate(360deg); opacity: 1; }
+}
+
+@keyframes float-crystal {
+  0%, 100% { transform: translateY(0) translateX(0) scale(1) rotate(0deg); }
+  33% { transform: translateY(-70px) translateX(30px) scale(1.6) rotate(120deg); }
+  66% { transform: translateY(-40px) translateX(-30px) scale(1.4) rotate(240deg); }
+}
+
+@keyframes float-master {
+  0%, 100% { transform: translateY(0) scale(1) rotate(0deg); opacity: 0.8; }
+  50% { transform: translateY(-80px) scale(1.8) rotate(540deg); opacity: 1; }
+}
+
+@keyframes float-fire {
+  0%, 100% { transform: translateY(0) translateX(0) scale(1); }
+  25% { transform: translateY(-90px) translateX(-40px) scale(2); }
+  50% { transform: translateY(-50px) translateX(40px) scale(1.7); }
+  75% { transform: translateY(-100px) translateX(0) scale(2.2); }
+}
+
+@keyframes float-ultimate {
+  0%, 100% { transform: translateY(0) scale(1) rotate(0deg); opacity: 0.9; }
+  50% { transform: translateY(-120px) scale(2.5) rotate(720deg); opacity: 1; }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+
+@keyframes pulse-energy {
+  0%, 100% { opacity: 0.7; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.05); }
+}
+
+@keyframes pulse-mystic {
+  0%, 100% { opacity: 0.8; }
+  50% { opacity: 1; }
+}
+
+@keyframes pulse-crystal {
+  0%, 100% { opacity: 0.85; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.1); }
+}
+
+@keyframes pulse-master {
+  0%, 100% { opacity: 0.9; }
+  50% { opacity: 1; }
+}
+
+@keyframes pulse-fire {
+  0%, 100% { opacity: 0.9; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.15); }
+}
+
+@keyframes pulse-ultimate {
+  0%, 100% { opacity: 0.95; transform: scale(1) rotate(0deg); }
+  50% { opacity: 1; transform: scale(1.2) rotate(5deg); }
+}
+
+@keyframes sweep-light {
+  0% { transform: translateX(-50%) translateY(-50%); }
+  100% { transform: translateX(50%) translateY(50%); }
+}
+
+@keyframes grid-pulse {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.6; }
+}
+
+@keyframes diamond-sparkle {
+  0% { transform: translateX(-50%) translateY(-50%) rotate(0deg); }
+  100% { transform: translateX(50%) translateY(50%) rotate(360deg); }
+}
+
+@keyframes scan-lines {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(100px); }
+}
+
+@keyframes fire-waves {
+  0% { transform: translateY(0) rotate(0deg); }
+  100% { transform: translateY(100%) rotate(360deg); }
+}
+
+@keyframes ultimate-rotate {
+  0% { transform: rotate(0deg) scale(1); opacity: 0.8; }
+  50% { transform: rotate(180deg) scale(1.1); opacity: 1; }
+  100% { transform: rotate(360deg) scale(1); opacity: 0.8; }
+}

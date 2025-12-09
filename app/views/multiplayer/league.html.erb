@@ -1,4 +1,4 @@
-<div class="league-page-wrapper">
+<div class="league-page-wrapper league-page" data-controller="league-effects" data-league="<%= @user_league.rank %>">
   <!-- Animated Background -->
   <div class="league-bg-animated">
     <div class="league-bg-fluid-wave"></div>
@@ -27,9 +27,50 @@
       <div class="section-label-epic">Ton rang actuel</div>
       <div class="rank-card-mega <%= @user_league.glow_class %>">
         <div class="rank-badge-mega">
-          <div class="rank-emblem-container">
+          <div class="rank-emblem-container" style="color: <%= @user_league.rank_color %>;">
             <div class="emblem-glow-ring <%= @user_league.glow_class %>"></div>
             <%= render partial: 'rank_logo', locals: { rank: @user_league.rank } %>
+            <!-- Lightning effects - zigzag SVG bolts -->
+            <div class="rank-lightning rank-lightning-1" style="color: <%= @user_league.rank_color %>;">
+              <svg viewBox="0 0 30 80" xmlns="http://www.w3.org/2000/svg">
+                <path d="M15 0 L12 25 L18 25 L10 50 L16 50 L8 80 L22 45 L16 45 L22 20 L16 20 Z"/>
+              </svg>
+            </div>
+            <div class="rank-lightning rank-lightning-2" style="color: <%= @user_league.rank_color %>;">
+              <svg viewBox="0 0 30 80" xmlns="http://www.w3.org/2000/svg">
+                <path d="M15 0 L10 30 L17 30 L12 55 L18 55 L10 80 L24 50 L18 50 L23 25 L17 25 Z"/>
+              </svg>
+            </div>
+            <div class="rank-lightning rank-lightning-3" style="color: <%= @user_league.rank_color %>;">
+              <svg viewBox="0 0 30 80" xmlns="http://www.w3.org/2000/svg">
+                <path d="M15 0 L11 28 L19 28 L13 52 L19 52 L11 80 L23 48 L17 48 L22 22 L15 22 Z"/>
+              </svg>
+            </div>
+            <div class="rank-lightning rank-lightning-4" style="color: <%= @user_league.rank_color %>;">
+              <svg viewBox="0 0 30 80" xmlns="http://www.w3.org/2000/svg">
+                <path d="M15 0 L12 26 L18 26 L11 50 L17 50 L9 80 L22 47 L16 47 L21 23 L16 23 Z"/>
+              </svg>
+            </div>
+            <div class="rank-lightning rank-lightning-5" style="color: <%= @user_league.rank_color %>;">
+              <svg viewBox="0 0 30 80" xmlns="http://www.w3.org/2000/svg">
+                <path d="M15 0 L10 27 L18 27 L12 53 L18 53 L10 80 L23 49 L17 49 L22 24 L16 24 Z"/>
+              </svg>
+            </div>
+            <div class="rank-lightning rank-lightning-6" style="color: <%= @user_league.rank_color %>;">
+              <svg viewBox="0 0 30 80" xmlns="http://www.w3.org/2000/svg">
+                <path d="M15 0 L11 29 L19 29 L13 54 L19 54 L11 80 L24 51 L18 51 L23 26 L17 26 Z"/>
+              </svg>
+            </div>
+            <div class="rank-lightning rank-lightning-7" style="color: <%= @user_league.rank_color %>;">
+              <svg viewBox="0 0 30 80" xmlns="http://www.w3.org/2000/svg">
+                <path d="M15 0 L12 25 L18 25 L10 51 L16 51 L8 80 L22 46 L16 46 L21 21 L15 21 Z"/>
+              </svg>
+            </div>
+            <div class="rank-lightning rank-lightning-8" style="color: <%= @user_league.rank_color %>;">
+              <svg viewBox="0 0 30 80" xmlns="http://www.w3.org/2000/svg">
+                <path d="M15 0 L11 28 L17 28 L11 52 L17 52 L9 80 L23 48 L17 48 L22 23 L16 23 Z"/>
+              </svg>
+            </div>
           </div>
           <div class="rank-info-mega">
             <div class="rank-name-mega"><%= @user_league.display_name %></div>
@@ -71,16 +112,18 @@
         <div class="progress-section-epic">
           <div class="progress-header-epic">
             <span class="progress-label">PROGRESSION</span>
-            <span class="progress-percentage"><%= @user_league.points %> / 100 LP</span>
+            <span class="progress-percentage"><%= @user_league.points %> / <%= @user_league.points_threshold %> LP</span>
           </div>
           <div class="progress-bar-epic">
             <div class="progress-bar-bg"></div>
-            <div class="progress-bar-fill-epic" style="width: <%= @user_league.points %>%;">
+            <div class="progress-bar-fill-epic" style="width: <%= (@user_league.points.to_f / @user_league.points_threshold * 100).round(2) %>%;">
               <div class="progress-bar-shine"></div>
             </div>
-            <div class="progress-bar-glow" style="width: <%= @user_league.points %>%;"></div>
+            <div class="progress-bar-glow" style="width: <%= (@user_league.points.to_f / @user_league.points_threshold * 100).round(2) %>%;"></div>
           </div>
-          <div class="progress-hint">Monte à 100 LP pour passer au prochain rang</div>
+          <div class="progress-hint">
+            <%= @user_league.points_threshold == 10000 ? "Monte à 10 000 LP pour atteindre le prochain rang d'élite" : "Monte à 100 LP pour passer au prochain rang" %>
+          </div>
         </div>
       </div>
     </div>
