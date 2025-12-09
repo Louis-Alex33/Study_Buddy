@@ -89,11 +89,37 @@
             </p>
             <div class="challenge-card-stats">
               <span><i class="fas fa-question-circle"></i> <%= challenge.quiz.questions.count %> questions</span>
+            <span data-bs-toggle="modal" data-bs-target="#invitedModal<%= challenge.id %>" class="invited-link">
+                <i class="fas fa-users"></i> <%= challenge.invited_users.count %> invité(s)
+              </span>
             </div>
             <div class="challenge-card-actions">
               <%= link_to quiz_path(challenge.quiz), class: "btn-challenge-play" do %>
                 <i class="fas fa-play"></i> Relever le défi
               <% end %>
+            </div>
+          </div>
+
+          <!-- Modal invités -->
+          <div class="modal fade" id="invitedModal<%= challenge.id %>" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-sm">
+              <div class="modal-content">
+                <div class="modal-header modal-header-gradient">
+                  <h5 class="modal-title">Invités au défi</h5>
+                  <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                  <% if challenge.invited_users.any? %>
+                    <ul class="invited-users-list">
+                      <% challenge.invited_users.each do |user| %>
+                        <li><i class="fas fa-user"></i> <%= user.display_name %></li>
+                      <% end %>
+                    </ul>
+                  <% else %>
+                    <p class="text-muted text-center">Aucun invité</p>
+                  <% end %>
+                </div>
+              </div>
             </div>
           </div>
         <% end %>
@@ -109,6 +135,14 @@
       <p>Crée ton premier défi et invite tes amis !</p>
     </div>
   <% end %>
+
+  <!-- Back Button -->
+  <div class="lectures-back-section">
+    <%= link_to multiplayer_path, class: "btn-back-home" do %>
+      <span>←</span>
+      <span>Retour au multijoueur</span>
+    <% end %>
+  </div>
 
 </div>
 

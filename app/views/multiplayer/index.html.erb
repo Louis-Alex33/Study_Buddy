@@ -37,20 +37,6 @@
       <% end %>
     </div>
 
-    <!-- Classements -->
-    <div class="multiplayer-feature-card">
-      <div class="feature-icon-wrapper">
-        <div class="feature-icon">🏆</div>
-      </div>
-      <h3 class="feature-title">Classements</h3>
-      <p class="feature-description">
-        Compare tes performances avec celles de tes amis et grimpe dans le classement global.
-      </p>
-      <button class="btn-feature-action" disabled>
-        Bientôt disponible
-      </button>
-    </div>
-
     <!-- Défis personnalisés -->
     <div class="multiplayer-feature-card">
       <div class="feature-icon-wrapper">
@@ -63,21 +49,6 @@
       <%= link_to challenges_path, class: "btn-feature-action" do %>
         Défie un ami
       <% end %>
-    </div>
-
-    <!-- Partage de ressources -->
-    <div class="multiplayer-feature-card">
-      <div class="feature-icon-wrapper">
-        <div class="feature-icon">📚</div>
-      </div>
-      <h3 class="feature-title">Partage de ressources</h3>
-      <p class="feature-description">
-        Partage tes meilleures flashcards et notes avec ta communauté d'étude.
-        Partage tes meilleures flashcards et notes avec ta communauté d'étude.
-      </p>
-      <button class="btn-feature-action" disabled>
-        Bientôt disponible
-      </button>
     </div>
 
     <!-- Communauté -->
@@ -118,76 +89,88 @@
 <style>
 .multiplayer-features-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  gap: 1.5rem;
-  margin-bottom: 3rem;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 3rem;
+  margin-bottom: 4rem;
+  max-width: 1300px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0 2rem;
 }
 
 .multiplayer-feature-card {
   background: white;
-  border-radius: 12px;
-  padding: 2rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  transition: all 0.3s ease;
-  border: 2px solid transparent;
+  border-radius: 20px;
+  padding: 3rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 2px solid #f0f0f0;
+  display: flex;
+  flex-direction: column;
+  min-height: 360px;
 }
 
 .multiplayer-feature-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 16px rgba(19, 81, 170, 0.15);
+  transform: translateY(-8px);
+  box-shadow: 0 12px 24px rgba(19, 81, 170, 0.2);
   border-color: #1351AA;
 }
 
 .feature-icon-wrapper {
-  width: 80px;
-  height: 80px;
+  width: 100px;
+  height: 100px;
   background: linear-gradient(135deg, #1351AA 0%, #1a66cc 100%);
-  border-radius: 20px;
+  border-radius: 26px;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 1.5rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 4px 16px rgba(19, 81, 170, 0.25);
 }
 
 .feature-icon {
-  font-size: 2.5rem;
+  font-size: 3.5rem;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
 }
 
 .feature-title {
-  font-size: 1.5rem;
+  font-size: 1.85rem;
   font-weight: 700;
   color: #1a1a1a;
-  margin-bottom: 1rem;
+  margin-bottom: 1.25rem;
+  letter-spacing: -0.02em;
 }
 
 .feature-description {
   color: #666;
-  line-height: 1.6;
-  margin-bottom: 1.5rem;
-  height: 80px;
+  line-height: 1.8;
+  margin-bottom: 2.5rem;
+  flex-grow: 1;
+  font-size: 1.1rem;
 }
 
 .btn-feature-action {
   width: 100%;
-  padding: 0.75rem 1.5rem;
-  background: #e0e0e0;
-  color: #999;
-  border: none;
-  border-radius: 8px;
-  font-weight: 600;
-  cursor: not-allowed;
-  transition: all 0.3s ease;
-}
-
-.btn-feature-action:not(:disabled) {
+  padding: 1rem 1.75rem;
   background: linear-gradient(135deg, #1351AA 0%, #1a66cc 100%);
   color: white;
+  border: none;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 1.05rem;
   cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: inline-block;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(19, 81, 170, 0.25);
 }
 
-.btn-feature-action:not(:disabled):hover {
+.btn-feature-action:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(19, 81, 170, 0.3);
+  box-shadow: 0 6px 16px rgba(19, 81, 170, 0.35);
+  color: white;
+  text-decoration: none;
 }
 
 .multiplayer-info-banner {
@@ -250,14 +233,29 @@
   color: #aaa;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 992px) {
   .multiplayer-features-grid {
     grid-template-columns: 1fr;
+    max-width: 650px;
+    gap: 2.5rem;
+    padding: 0 1rem;
+  }
+
+  .multiplayer-feature-card {
+    min-height: 320px;
+    padding: 2.5rem;
   }
 
   .multiplayer-info-banner {
     flex-direction: column;
     text-align: center;
+  }
+}
+
+@media (min-width: 1400px) {
+  .multiplayer-features-grid {
+    max-width: 1400px;
+    gap: 4rem;
   }
 }
 </style>
