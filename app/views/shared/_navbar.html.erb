@@ -6,7 +6,6 @@
     <% end %>
     <div class="navbar-links">
       <% if user_signed_in? %>
-        <%= link_to "Home", root_path, class: "navbar-link #{'active' if current_page?(root_path)}" %>
         <%= link_to "Mes cours", lectures_path, class: "navbar-link #{'active' if current_page?(lectures_path)}" %>
         <%= link_to "Mes Quiz", quizzes_path, class: "navbar-link #{'active' if current_page?(quizzes_path)}" %>
         <%= link_to "Multijoueur", multiplayer_path, class: "navbar-link #{'active' if current_page?(multiplayer_path)}" %>
@@ -28,7 +27,6 @@
         </div>
         <%= link_to "Déconnexion", destroy_user_session_path, data: { turbo_method: :delete }, class: "navbar-btn" %>
       <% else %>
-        <%= link_to "Home", root_path, class: "navbar-link #{'active' if current_page?(root_path)}" %>
         <button type="button" class="dark-mode-toggle" data-action="click->dark-mode#toggle" data-dark-mode-target="button">
           <i class="fas fa-sun"></i>
         </button>
