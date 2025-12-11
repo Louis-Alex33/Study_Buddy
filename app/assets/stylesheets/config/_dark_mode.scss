@@ -18,6 +18,28 @@ body[data-theme="dark"] {
   background-color: var(--bg-primary) !important;
   color: var(--text-primary) !important;
 
+  // Override tous les backgrounds blancs avec !important maximum
+  *[style*="background: white"],
+  *[style*="background-color: white"],
+  *[style*="background:#fff"],
+  *[style*="background-color:#fff"],
+  *[style*="background: #fff"],
+  *[style*="background-color: #fff"] {
+    background-color: var(--bg-secondary) !important;
+    background-image: none !important;
+  }
+
+  // Divs avec background blanc - force override
+  div[style*="background"],
+  section[style*="background"],
+  article[style*="background"],
+  aside[style*="background"],
+  main[style*="background"] {
+    &:not(.floating-icon):not(.feature-icon):not([class*="btn-"]):not([class*="badge"]):not(.progress-bar-fill):not(.feature-icon-wrapper) {
+      background-color: var(--bg-secondary) !important;
+    }
+  }
+
   // Home background
   .home-background {
     background: var(--bg-primary) !important;
@@ -43,6 +65,19 @@ body[data-theme="dark"] {
   .navbar-lewagon {
     background: var(--bg-secondary);
     box-shadow: 0 2px 10px var(--shadow-color);
+  }
+
+  .navbar-studybuddy {
+    .navbar-logo {
+      background: linear-gradient(135deg, #ffffff 0%, #f0f4ff 100%) !important;
+      color: #1351AA !important;
+      box-shadow: 0 4px 15px rgba(255, 255, 255, 0.3) !important;
+    }
+
+    .navbar-title {
+      color: #ffffff !important;
+      text-shadow: 0 2px 8px rgba(255, 255, 255, 0.2) !important;
+    }
   }
 
   // Hero section
@@ -622,6 +657,14 @@ body[data-theme="dark"] {
 
   .flashcard-show-header {
     background: linear-gradient(135deg, var(--blue-dark) 0%, var(--blue-primary) 100%) !important;
+
+    h2 {
+      color: white !important;
+    }
+
+    p, .text-muted {
+      color: rgba(255, 255, 255, 0.9) !important;
+    }
   }
 
   .flashcard-progress-card {
@@ -637,6 +680,10 @@ body[data-theme="dark"] {
 
     .progress {
       background-color: var(--bg-tertiary) !important;
+    }
+
+    .progress-bar {
+      background-color: var(--blue-primary) !important;
     }
   }
 
@@ -706,7 +753,7 @@ body[data-theme="dark"] {
     }
   }
 
-  // Quizz category section
+  // Quizz category section (for other pages)
   .quizz-category-title {
     color: var(--text-primary) !important;
     background: linear-gradient(135deg, rgba(74, 144, 226, 0.12) 0%, rgba(107, 164, 231, 0.08) 100%) !important;
@@ -718,36 +765,265 @@ body[data-theme="dark"] {
       color: var(--blue-primary) !important;
       box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3) !important;
     }
+
+    .category-icon {
+      filter: grayscale(0.3);
+    }
   }
 
-  // Quizz cards
-  .quizz-card {
+  // Quizzes section containers - Force dark background
+  .quizzes-section-container,
+  .quizzes-section-public,
+  .quizzes-section-shared {
+    background-color: var(--bg-secondary) !important;
     background: var(--bg-secondary) !important;
     border-color: var(--border-color) !important;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3) !important;
 
-    &:hover {
-      background: var(--bg-tertiary) !important;
-      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5) !important;
-      border-color: rgba(74, 144, 226, 0.4) !important;
-    }
+    .quizzes-section-header {
+      background: transparent !important;
 
-    .quizz-card-icon {
-      background: linear-gradient(135deg, var(--blue-primary) 0%, var(--blue-secondary) 100%) !important;
-      box-shadow: 0 4px 15px rgba(74, 144, 226, 0.3) !important;
-    }
+      .quizzes-section-title {
+        color: var(--blue-primary) !important;
 
-    .quizz-card-title {
+        i {
+          color: var(--blue-primary) !important;
+        }
+      }
+
+      .quizzes-section-subtitle {
+        color: var(--text-secondary) !important;
+      }
+    }
+  }
+
+  // Empty state
+  .quizzes-empty {
+    background: var(--bg-secondary) !important;
+    border: 1px solid var(--border-color) !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3) !important;
+
+    h3 {
       color: var(--blue-primary) !important;
     }
 
-    .quizz-card-category {
+    p {
       color: var(--text-secondary) !important;
     }
 
-    .quizz-card-stats {
+    .quizzes-empty-icon {
+      opacity: 0.4 !important;
+      filter: grayscale(0.3);
+    }
+  }
+
+  // Quizzes category blocks
+  .quizzes-category-block {
+    background: transparent !important;
+  }
+
+  // Quizzes category title
+  .quizzes-category-title {
+    color: var(--blue-primary) !important;
+
+    .category-icon {
+      filter: grayscale(0.2);
+    }
+
+    .category-count {
       color: var(--text-secondary) !important;
     }
+  }
+
+  // Quizzes grid
+  .quizzes-grid {
+    background: transparent !important;
+  }
+
+  // Quizz cards - Force override inline styles
+  .quizz-card,
+  .quiz-card {
+    border-color: var(--border-color) !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3) !important;
+  }
+
+  // Quiz cards publics - Keep blue gradient
+  .quiz-card-public {
+    background: linear-gradient(135deg, #1351AA 0%, #1a66cc 50%, #2980b9 100%) !important;
+    box-shadow: 0 8px 30px rgba(19, 81, 170, 0.4) !important;
+
+    &:hover {
+      box-shadow: 0 12px 40px rgba(19, 81, 170, 0.5) !important;
+      transform: translateY(-5px);
+    }
+
+    // Progress bar in quiz cards - better visibility
+    .progress-bar-container {
+      background: rgba(255, 255, 255, 0.3) !important;
+      border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    }
+
+    .progress-text {
+      color: rgba(255, 255, 255, 0.95) !important;
+      font-weight: 600 !important;
+    }
+  }
+
+  // Quiz cards shared - Keep purple gradient
+  .quiz-card-shared {
+    background: linear-gradient(135deg, #6c5ce7 0%, #a29bfe 100%) !important;
+    box-shadow: 0 8px 30px rgba(108, 92, 231, 0.4) !important;
+
+    &:hover {
+      box-shadow: 0 12px 40px rgba(108, 92, 231, 0.5) !important;
+      transform: translateY(-5px);
+    }
+
+    // Progress bar in quiz cards - better visibility
+    .progress-bar-container {
+      background: rgba(255, 255, 255, 0.3) !important;
+      border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    }
+
+    .progress-text {
+      color: rgba(255, 255, 255, 0.95) !important;
+      font-weight: 600 !important;
+    }
+  }
+
+  // Quiz card content styling - Keep white text on colored cards
+  .quiz-card-public,
+  .quiz-card-shared {
+    .quiz-card-title {
+      color: white !important;
+    }
+
+    .quiz-card-category {
+      background: rgba(255, 255, 255, 0.2) !important;
+      color: white !important;
+      border: 1px solid rgba(255, 255, 255, 0.3) !important;
+    }
+
+    .quiz-card-stats {
+      color: rgba(255, 255, 255, 0.9) !important;
+    }
+
+    .quiz-card-level {
+      color: rgba(255, 255, 255, 0.9) !important;
+
+      i {
+        color: #ffd700 !important;
+      }
+
+      .far {
+        color: rgba(255, 255, 255, 0.4) !important;
+      }
+    }
+
+    .quiz-card-from {
+      color: rgba(255, 255, 255, 0.9) !important;
+
+      i {
+        color: white !important;
+      }
+    }
+
+    .quiz-card-progress {
+      .progress-bar-container {
+        background: rgba(255, 255, 255, 0.2) !important;
+      }
+
+      .progress-text {
+        color: white !important;
+      }
+    }
+
+    .quiz-invited-link {
+      background: rgba(255, 255, 255, 0.2) !important;
+      color: white !important;
+      border: 1px solid rgba(255, 255, 255, 0.3) !important;
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.3) !important;
+      }
+    }
+  }
+
+  .quiz-card-link {
+    text-decoration: none !important;
+  }
+
+  // Button "Jouer" styling on colored cards
+  .quiz-card-public,
+  .quiz-card-shared {
+    .btn-quiz-play {
+      background: rgba(255, 255, 255, 0.2) !important;
+      color: white !important;
+      border: 2px solid rgba(255, 255, 255, 0.3) !important;
+
+      &:hover {
+        background: white !important;
+        color: #1351AA !important;
+      }
+    }
+  }
+
+  .quiz-card-shared {
+    .btn-quiz-play:hover {
+      color: #6c5ce7 !important;
+    }
+  }
+
+  // Quizzes empty state
+  .quizzes-empty {
+    background: var(--bg-secondary) !important;
+    border-color: var(--border-color) !important;
+
+    h3 {
+      color: var(--text-primary) !important;
+    }
+
+    p {
+      color: var(--text-secondary) !important;
+    }
+  }
+
+  // Invited users list in modal
+  .invited-users-list {
+    li {
+      color: var(--text-primary) !important;
+      background: var(--bg-tertiary) !important;
+      border-color: var(--border-color) !important;
+
+      i {
+        color: var(--blue-primary) !important;
+      }
+    }
+  }
+
+  // Quiz card wrapper
+  .quiz-card-wrapper {
+    background: transparent !important;
+  }
+
+  // Quiz card actions
+  .quiz-card-actions {
+    background: transparent !important;
+  }
+
+  // Quiz card header
+  .quiz-card-header {
+    background: transparent !important;
+  }
+
+  // Text muted
+  .text-muted {
+    color: var(--text-secondary) !important;
+  }
+
+  // Text center
+  .text-center {
+    color: inherit !important;
   }
 
   // Real-time quiz dark mode
@@ -880,10 +1156,29 @@ body[data-theme="dark"] {
     .card-header {
       background: linear-gradient(135deg, var(--blue-primary) 0%, var(--blue-secondary) 100%) !important;
       border-color: var(--border-color) !important;
+      color: white !important;
+
+      &.bg-primary {
+        background: linear-gradient(135deg, var(--blue-primary) 0%, var(--blue-secondary) 100%) !important;
+        color: white !important;
+      }
+
+      &.bg-success {
+        background: linear-gradient(135deg, #28a745 0%, #20c997 100%) !important;
+        color: white !important;
+      }
+
+      h2, h5 {
+        color: white !important;
+      }
     }
 
     .card-body {
       background: var(--bg-secondary) !important;
+
+      &.bg-light {
+        background: var(--bg-tertiary) !important;
+      }
     }
   }
 
@@ -905,5 +1200,425 @@ body[data-theme="dark"] {
 
   .bg-light {
     background: var(--bg-tertiary) !important;
+  }
+
+  // Quiz results (podium)
+  .quiz-results {
+    .podium-item {
+      background: var(--bg-secondary) !important;
+      border-color: var(--border-color) !important;
+
+      .player-name {
+        color: var(--text-primary) !important;
+      }
+
+      .player-score, .player-accuracy {
+        color: var(--blue-primary) !important;
+      }
+
+      &.winner {
+        background: linear-gradient(135deg, var(--bg-secondary) 0%, rgba(74, 144, 226, 0.15) 100%) !important;
+        border-color: var(--blue-primary) !important;
+      }
+    }
+  }
+
+  // Multiplayer page cards
+  .multiplayer-feature-card {
+    background: var(--bg-secondary) !important;
+    border-color: var(--border-color) !important;
+
+    &:hover {
+      border-color: rgba(74, 144, 226, 0.5) !important;
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.5) !important;
+    }
+
+    .feature-title {
+      color: var(--blue-primary) !important;
+    }
+
+    .feature-description {
+      color: var(--text-secondary) !important;
+    }
+  }
+
+  // Lectures back section
+  .lectures-back-section {
+    .btn-back-home {
+      background: var(--bg-secondary) !important;
+      border-color: var(--border-color) !important;
+      color: var(--text-primary) !important;
+
+      &:hover {
+        background: var(--bg-tertiary) !important;
+        border-color: var(--blue-primary) !important;
+        color: var(--blue-primary) !important;
+      }
+    }
+  }
+
+  // Container
+  .container {
+    color: var(--text-primary) !important;
+
+    // Ensure my-5 containers in quiz pages have no white background
+    &.my-5 {
+      background: transparent !important;
+    }
+  }
+
+  // Text colors
+  p, span, div {
+    &:not(.floating-icon):not(.feature-icon):not([class*="btn"]):not([class*="badge"]) {
+      color: inherit;
+    }
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    color: var(--text-primary) !important;
+  }
+
+  // Leaderboard / League page
+  .leaderboard-card, .league-card {
+    background: var(--bg-secondary) !important;
+    border-color: var(--border-color) !important;
+
+    h3, h4 {
+      color: var(--blue-primary) !important;
+    }
+
+    .player-name, .username {
+      color: var(--text-primary) !important;
+    }
+
+    .player-rank, .rank-badge {
+      color: var(--blue-primary) !important;
+    }
+  }
+
+  // Friendships / Community page
+  .friend-card, .user-card {
+    background: var(--bg-secondary) !important;
+    border-color: var(--border-color) !important;
+
+    &:hover {
+      border-color: var(--blue-primary) !important;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4) !important;
+    }
+
+    .friend-name {
+      color: var(--text-primary) !important;
+    }
+
+    .friend-email {
+      color: var(--text-secondary) !important;
+    }
+  }
+
+  // Friendship cards
+  .friendship-card {
+    background: var(--bg-secondary) !important;
+    border-color: var(--border-color) !important;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3) !important;
+  }
+
+  .friendship-card-header {
+    // Keep the gradient headers as they are
+    h5 {
+      color: white !important;
+    }
+
+    .header-count {
+      background: rgba(255, 255, 255, 0.2) !important;
+      color: white !important;
+    }
+  }
+
+  .friendship-card-body {
+    background: transparent !important;
+  }
+
+  .friendship-item {
+    background: var(--bg-tertiary) !important;
+    border-color: var(--border-color) !important;
+
+    &:hover {
+      box-shadow: 0 4px 15px rgba(74, 144, 226, 0.2) !important;
+      border-color: var(--blue-primary) !important;
+    }
+  }
+
+  .friendship-item-info {
+    .friendship-name {
+      color: var(--text-primary) !important;
+
+      &:hover {
+        color: var(--blue-primary) !important;
+      }
+    }
+
+    .friendship-email {
+      color: var(--text-secondary) !important;
+    }
+
+    .friendship-stats {
+      color: var(--blue-primary) !important;
+
+      i {
+        color: var(--blue-primary) !important;
+      }
+    }
+  }
+
+  .friendship-empty {
+    color: var(--text-secondary) !important;
+
+    p {
+      color: var(--text-secondary) !important;
+    }
+
+    .empty-icon {
+      opacity: 0.4;
+    }
+  }
+
+  .btn-friendship {
+    &.btn-cancel {
+      background: var(--bg-tertiary) !important;
+      color: var(--text-secondary) !important;
+
+      &:hover {
+        background: var(--border-color) !important;
+        color: var(--text-primary) !important;
+      }
+    }
+  }
+
+  .btn-find-friends {
+    background: linear-gradient(135deg, #1351AA 0%, #1a66cc 100%) !important;
+    color: white !important;
+    box-shadow: 0 5px 20px rgba(19, 81, 170, 0.4) !important;
+
+    &:hover {
+      box-shadow: 0 8px 25px rgba(19, 81, 170, 0.5) !important;
+      color: white !important;
+    }
+  }
+
+  .hero-section-friends {
+    background: transparent !important;
+  }
+
+  // Challenges page
+  .challenge-card {
+    background: var(--bg-secondary) !important;
+    border-color: var(--border-color) !important;
+
+    &:hover {
+      border-color: var(--blue-primary) !important;
+    }
+
+    .challenge-title {
+      color: var(--blue-primary) !important;
+    }
+
+    .challenge-info {
+      color: var(--text-secondary) !important;
+    }
+  }
+
+  // Tables
+  table {
+    background: var(--bg-secondary) !important;
+    color: var(--text-primary) !important;
+
+    thead {
+      background: var(--bg-tertiary) !important;
+
+      th {
+        color: var(--blue-primary) !important;
+        border-color: var(--border-color) !important;
+      }
+    }
+
+    tbody {
+      tr {
+        border-color: var(--border-color) !important;
+
+        &:hover {
+          background: var(--bg-tertiary) !important;
+        }
+
+        td {
+          color: var(--text-primary) !important;
+          border-color: var(--border-color) !important;
+        }
+      }
+    }
+
+    &.table-striped {
+      tbody tr:nth-of-type(odd) {
+        background-color: rgba(255, 255, 255, 0.02) !important;
+      }
+    }
+  }
+
+  // Boutons outline
+  .btn-outline-primary {
+    color: var(--blue-primary) !important;
+    border-color: var(--blue-primary) !important;
+
+    &:hover {
+      background: var(--blue-primary) !important;
+      color: white !important;
+    }
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, var(--blue-primary) 0%, var(--blue-secondary) 100%) !important;
+    border: none !important;
+    color: white !important;
+
+    &:hover {
+      background: linear-gradient(135deg, var(--blue-secondary) 0%, var(--blue-primary) 100%) !important;
+    }
+  }
+
+  .btn-lg {
+    box-shadow: 0 4px 15px rgba(74, 144, 226, 0.3) !important;
+
+    &:hover {
+      box-shadow: 0 6px 20px rgba(74, 144, 226, 0.4) !important;
+    }
+  }
+
+  // Badges
+  .badge {
+    &.bg-primary, &.badge-primary {
+      background: var(--blue-primary) !important;
+      color: white !important;
+    }
+
+    &.bg-secondary, &.badge-secondary {
+      background: var(--bg-tertiary) !important;
+      color: var(--text-primary) !important;
+    }
+
+    &.bg-success, &.badge-success {
+      background: #28a745 !important;
+      color: white !important;
+    }
+
+    &.bg-warning, &.badge-warning {
+      background: #ffc107 !important;
+      color: #1a1a1a !important;
+
+      &.text-dark {
+        color: #1a1a1a !important;
+      }
+    }
+
+    &.bg-danger, &.badge-danger {
+      background: #dc3545 !important;
+      color: white !important;
+    }
+  }
+
+  // Pagination
+  .pagination {
+    .page-item {
+      .page-link {
+        background: var(--bg-secondary) !important;
+        border-color: var(--border-color) !important;
+        color: var(--text-primary) !important;
+
+        &:hover {
+          background: var(--bg-tertiary) !important;
+          border-color: var(--blue-primary) !important;
+          color: var(--blue-primary) !important;
+        }
+      }
+
+      &.active .page-link {
+        background: var(--blue-primary) !important;
+        border-color: var(--blue-primary) !important;
+        color: white !important;
+      }
+
+      &.disabled .page-link {
+        background: var(--bg-tertiary) !important;
+        color: var(--text-secondary) !important;
+      }
+    }
+  }
+
+  // Dropdowns
+  .dropdown-menu {
+    background: var(--bg-secondary) !important;
+    border-color: var(--border-color) !important;
+
+    .dropdown-item {
+      color: var(--text-primary) !important;
+
+      &:hover {
+        background: var(--bg-tertiary) !important;
+        color: var(--blue-primary) !important;
+      }
+
+      &.active {
+        background: var(--blue-primary) !important;
+        color: white !important;
+      }
+    }
+
+    .dropdown-divider {
+      border-color: var(--border-color) !important;
+    }
+  }
+
+  // Alerts
+  .alert {
+    border-color: var(--border-color) !important;
+
+    &.alert-success {
+      background: rgba(40, 167, 69, 0.15) !important;
+      color: #28a745 !important;
+    }
+
+    &.alert-danger {
+      background: rgba(220, 53, 69, 0.15) !important;
+      color: #dc3545 !important;
+    }
+
+    &.alert-warning {
+      background: rgba(255, 193, 7, 0.15) !important;
+      color: #ffc107 !important;
+    }
+  }
+
+  // Quiz show specific elements
+  .text-center.my-4 {
+    background: transparent !important;
+  }
+
+  // Progress bars in quiz show
+  .progress {
+    background-color: var(--bg-tertiary) !important;
+
+    .progress-bar {
+      // Keep the color from inline styles but ensure visibility
+      &.progress-bar-striped {
+        background-image: linear-gradient(
+          45deg,
+          rgba(255, 255, 255, 0.15) 25%,
+          transparent 25%,
+          transparent 50%,
+          rgba(255, 255, 255, 0.15) 50%,
+          rgba(255, 255, 255, 0.15) 75%,
+          transparent 75%,
+          transparent
+        ) !important;
+      }
+    }
   }
 }

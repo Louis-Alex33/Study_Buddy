@@ -66,17 +66,6 @@
     </div>
   </div>
 
-  <!-- Info Banner -->
-  <div class="multiplayer-info-banner">
-    <div class="info-banner-icon">💡</div>
-    <div class="info-banner-content">
-      <h4>Fonctionnalités en développement</h4>
-      <p>
-        Ces fonctionnalités multijoueurs sont actuellement en cours de développement.
-      </p>
-    </div>
-  </div>
-
   <!-- Back Button -->
   <div class="lectures-back-section">
     <%= link_to root_path, class: "btn-back-home" do %>
@@ -107,6 +96,8 @@
   border: 2px solid #f0f0f0;
   display: flex;
   flex-direction: column;
+  align-items: center;
+  text-align: center;
   min-height: 360px;
 }
 
@@ -124,7 +115,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 2rem;
+  margin: 0 auto 2rem;
   box-shadow: 0 4px 16px rgba(19, 81, 170, 0.25);
 }
 
@@ -173,35 +164,6 @@
   text-decoration: none;
 }
 
-.multiplayer-info-banner {
-  background: linear-gradient(135deg, #fff3cd 0%, #fff8e1 100%);
-  border: 2px solid #ffc107;
-  border-radius: 12px;
-  padding: 2rem;
-  display: flex;
-  gap: 1.5rem;
-  align-items: start;
-  margin-bottom: 2rem;
-}
-
-.info-banner-icon {
-  font-size: 2.5rem;
-  flex-shrink: 0;
-}
-
-.info-banner-content h4 {
-  color: #1a1a1a;
-  font-size: 1.25rem;
-  font-weight: 700;
-  margin-bottom: 0.5rem;
-}
-
-.info-banner-content p {
-  color: #666;
-  line-height: 1.6;
-  margin: 0;
-}
-
 /* Dark mode support */
 [data-theme="dark"] .multiplayer-feature-card {
   background: #2a2a2a;
@@ -220,19 +182,6 @@
   color: #aaa;
 }
 
-[data-theme="dark"] .multiplayer-info-banner {
-  background: linear-gradient(135deg, #3a3a2a 0%, #4a4a3a 100%);
-  border-color: #ffc107;
-}
-
-[data-theme="dark"] .info-banner-content h4 {
-  color: #e0e0e0;
-}
-
-[data-theme="dark"] .info-banner-content p {
-  color: #aaa;
-}
-
 @media (max-width: 992px) {
   .multiplayer-features-grid {
     grid-template-columns: 1fr;
@@ -244,11 +193,6 @@
   .multiplayer-feature-card {
     min-height: 320px;
     padding: 2.5rem;
-  }
-
-  .multiplayer-info-banner {
-    flex-direction: column;
-    text-align: center;
   }
 }
 

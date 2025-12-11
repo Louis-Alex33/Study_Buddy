@@ -216,9 +216,9 @@
     border-radius: 20px;
     padding: 20px;
     margin-bottom: 20px;
-    max-height: 400px;
     overflow-y: auto;
     border: 2px solid #E3E2DE;
+    min-height: 0;
 
     .chat-message {
       margin-bottom: 16px;
@@ -303,7 +303,8 @@
 
     .submit-button {
       position: absolute;
-      bottom: 12px;
+      bottom: 50%;
+      transform: translateY(50%);
       right: 12px;
       padding: 10px 24px;
       background: linear-gradient(135deg, #1351AA 0%, #1a66cc 100%);
@@ -317,7 +318,7 @@
       transition: all 0.3s;
 
       &:hover {
-        transform: translateY(-2px);
+        transform: translateY(50%) translateY(-2px);
         box-shadow: 0 4px 12px rgba(19, 81, 170, 0.4);
       }
     }
