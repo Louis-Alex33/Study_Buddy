@@ -49,6 +49,7 @@ class RealTimeQuizzesController < ApplicationController
 
     @quiz_room.quiz_participants.create!(user: current_user, score: 0, correct_answers: 0, total_questions: 0)
 
+    
     # Broadcaster la mise à jour des participants à tous les joueurs dans la room
     QuizRoomChannel.broadcast_to(@quiz_room, {
       type: 'player_joined',

@@ -2,6 +2,7 @@ class QuizParticipant < ApplicationRecord
   belongs_to :quiz_room
   belongs_to :user
 
+
   validates :user_id, uniqueness: { scope: :quiz_room_id, message: "est déjà dans cette room" }
 
   def calculate_score(time_bonus: 0)

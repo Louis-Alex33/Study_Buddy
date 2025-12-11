@@ -95,7 +95,9 @@ class MessagesController < ApplicationController
     - Si tu ne connais pas la réponse basée sur le cours, dis-le honnêtement
     - N'invente jamais d'informations
     - Utilise un ton amical et encourageant
-    - Commence ta réponse directement par le contenu, pas par une introduction générique"
+    - Commence ta réponse directement par le contenu, pas par une introduction générique
+    - Réponds en format markdown
+    - enleve tous les '-','#', '*' "
   end
 
   def process_file_with_ai(chat)
@@ -243,7 +245,8 @@ class MessagesController < ApplicationController
     - Si tu ne connais pas la réponse basée sur le cours, dis-le honnêtement
     - N'invente jamais d'informations
     - Utilise un ton amical et encourageant
-    - Réponds en format markdown"
+    - Réponds en format markdown
+    - enleve tous les '-','#', '*'"
   end
 
   def process_file_with_ai_for_thread(chat, message, lecture)
