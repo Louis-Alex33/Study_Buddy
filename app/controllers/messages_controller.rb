@@ -110,9 +110,11 @@ class MessagesController < ApplicationController
         if quota_error?(e)
           Rails.logger.warn "Gemini quota exceeded, falling back to GPT-4o: #{e.message}"
           chat = RubyLLM.chat(model: "gpt-4o")
+          reader = PDF::Reader.new(@message.file.url)
+          text = reader.pages.map(&:text).join('\n')
           build_conversation_history(chat)
           chat.with_instructions(instructions)
-          chat.ask(@message.content, with: { pdf: @message.file.url }).content
+          chat.ask(@message.content, with: { pdf: text }).content
         else
           raise e
         end
