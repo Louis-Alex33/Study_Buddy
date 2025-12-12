@@ -38,13 +38,45 @@ class LectureAnalyzerService
 
   def ask_chat(chat)
     if @lecture.document.content_type == "application/pdf"
-      chat.ask("Analyse ce document et fournis un résumé détaillé.", with: { pdf: @lecture.document.url }).content
+      begin
+        chat.ask("Analyse ce document et fournis un résumé détaillé.", with: { pdf: @lecture.document.url }).content
+      rescue => e
+        Rails.logger.warn "PDF analysis failed, falling back to text extraction: #{e.message}"
+        ask_with_extracted_text(e)
+      end
     elsif @lecture.document.image?
       chat.ask("Analyse ce document et fournis un résumé détaillé.", with: { image: @lecture.document.url }).content
     else
       # Pour les fichiers texte ou autres
       chat.ask("Analyse ce document et fournis un résumé détaillé.").content
     end
+  end
+
+  def ask_with_extracted_text(original_error)
+    text = extract_text_from_pdf
+
+    if text.blank?
+      raise original_error
+    end
+
+    Rails.logger.info "Extracted #{text.length} characters from PDF, retrying with GPT-4o"
+    chat = RubyLLM.chat(model: "gpt-4o")
+    chat.with_instructions(instructions)
+    chat.ask("Analyse ce document et fournis un résumé détaillé.\n\nContenu du document :\n#{text}").content
+  end
+
+  def extract_text_from_pdf
+    require 'pdf-reader'
+
+    @lecture.document.open do |file|
+      reader = PDF::Reader.new(file.path)
+      text = reader.pages.map(&:text).join("\n\n")
+      # Limiter la taille du texte pour éviter de dépasser les limites du modèle
+      text.truncate(100_000, omission: "\n\n[... texte tronqué ...]")
+    end
+  rescue => e
+    Rails.logger.error "Failed to extract text from PDF: #{e.message}"
+    nil
   end
 
   def initialize_chat(preferred: true)

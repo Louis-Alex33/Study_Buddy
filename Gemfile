@@ -55,7 +55,7 @@ gem "simple_form", github: "heartcombo/simple_form"
 gem "sassc-rails"
 gem "solid_cable"
 gem 'image_processing', '~> 1.2'
-
+gem 'pdf-reader'
 
 group :development, :test do
   gem "dotenv-rails"
@@ -82,3 +82,4 @@ group :test do
   gem "capybara"
   gem "selenium-webdriver"
 end
+
